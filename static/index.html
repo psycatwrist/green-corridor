@@ -1,0 +1,715 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Jaipur Smart Green Corridor | AI Emergency Traffic Management</title>
+  
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- Leaflet Map CSS & JS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+
+  <!-- Custom Stylesheet -->
+  <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body class="bg-slate-100 text-slate-900 min-h-screen flex flex-col">
+
+  <!-- ================= TOP NAVIGATION BAR ================= -->
+  <header class="bg-white border-b border-slate-200 sticky top-0 z-50 shadow-sm">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 py-3 flex flex-wrap items-center justify-between gap-4">
+      
+      <!-- Brand & Title -->
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-emerald-500 to-sky-600 flex items-center justify-center text-white font-bold text-xl shadow-md shadow-emerald-500/20">
+          🚑
+        </div>
+        <div>
+          <div class="flex items-center gap-2">
+            <h1 class="font-bold text-lg text-slate-900 tracking-tight">Jaipur Green Corridor</h1>
+            <span class="px-2 py-0.5 text-[11px] font-bold rounded-full bg-emerald-100 text-emerald-800 border border-emerald-300">AI Traffic Grid</span>
+          </div>
+          <p class="text-xs text-slate-500">Autonomous Emergency Vehicle Signal Prioritization & TMC Grid</p>
+        </div>
+      </div>
+
+      <!-- Live Connection & Simulation Controls -->
+      <div class="flex items-center gap-3">
+        <!-- Live WS Status Indicator -->
+        <div class="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-slate-50 border border-slate-200">
+          <span id="ws-status-dot" class="w-2.5 h-2.5 rounded-full bg-emerald-500 shadow-sm shadow-emerald-400"></span>
+          <span id="ws-status-text" class="text-xs font-semibold text-emerald-700">Live Grid Connected</span>
+        </div>
+
+        <!-- Simulation Speed Multipliers -->
+        <div class="hidden sm:flex items-center bg-slate-100 p-1 rounded-xl border border-slate-200 gap-1">
+          <span class="text-[11px] font-semibold text-slate-500 px-1.5">Speed:</span>
+          <button id="btn-speed-1x" class="px-2.5 py-1 text-xs font-medium rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700">1x</button>
+          <button id="btn-speed-2x" class="px-2.5 py-1 text-xs font-bold rounded-lg bg-sky-600 text-white shadow-sm">2x</button>
+          <button id="btn-speed-4x" class="px-2.5 py-1 text-xs font-medium rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700">4x</button>
+        </div>
+
+        <!-- Reset Button -->
+        <button id="btn-global-reset" class="px-3 py-1.5 text-xs font-semibold rounded-lg bg-white border border-slate-300 hover:bg-slate-50 text-slate-700 transition flex items-center gap-1.5 shadow-sm">
+          <span>🔄</span> Reset Demo
+        </button>
+      </div>
+
+      <!-- Panel Navigation Switcher Tabs -->
+      <div class="w-full lg:w-auto flex items-center gap-2 overflow-x-auto pb-1 lg:pb-0">
+        <button id="btn-tab-unified" class="px-3.5 py-1.5 text-xs font-bold rounded-lg bg-sky-600 text-white shadow-sm flex items-center gap-1.5 transition">
+          <span>🎛️</span> Unified 3-Panel View
+        </button>
+        <button id="btn-tab-traffic" class="px-3.5 py-1.5 text-xs font-semibold rounded-lg bg-white border border-slate-200 text-slate-700 hover:bg-slate-50 transition flex items-center gap-1.5">
+          <span>🚦</span> Jaipur Traffic Control
+        </button>
+        <button id="btn-tab-hospital" class="px-3.5 py-1.5 text-xs font-semibold rounded-lg bg-white border border-slate-200 text-slate-700 hover:bg-slate-50 transition flex items-center gap-1.5">
+          <span>🏥</span> Hospital Command
+        </button>
+        <button id="btn-tab-ambulance" class="px-3.5 py-1.5 text-xs font-semibold rounded-lg bg-white border border-slate-200 text-slate-700 hover:bg-slate-50 transition flex items-center gap-1.5">
+          <span>🚑</span> Ambulance HUD
+        </button>
+      </div>
+
+    </div>
+  </header>
+
+  <!-- ================= MAIN CONTENT VIEWPORT ================= -->
+  <main class="flex-1 max-w-7xl w-full mx-auto p-4 sm:p-6 space-y-6">
+
+    <!-- Active Incident Alert Banner -->
+    <div id="tmc-incident-banner" class="hidden bg-rose-50 border-l-4 border-rose-500 p-4 rounded-xl shadow-sm flex items-center justify-between gap-4">
+      <div class="flex items-center gap-3">
+        <span class="text-2xl">⚠️</span>
+        <div>
+          <h3 id="tmc-incident-title" class="font-bold text-rose-800 text-sm">ROAD OBSTRUCTION DETECTED</h3>
+          <p id="tmc-incident-desc" class="text-xs text-rose-700">Congestion detected on primary green corridor. AI recommends instant rerouting.</p>
+        </div>
+      </div>
+      <div class="flex items-center gap-2">
+        <button id="btn-tmc-reroute" class="px-3 py-1.5 text-xs font-bold rounded-lg bg-rose-600 hover:bg-rose-700 text-white shadow-sm transition">
+          Switch to Alternate Route ⚡
+        </button>
+        <button id="btn-clear-incident" class="px-3 py-1.5 text-xs font-medium rounded-lg bg-white border border-rose-300 text-rose-700 hover:bg-rose-100 transition">
+          Dismiss
+        </button>
+      </div>
+    </div>
+    <!-- ================= VIEW 1: UNIFIED 3-PANEL VIEW ================= -->
+    <div id="panel-unified" class="space-y-6">
+      
+      <!-- Top Grid: Map & Live Metrics -->
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        
+        <!-- Live Jaipur Leaflet Map Card (Takes 2 Columns) -->
+        <div class="lg:col-span-2 clean-card p-4 flex flex-col h-[520px]">
+          <div class="flex items-center justify-between pb-3 mb-2 border-b border-slate-100">
+            <div class="flex items-center gap-2">
+              <span class="w-3 h-3 rounded-full bg-emerald-500 animate-ping"></span>
+              <h2 class="font-bold text-slate-800 text-sm">Jaipur Live Traffic & Corridor Map</h2>
+              <span class="text-xs text-slate-400 font-normal">| Real Jaipur Road Grid</span>
+            </div>
+            <div class="flex items-center gap-2">
+              <button id="btn-recenter-map" class="px-2.5 py-1 text-xs font-medium rounded-md bg-slate-100 hover:bg-slate-200 text-slate-700">
+                Center Jaipur
+              </button>
+              <span class="text-xs text-slate-500 hidden sm:inline">🟢 Active Corridor | 🟡 Alternate Route</span>
+            </div>
+          </div>
+          <!-- Leaflet Map Container -->
+          <div id="jaipur-map" class="flex-1 rounded-xl overflow-hidden border border-slate-200"></div>
+        </div>
+
+        <!-- Right Side: Emergency Telemetry & Analytics Overview -->
+        <div class="clean-card p-5 flex flex-col justify-between space-y-4">
+          <div>
+            <div class="flex items-center justify-between pb-3 border-b border-slate-100">
+              <h2 class="font-bold text-slate-800 text-sm">Corridor Performance Metrics</h2>
+              <span class="px-2 py-0.5 text-[10px] font-bold rounded bg-sky-100 text-sky-800">Jaipur AI TMC</span>
+            </div>
+
+            <!-- Key Metric Cards -->
+            <div class="grid grid-cols-2 gap-3 mt-4">
+              <div class="p-3.5 rounded-xl bg-emerald-50/70 border border-emerald-100">
+                <span class="text-xs text-emerald-800 font-medium">Time Saved</span>
+                <div id="metric-time-saved" class="text-2xl font-extrabold text-emerald-700 mt-1 font-mono">12.2 mins</div>
+                <span class="text-[10px] text-emerald-600">-64% delay reduction</span>
+              </div>
+
+              <div class="p-3.5 rounded-xl bg-sky-50/70 border border-sky-100">
+                <span class="text-xs text-sky-800 font-medium">Avg Transit Speed</span>
+                <div id="metric-avg-speed" class="text-2xl font-extrabold text-sky-700 mt-1 font-mono">54 km/h</div>
+                <span class="text-[10px] text-sky-600">vs 18 km/h standard</span>
+              </div>
+
+              <div class="p-3.5 rounded-xl bg-purple-50/70 border border-purple-100">
+                <span class="text-xs text-purple-800 font-medium">Response Score</span>
+                <div id="metric-response-score" class="text-2xl font-extrabold text-purple-700 mt-1 font-mono">98/100</div>
+                <span class="text-[10px] text-purple-600">Golden hour compliance</span>
+              </div>
+
+              <div class="p-3.5 rounded-xl bg-amber-50/70 border border-amber-100">
+                <span class="text-xs text-amber-800 font-medium">Green Wave Rate</span>
+                <div class="text-2xl font-extrabold text-amber-700 mt-1 font-mono">100%</div>
+                <span class="text-[10px] text-amber-600">Zero junction wait</span>
+              </div>
+            </div>
+
+            <!-- Quick Incident Simulation Tool -->
+            <div class="mt-5 p-4 rounded-xl bg-slate-50 border border-slate-200">
+              <h3 class="text-xs font-bold text-slate-700 mb-1">Simulate Traffic Incident</h3>
+              <p class="text-[11px] text-slate-500 mb-3">Test AI dynamic rerouting when unexpected gridlock or breakdown occurs.</p>
+              <button id="btn-sim-blockage" class="w-full px-3 py-2 text-xs font-bold rounded-lg bg-amber-500 hover:bg-amber-600 text-white shadow-sm transition">
+                Simulate Road Blockage 🚧
+              </button>
+            </div>
+          </div>
+
+          <!-- Quick Guide Note -->
+          <div class="p-3 rounded-lg bg-blue-50/60 border border-blue-100 text-[11px] text-blue-800 flex items-start gap-2">
+            <span>💡</span>
+            <span>Hospital panel authorization login: <strong>Hospital</strong> / <strong>001</strong>. Signals ahead turn green automatically within 450m.</span>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Bottom Grid: Three Dedicated Workflow Cards side-by-side -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+
+        <!-- Panel 1: Ambulance Dispatch & Cockpit HUD -->
+        <div id="amb-hud-container" class="clean-card p-5 flex flex-col justify-between">
+          <div>
+            <div class="flex items-center justify-between pb-3 border-b border-slate-100">
+              <div class="flex items-center gap-2">
+                <span class="text-lg">🚑</span>
+                <h3 class="font-bold text-slate-800 text-sm">Ambulance Cockpit HUD</h3>
+              </div>
+              <span id="hud-corridor-status" class="px-2.5 py-0.5 text-[10px] font-bold rounded-full bg-amber-100 text-amber-800">
+                AWAITING CLEARANCE
+              </span>
+            </div>
+
+            <div class="mt-4 space-y-3">
+              <div class="flex items-center justify-between text-xs">
+                <span class="text-slate-500">Ambulance Unit:</span>
+                <span id="hud-amb-id" class="font-bold text-slate-800 font-mono">RJ-14-EA-2091</span>
+              </div>
+              <div class="flex items-center justify-between text-xs">
+                <span class="text-slate-500">Target Hospital:</span>
+                <span id="hud-dest-name" class="font-bold text-sky-700">SMS Hospital</span>
+              </div>
+              <div class="flex items-center justify-between text-xs">
+                <span class="text-slate-500">Pickup Origin:</span>
+                <span id="hud-origin-name" class="font-medium text-slate-700">Sindhi Camp</span>
+              </div>
+
+              <!-- Cockpit Gauges -->
+              <div class="grid grid-cols-3 gap-2 pt-2">
+                <div class="p-2 rounded-lg bg-slate-50 border border-slate-200 text-center">
+                  <div class="text-[10px] text-slate-500">SPEED</div>
+                  <div class="text-lg font-extrabold text-slate-800 font-mono"><span id="hud-speed">0</span> <span class="text-[10px] font-normal">km/h</span></div>
+                </div>
+                <div class="p-2 rounded-lg bg-slate-50 border border-slate-200 text-center">
+                  <div class="text-[10px] text-slate-500">REMAINING</div>
+                  <div id="hud-distance" class="text-lg font-extrabold text-slate-800 font-mono">4.6 km</div>
+                </div>
+                <div class="p-2 rounded-lg bg-emerald-50 border border-emerald-200 text-center">
+                  <div class="text-[10px] text-emerald-700">ETA</div>
+                  <div id="hud-eta" class="text-lg font-extrabold text-emerald-700 font-mono">6.8m</div>
+                </div>
+              </div>
+
+              <div id="hud-time-saved" class="text-xs font-semibold text-emerald-700 text-center bg-emerald-50 py-1.5 rounded-lg border border-emerald-100">
+                ⚡ Saves ~12.2 mins vs normal traffic
+              </div>
+
+              <!-- Next Upcoming Junction Preview -->
+              <div class="p-3 rounded-xl bg-slate-50 border border-slate-200">
+                <div class="flex items-center justify-between text-xs mb-1">
+                  <span class="text-slate-500">Next Signal:</span>
+                  <span id="hud-next-dist" class="font-mono text-slate-700 font-bold">320m ahead</span>
+                </div>
+                <div class="flex items-center justify-between">
+                  <span id="hud-next-junc" class="font-bold text-xs text-slate-800">Sindhi Camp Crossing</span>
+                  <div id="hud-next-signal">
+                    <span class="px-2 py-0.5 rounded bg-emerald-100 text-emerald-700 font-bold text-[10px] border border-emerald-300">PRIORITY GREEN</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Driver Action Controls -->
+          <div class="mt-4 pt-3 border-t border-slate-100 flex items-center gap-2">
+            <button id="btn-start-drive" class="flex-1 py-2 text-xs font-bold rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white shadow-sm transition disabled:opacity-50">
+              ▶ Start Drive
+            </button>
+            <button id="btn-pause-drive" class="px-3 py-2 text-xs font-bold rounded-lg bg-slate-200 hover:bg-slate-300 text-slate-700 transition">
+              ⏸ Pause
+            </button>
+            <button id="btn-reset-drive" class="px-2.5 py-2 text-xs font-bold rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-600 transition" title="Reset Trip">
+              🔄
+            </button>
+            <button id="btn-sos-ambulance" class="px-3 py-2 text-xs font-bold rounded-lg bg-rose-600 hover:bg-rose-700 text-white transition" title="Broadcast Emergency SOS">
+              🚨 SOS
+            </button>
+          </div>
+        </div>
+
+        <!-- Panel 2: Hospital Emergency Command -->
+        <div class="clean-card p-5 flex flex-col justify-between">
+          <div>
+            <div class="flex items-center justify-between pb-3 border-b border-slate-100">
+              <div class="flex items-center gap-2">
+                <span class="text-lg">🏥</span>
+                <h3 class="font-bold text-slate-800 text-sm">Hospital Medical Command</h3>
+              </div>
+              <span id="hosp-status-badge" class="px-2 py-0.5 text-[10px] font-bold rounded bg-amber-100 text-amber-800">
+                INBOUND EMERGENCY
+              </span>
+            </div>
+
+            <!-- Inbound Request Details Card -->
+            <div id="hosp-request-card" class="mt-4 space-y-3">
+              <div class="p-3 rounded-xl bg-slate-50 border border-slate-200 space-y-2">
+                <div class="flex items-center justify-between">
+                  <span class="text-xs font-bold text-slate-800" id="hosp-patient-name">Sunil Verma, 52 yrs</span>
+                  <span id="hosp-severity-badge" class="px-2 py-0.5 text-[10px] font-bold rounded-full bg-rose-100 text-rose-700 border border-rose-200">Level 1 - Critical</span>
+                </div>
+                <div class="text-xs text-slate-600 font-medium" id="hosp-emergency-type">Acute STEMI / Cardiac Golden Hour</div>
+                <div class="flex items-center justify-between text-[11px] text-slate-500 pt-1 border-t border-slate-200/60">
+                  <span>From: <strong id="hosp-pickup-loc" class="text-slate-700">Sindhi Camp</strong></span>
+                  <span>To: <strong id="hosp-dest-hospital" class="text-slate-700">SMS Hospital</strong></span>
+                </div>
+                <div class="flex items-center justify-between text-[11px] text-slate-500">
+                  <span>Unit: <strong id="hosp-ambulance-id" class="text-slate-700">RJ-14-EA-2091</strong></span>
+                  <span>Dist: <strong id="hosp-dist-val" class="text-slate-700">4.6 km</strong></span>
+                  <span>ETA: <strong id="hosp-eta-val" class="text-emerald-700 font-bold">6.8 mins</strong></span>
+                </div>
+              </div>
+
+              <!-- Hospital Readiness Checklist -->
+              <div class="space-y-1.5 text-xs text-slate-600 bg-emerald-50/50 p-3 rounded-xl border border-emerald-100">
+                <div class="font-bold text-emerald-900 text-xs mb-1">ER Receiving Readiness:</div>
+                <div class="flex items-center gap-2 text-[11px]">
+                  <span class="text-emerald-600">✓</span> <span>Trauma Bay 1 Reserved</span>
+                </div>
+                <div class="flex items-center gap-2 text-[11px]">
+                  <span class="text-emerald-600">✓</span> <span>Cath Lab Team on Standby</span>
+                </div>
+                <div class="flex items-center gap-2 text-[11px]">
+                  <span class="text-emerald-600">✓</span> <span>O2 & Defibrillator Prepared</span>
+                </div>
+              </div>
+
+              <!-- Telemetry after authorization -->
+              <div id="hosp-transit-info" class="hidden p-3 rounded-xl bg-sky-50 border border-sky-200 text-xs space-y-1">
+                <div class="font-bold text-sky-900 text-xs">Ambulance Telemetry:</div>
+                <div class="flex justify-between text-[11px]"><span>Speed:</span> <strong id="hosp-live-speed">54 km/h</strong></div>
+                <div class="flex justify-between text-[11px]"><span>Next Junction:</span> <strong id="hosp-live-junc">Sindhi Camp</strong></div>
+                <div class="flex justify-between text-[11px]"><span>Arrival Countdown:</span> <strong id="hosp-live-eta" class="text-emerald-700 font-bold">6.5 mins</strong></div>
+              </div>
+            </div>
+
+            <!-- No request placeholder -->
+            <div id="hosp-no-request" class="hidden mt-6 text-center py-6 text-slate-400 text-xs">
+              No active emergency corridor in transit.
+            </div>
+          </div>
+
+          <!-- Hospital Authorization Action Buttons -->
+          <div id="hosp-action-buttons" class="mt-4 pt-3 border-t border-slate-100 flex items-center gap-2">
+            <button onclick="window.hospitalManager.authorizeEmergency('APPROVE')" 
+              class="flex-1 py-2 text-xs font-bold rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white shadow-sm transition">
+              Authorize Green Corridor ⚡
+            </button>
+            <button onclick="window.hospitalManager.authorizeEmergency('REJECT')" 
+              class="px-3 py-2 text-xs font-medium rounded-lg bg-slate-100 hover:bg-rose-50 text-rose-600 transition">
+              Decline
+            </button>
+          </div>
+        </div>
+
+        <!-- Panel 3: Jaipur Traffic Police TMC Controls -->
+        <div class="clean-card p-5 flex flex-col justify-between">
+          <div>
+            <div class="flex items-center justify-between pb-3 border-b border-slate-100">
+              <div class="flex items-center gap-2">
+                <span class="text-lg">🚦</span>
+                <h3 class="font-bold text-slate-800 text-sm">Jaipur Police TMC Control</h3>
+              </div>
+              <span class="px-2 py-0.5 text-[10px] font-bold rounded bg-emerald-100 text-emerald-800">
+                AI AUTO-PILOT ACTIVE
+              </span>
+            </div>
+
+            <div class="mt-4 space-y-3">
+              <p class="text-xs text-slate-500">
+                Junctions along the corridor automatically switch to <span class="text-emerald-600 font-bold">GREEN</span> 450m ahead of the ambulance and return to normal cycles after crossing.
+              </p>
+
+              <!-- Computer Vision Camera Inspection Card -->
+              <div class="p-3 rounded-xl bg-sky-50 border border-sky-200 flex items-center justify-between">
+                <div>
+                  <div class="font-bold text-sky-900 text-xs">AI Smart Camera Feed</div>
+                  <div class="text-[11px] text-sky-700">Vehicle density & queue clearance</div>
+                </div>
+                <button onclick="window.trafficManager.openCctvModal('J9')" 
+                  class="px-3 py-1.5 text-xs font-bold rounded-lg bg-sky-600 hover:bg-sky-700 text-white shadow-sm transition">
+                  Inspect CCTV 📹
+                </button>
+              </div>
+
+              <!-- Quick Override Note -->
+              <div class="p-3 rounded-xl bg-slate-50 border border-slate-200 text-[11px] text-slate-600">
+                Traffic Police can execute manual overrides at any junction or trigger instant dynamic rerouting.
+              </div>
+            </div>
+          </div>
+
+          <!-- Bottom TMC Action -->
+          <div class="mt-4 pt-3 border-t border-slate-100 flex items-center gap-2">
+            <button onclick="window.app.switchTab('traffic')" 
+              class="w-full py-2 text-xs font-bold rounded-lg bg-slate-800 hover:bg-slate-900 text-white shadow-sm transition text-center">
+              Open Full Traffic Control Console →
+            </button>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+    <!-- ================= VIEW 2: JAIPUR TRAFFIC CONTROL TMC (FULL) ================= -->
+    <div id="panel-traffic" class="hidden space-y-6">
+      <div class="clean-card p-6">
+        <div class="flex flex-wrap items-center justify-between gap-4 pb-4 mb-4 border-b border-slate-200">
+          <div>
+            <h2 class="text-lg font-bold text-slate-900">Jaipur Traffic Management Centre (TMC) Police Command</h2>
+            <p class="text-xs text-slate-500">Live monitoring of all traffic junctions, signal overrides, CCTV camera streams, and green corridor clearance.</p>
+          </div>
+          <div class="flex items-center gap-3">
+            <button onclick="window.trafficManager.openCctvModal('J9')" 
+              class="px-3.5 py-2 text-xs font-bold rounded-lg bg-sky-600 hover:bg-sky-700 text-white shadow-sm transition flex items-center gap-1.5">
+              <span>📹</span> Open SMS Hospital CCTV Camera
+            </button>
+          </div>
+        </div>
+
+        <!-- Master Junctions Table -->
+        <div class="overflow-x-auto">
+          <table class="w-full text-left border-collapse">
+            <thead>
+              <tr class="border-b border-slate-200 text-slate-500 text-xs font-semibold uppercase tracking-wider bg-slate-50">
+                <th class="py-3 px-3">Junction Name</th>
+                <th class="py-3 px-3 hidden sm:table-cell">Road / Sector</th>
+                <th class="py-3 px-3">Signal</th>
+                <th class="py-3 px-3">Control Mode</th>
+                <th class="py-3 px-3 hidden md:table-cell">Queue Length</th>
+                <th class="py-3 px-3 text-right">Police Override</th>
+              </tr>
+            </thead>
+            <tbody id="tmc-junctions-body">
+              <!-- Dynamically populated by traffic.js -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ================= VIEW 3: HOSPITAL COMMAND PANEL (FULL) ================= -->
+    <div id="panel-hospital" class="hidden space-y-6">
+      
+      <!-- Hospital Auth Gate (When not logged in) -->
+      <div id="hospital-auth-container" class="max-w-md mx-auto clean-card p-8 shadow-md">
+        <div class="text-center mb-6">
+          <div class="w-14 h-14 mx-auto rounded-2xl bg-sky-100 border border-sky-200 flex items-center justify-center text-2xl mb-3">
+            🏥
+          </div>
+          <h2 class="text-xl font-bold text-slate-900">Hospital Medical Authorization</h2>
+          <p class="text-xs text-slate-500 mt-1">Authorized hospital emergency staff verification required to approve green corridor requests.</p>
+        </div>
+
+        <form id="hospital-login-form" class="space-y-4">
+          <div id="hosp-login-error" class="hidden p-3 rounded-lg bg-rose-50 border border-rose-200 text-rose-700 text-xs font-medium"></div>
+
+          <div>
+            <label class="block text-xs font-semibold text-slate-700 mb-1">Username / Organization</label>
+            <input id="hosp-username" type="text" placeholder="e.g. Hospital" value="Hospital" required
+              class="w-full px-3 py-2 text-sm rounded-lg border border-slate-300 focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-sky-500">
+          </div>
+
+          <div>
+            <label class="block text-xs font-semibold text-slate-700 mb-1">Security Code / Password</label>
+            <input id="hosp-password" type="password" placeholder="e.g. 001" value="001" required
+              class="w-full px-3 py-2 text-sm rounded-lg border border-slate-300 focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-sky-500">
+          </div>
+
+          <div class="flex items-center justify-between text-xs text-slate-500 pt-1">
+            <span>Required: <strong>Hospital</strong> / <strong>001</strong></span>
+            <button type="button" id="btn-quick-fill-hosp" class="text-sky-600 hover:text-sky-700 font-semibold underline">Auto-Fill Credentials</button>
+          </div>
+
+          <button type="submit" class="w-full py-2.5 text-sm font-bold rounded-lg bg-sky-600 hover:bg-sky-700 text-white shadow-sm transition mt-2">
+            Authorize & Sign In
+          </button>
+        </form>
+      </div>
+
+      <!-- Hospital Active Dashboard (When logged in) -->
+      <div id="hospital-active-panel" class="hidden space-y-6">
+        <div class="clean-card p-6">
+          <div class="flex flex-wrap items-center justify-between gap-4 pb-4 border-b border-slate-200">
+            <div>
+              <div class="flex items-center gap-2">
+                <h2 class="text-lg font-bold text-slate-900">SMS Medical College & Hospital Emergency Command</h2>
+                <span class="px-2 py-0.5 text-[10px] font-bold rounded-full bg-emerald-100 text-emerald-800">Verified Medical Authority</span>
+              </div>
+              <p class="text-xs text-slate-500">Authorized Officer: Dr. A. Sharma (HOD Emergency & Trauma Wing, Jaipur)</p>
+            </div>
+            <button id="btn-hosp-logout" class="px-3 py-1.5 text-xs font-semibold rounded-lg bg-slate-100 hover:bg-rose-50 text-rose-600 border border-slate-200 transition">
+              Sign Out
+            </button>
+          </div>
+
+          <!-- Inbound Triage Workstation -->
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
+            
+            <!-- Inbound Patient Triage Details -->
+            <div class="p-5 rounded-2xl bg-slate-50 border border-slate-200 space-y-4">
+              <div class="flex items-center justify-between">
+                <h3 class="font-bold text-sm text-slate-800">Inbound Critical Emergency</h3>
+                <span class="px-2.5 py-1 text-xs font-bold rounded-full bg-rose-100 text-rose-700 border border-rose-200">Level 1 - Golden Hour</span>
+              </div>
+
+              <div class="grid grid-cols-2 gap-3 text-xs">
+                <div>
+                  <span class="text-slate-500">Patient:</span>
+                  <div class="font-bold text-slate-800 text-sm">Sunil Verma (52y/M)</div>
+                </div>
+                <div>
+                  <span class="text-slate-500">Condition:</span>
+                  <div class="font-bold text-rose-700 text-sm">STEMI / Acute MI</div>
+                </div>
+                <div>
+                  <span class="text-slate-500">Inbound Ambulance:</span>
+                  <div class="font-mono font-bold text-slate-800">RJ-14-EA-2091</div>
+                </div>
+                <div>
+                  <span class="text-slate-500">Pickup Origin:</span>
+                  <div class="font-medium text-slate-700">Sindhi Camp Terminal</div>
+                </div>
+              </div>
+
+              <div class="p-3 rounded-xl bg-white border border-slate-200 flex justify-around text-center">
+                <div>
+                  <div class="text-[10px] text-slate-400 uppercase">Estimated ETA</div>
+                  <div class="text-xl font-extrabold text-emerald-600 font-mono">6.8 mins</div>
+                </div>
+                <div class="border-r border-slate-100"></div>
+                <div>
+                  <div class="text-[10px] text-slate-400 uppercase">Distance Left</div>
+                  <div class="text-xl font-extrabold text-slate-800 font-mono">4.6 km</div>
+                </div>
+                <div class="border-r border-slate-100"></div>
+                <div>
+                  <div class="text-[10px] text-slate-400 uppercase">Speed</div>
+                  <div class="text-xl font-extrabold text-sky-600 font-mono">54 km/h</div>
+                </div>
+              </div>
+
+              <div class="flex items-center gap-3 pt-2">
+                <button onclick="window.hospitalManager.authorizeEmergency('APPROVE')" 
+                  class="flex-1 py-2.5 text-xs font-bold rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white shadow-sm transition flex items-center justify-center gap-2">
+                  <span>⚡</span> Authorize Green Corridor (Alert Traffic Control)
+                </button>
+                <button onclick="window.hospitalManager.authorizeEmergency('REJECT')" 
+                  class="px-4 py-2.5 text-xs font-semibold rounded-xl bg-white border border-slate-300 hover:bg-rose-50 text-rose-600 transition">
+                  Divert
+                </button>
+              </div>
+            </div>
+
+            <!-- Trauma Bay & Hospital Resource Readiness -->
+            <div class="p-5 rounded-2xl bg-white border border-slate-200 space-y-4">
+              <h3 class="font-bold text-sm text-slate-800">Trauma Centre Resource Allocation</h3>
+
+              <div class="space-y-3 text-xs">
+                <div class="p-3 rounded-xl bg-slate-50 border border-slate-200 flex items-center justify-between">
+                  <div>
+                    <div class="font-bold text-slate-800">Resuscitation Bay 1</div>
+                    <div class="text-[11px] text-slate-500">Reserved for Inbound Cardiac Patient</div>
+                  </div>
+                  <span class="px-2.5 py-1 rounded bg-emerald-100 text-emerald-800 font-bold text-[11px]">READY</span>
+                </div>
+
+                <div class="p-3 rounded-xl bg-slate-50 border border-slate-200 flex items-center justify-between">
+                  <div>
+                    <div class="font-bold text-slate-800">Interventional Cath Lab</div>
+                    <div class="text-[11px] text-slate-500">Cardiologist Dr. Mehta on Standby</div>
+                  </div>
+                  <span class="px-2.5 py-1 rounded bg-emerald-100 text-emerald-800 font-bold text-[11px]">STANDBY</span>
+                </div>
+
+                <div class="p-3 rounded-xl bg-slate-50 border border-slate-200 flex items-center justify-between">
+                  <div>
+                    <div class="font-bold text-slate-800">Blood Bank Cross-match</div>
+                    <div class="text-[11px] text-slate-500">2 Units O-Negative Reserved</div>
+                  </div>
+                  <span class="px-2.5 py-1 rounded bg-emerald-100 text-emerald-800 font-bold text-[11px]">PREPARED</span>
+                </div>
+              </div>
+
+              <div class="p-3 rounded-xl bg-blue-50/70 border border-blue-100 text-[11px] text-blue-800">
+                Authorizing the corridor automatically alerts the Jaipur Traffic Police TMC and locks green wave priority signals on JLN Marg / MI Road.
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ================= VIEW 4: AMBULANCE DRIVER DISPATCH & HUD (FULL) ================= -->
+    <div id="panel-ambulance" class="hidden space-y-6">
+      
+      <!-- New Corridor Emergency Request Form -->
+      <div id="amb-form-container" class="clean-card p-6">
+        <div class="pb-4 mb-4 border-b border-slate-200 flex items-center justify-between">
+          <div>
+            <h2 class="text-lg font-bold text-slate-900">Ambulance Emergency Dispatch Request</h2>
+            <p class="text-xs text-slate-500">Initiate a Virtual Green Corridor request from Jaipur city locations to tertiary hospitals.</p>
+          </div>
+          <span class="px-2.5 py-1 text-xs font-bold rounded-lg bg-sky-100 text-sky-800">Jaipur EMS Fleet</span>
+        </div>
+
+        <form id="ambulance-request-form" class="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div>
+            <label class="block text-xs font-semibold text-slate-700 mb-1">Ambulance Registration No.</label>
+            <input id="amb-input-id" type="text" value="RJ-14-EA-2091" required
+              class="w-full px-3 py-2 text-sm rounded-lg border border-slate-300 focus:outline-none focus:ring-2 focus:ring-sky-500">
+          </div>
+
+          <div>
+            <label class="block text-xs font-semibold text-slate-700 mb-1">Driver / Paramedic In-Charge</label>
+            <input id="amb-input-driver" type="text" value="Ramesh Choudhary" required
+              class="w-full px-3 py-2 text-sm rounded-lg border border-slate-300 focus:outline-none focus:ring-2 focus:ring-sky-500">
+          </div>
+
+          <div>
+            <label class="block text-xs font-semibold text-slate-700 mb-1">Patient Details & Vitals</label>
+            <input id="amb-input-patient" type="text" value="Sunil Verma, 52 yrs" required
+              class="w-full px-3 py-2 text-sm rounded-lg border border-slate-300 focus:outline-none focus:ring-2 focus:ring-sky-500">
+          </div>
+
+          <div>
+            <label class="block text-xs font-semibold text-slate-700 mb-1">Emergency Condition / Medical Type</label>
+            <select id="amb-select-type" class="w-full px-3 py-2 text-sm rounded-lg border border-slate-300 focus:outline-none focus:ring-2 focus:ring-sky-500 bg-white">
+              <option value="Acute STEMI / Cardiac Golden Hour">Acute STEMI / Cardiac Golden Hour</option>
+              <option value="Severe Polytrauma / Road Accident">Severe Polytrauma / Road Accident</option>
+              <option value="Acute Ischemic Stroke / Neuro">Acute Ischemic Stroke / Neuro</option>
+              <option value="Organ Donation Transit">Organ Donation Transit</option>
+              <option value="Neonatal ICU Critical Transport">Neonatal ICU Critical Transport</option>
+            </select>
+          </div>
+
+          <div>
+            <label class="block text-xs font-semibold text-slate-700 mb-1">Triage Severity Priority</label>
+            <select id="amb-select-severity" class="w-full px-3 py-2 text-sm rounded-lg border border-slate-300 focus:outline-none focus:ring-2 focus:ring-sky-500 bg-white">
+              <option value="Level 1 - Critical">Level 1 - Critical (Immediate Signal Priority)</option>
+              <option value="Level 2 - Severe">Level 2 - Severe (High Priority)</option>
+              <option value="Level 3 - Moderate">Level 3 - Moderate (Standard Corridor)</option>
+            </select>
+          </div>
+
+          <div>
+            <label class="block text-xs font-semibold text-slate-700 mb-1">Starting Hub / Incident Location</label>
+            <select id="amb-select-origin" class="w-full px-3 py-2 text-sm rounded-lg border border-slate-300 focus:outline-none focus:ring-2 focus:ring-sky-500 bg-white">
+              <option value="sindhi_camp">Sindhi Camp Central Bus Stand</option>
+              <option value="jaipur_station">Jaipur Junction Railway Station</option>
+              <option value="mansarovar">Mansarovar Metro / Shipra Path</option>
+              <option value="badi_chaupar">Badi Chaupar (Pink City Walled Area)</option>
+              <option value="raja_park">Raja Park (LBS College Circle)</option>
+              <option value="vaishali">Vaishali Nagar</option>
+            </select>
+          </div>
+
+          <div class="md:col-span-2">
+            <label class="block text-xs font-semibold text-slate-700 mb-1">Destination Hospital</label>
+            <select id="amb-select-dest" class="w-full px-3 py-2 text-sm rounded-lg border border-slate-300 focus:outline-none focus:ring-2 focus:ring-sky-500 bg-white">
+              <option value="sms">SMS Hospital (Sawai Man Singh Hospital - Level 1 Trauma)</option>
+              <option value="fortis">Fortis Escorts Hospital (JLN Marg, Malviya Nagar)</option>
+              <option value="ehcc">EHCC (Eternal Heart Care Centre, Jawahar Circle)</option>
+              <option value="apex">Apex Hospital (Malviya Nagar)</option>
+              <option value="narayana">Narayana Multispeciality Hospital (Pratap Nagar)</option>
+            </select>
+          </div>
+
+          <div class="flex items-end">
+            <button type="submit" class="w-full py-2.5 text-xs font-bold rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white shadow-sm transition">
+              Request Virtual Green Corridor ⚡
+            </button>
+          </div>
+        </form>
+      </div>
+
+    </div>
+
+  </main>
+
+  <!-- ================= AI COMPUTER VISION CCTV MODAL ================= -->
+  <div id="cctv-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-slate-900/60 backdrop-blur-sm p-4">
+    <div class="bg-white rounded-2xl shadow-2xl max-w-2xl w-full overflow-hidden border border-slate-200">
+      
+      <!-- Modal Header -->
+      <div class="p-4 bg-slate-900 text-white flex items-center justify-between">
+        <div class="flex items-center gap-2.5">
+          <span class="w-3 h-3 rounded-full bg-rose-500 animate-ping"></span>
+          <div>
+            <h3 id="cctv-junction-name" class="font-bold text-sm tracking-wide">SMS Hospital Crossing (CCTV-JP-09)</h3>
+            <p id="cctv-road-name" class="text-[11px] text-slate-400">JLN Marg / Medical College Gate</p>
+          </div>
+        </div>
+        <div class="flex items-center gap-3">
+          <span id="cctv-signal-state" class="px-2.5 py-1 text-xs font-mono font-bold rounded bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">
+            SIGNAL: GREEN
+          </span>
+          <button id="btn-close-cctv" class="text-slate-400 hover:text-white text-lg font-bold">✕</button>
+        </div>
+      </div>
+
+      <!-- Canvas CCTV Stream Simulation -->
+      <div class="p-4 bg-slate-950 flex flex-col items-center">
+        <div class="relative rounded-xl overflow-hidden border border-slate-800 shadow-inner">
+          <canvas id="cctv-canvas" width="560" height="320" class="block bg-slate-900"></canvas>
+        </div>
+      </div>
+
+      <!-- Modal Footer & Clearance Status -->
+      <div class="p-4 bg-slate-900 border-t border-slate-800 flex items-center justify-between text-xs">
+        <div id="cctv-cv-status">
+          <span class="text-emerald-400 font-bold">PATH SECURED (98% CLEARED) - GREEN WAVE VERIFIED</span>
+        </div>
+        <div class="text-slate-400 text-[11px] font-mono">
+          YOLOv9-JaipurTMC | Camera Resolution: 1080p@30fps
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ================= FLOATING TOAST NOTIFICATION CONTAINER ================= -->
+  <div id="toast-container"></div>
+
+  <!-- ================= SCRIPTS ================= -->
+  <script src="/static/js/map.js"></script>
+  <script src="/static/js/hospital.js"></script>
+  <script src="/static/js/traffic.js"></script>
+  <script src="/static/js/ambulance.js"></script>
+  <script src="/static/js/app.js"></script>
+
+</body>
+</html>

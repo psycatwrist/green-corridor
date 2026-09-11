@@ -1,0 +1,869 @@
+{
+  "city": "Jaipur, Rajasthan, India",
+  "center": [
+    26.9024,
+    75.805
+  ],
+  "default_zoom": 13,
+  "hospitals": [
+    {
+      "id": "sms",
+      "name": "SMS Hospital (Sawai Man Singh Hospital)",
+      "type": "Government Tertiary & Level-1 Trauma Centre",
+      "address": "Jawaharlal Nehru Marg, Ashok Nagar, Jaipur",
+      "lat": 26.8978,
+      "lng": 75.8164,
+      "beds_available": 14,
+      "icu_available": 5,
+      "trauma_ready": true,
+      "cath_lab": true,
+      "phone": "+91 141 251 8222"
+    },
+    {
+      "id": "fortis",
+      "name": "Fortis Escorts Hospital",
+      "type": "Super Speciality Cardiac & Critical Care",
+      "address": "JLN Marg, Sector 5, Malviya Nagar, Jaipur",
+      "lat": 26.853,
+      "lng": 75.8052,
+      "beds_available": 9,
+      "icu_available": 3,
+      "trauma_ready": true,
+      "cath_lab": true,
+      "phone": "+91 141 254 7000"
+    },
+    {
+      "id": "ehcc",
+      "name": "EHCC (Eternal Heart Care Centre)",
+      "type": "Multispeciality & Heart Institute",
+      "address": "Jawahar Circle, Near Airport, Jaipur",
+      "lat": 26.8402,
+      "lng": 75.8005,
+      "beds_available": 7,
+      "icu_available": 2,
+      "trauma_ready": true,
+      "cath_lab": true,
+      "phone": "+91 141 395 7000"
+    },
+    {
+      "id": "apex",
+      "name": "Apex Hospital",
+      "type": "Multi-Speciality Emergency Centre",
+      "address": "SP-4, Malviya Nagar Industrial Area, Jaipur",
+      "lat": 26.855,
+      "lng": 75.815,
+      "beds_available": 6,
+      "icu_available": 4,
+      "trauma_ready": true,
+      "cath_lab": false,
+      "phone": "+91 141 275 1871"
+    },
+    {
+      "id": "sdmh",
+      "name": "Santokba Durlabhji Memorial Hospital (SDMH)",
+      "type": "Charitable Trust Multispeciality",
+      "address": "Bhawani Singh Road, Near Rambagh, Jaipur",
+      "lat": 26.892,
+      "lng": 75.805,
+      "beds_available": 8,
+      "icu_available": 3,
+      "trauma_ready": true,
+      "cath_lab": true,
+      "phone": "+91 141 256 6251"
+    },
+    {
+      "id": "narayana",
+      "name": "Narayana Multispeciality Hospital",
+      "type": "Advanced Trauma & Oncology",
+      "address": "Sector 28, Kumbha Marg, Pratap Nagar, Jaipur",
+      "lat": 26.802,
+      "lng": 75.8235,
+      "beds_available": 12,
+      "icu_available": 6,
+      "trauma_ready": true,
+      "cath_lab": true,
+      "phone": "+91 141 712 2222"
+    }
+  ],
+  "pickup_points": [
+    {
+      "id": "sindhi_camp",
+      "name": "Sindhi Camp Central Bus Stand",
+      "area": "Station Road / Walled City Border",
+      "lat": 26.9242,
+      "lng": 75.7995
+    },
+    {
+      "id": "jaipur_station",
+      "name": "Jaipur Junction Railway Station",
+      "area": "Civil Lines / Station Road",
+      "lat": 26.9196,
+      "lng": 75.7878
+    },
+    {
+      "id": "mansarovar",
+      "name": "Mansarovar Metro / Shipra Path",
+      "area": "Mansarovar South",
+      "lat": 26.864,
+      "lng": 75.758
+    },
+    {
+      "id": "vaishali",
+      "name": "Vaishali Nagar (National Handloom Circle)",
+      "area": "Vaishali Nagar West",
+      "lat": 26.9065,
+      "lng": 75.742
+    },
+    {
+      "id": "badi_chaupar",
+      "name": "Badi Chaupar (Pink City Walled Area)",
+      "area": "Hawa Mahal / Walled City",
+      "lat": 26.9239,
+      "lng": 75.8271
+    },
+    {
+      "id": "raja_park",
+      "name": "Raja Park (LBS College Circle)",
+      "area": "Raja Park / Tilak Nagar",
+      "lat": 26.895,
+      "lng": 75.832
+    }
+  ],
+  "junctions": [
+    {
+      "id": "J1",
+      "name": "Sindhi Camp Crossing",
+      "road": "Station Road / Kanti Nagar",
+      "lat": 26.924,
+      "lng": 75.798,
+      "cam_id": "CCTV-JP-01",
+      "density": "Heavy",
+      "vehicle_count": 68,
+      "queue_meters": 120,
+      "status": "AUTO",
+      "signal": "RED"
+    },
+    {
+      "id": "J2",
+      "name": "Khasa Kothi Circle",
+      "road": "Station Road / Collectorate",
+      "lat": 26.9205,
+      "lng": 75.7925,
+      "cam_id": "CCTV-JP-02",
+      "density": "Moderate",
+      "vehicle_count": 42,
+      "queue_meters": 75,
+      "status": "AUTO",
+      "signal": "GREEN"
+    },
+    {
+      "id": "J3",
+      "name": "Govt Hostel Crossing",
+      "road": "MI Road / Sansar Chandra Road",
+      "lat": 26.918,
+      "lng": 75.801,
+      "cam_id": "CCTV-JP-03",
+      "density": "Heavy",
+      "vehicle_count": 82,
+      "queue_meters": 140,
+      "status": "AUTO",
+      "signal": "RED"
+    },
+    {
+      "id": "J4",
+      "name": "Ajmer Puliya Junction",
+      "road": "Civil Lines / Station Road Flyover",
+      "lat": 26.911,
+      "lng": 75.789,
+      "cam_id": "CCTV-JP-04",
+      "density": "Moderate",
+      "vehicle_count": 55,
+      "queue_meters": 90,
+      "status": "AUTO",
+      "signal": "RED"
+    },
+    {
+      "id": "J5",
+      "name": "Statue Circle",
+      "road": "Bhagwan Das Road / Ashok Nagar",
+      "lat": 26.909,
+      "lng": 75.805,
+      "cam_id": "CCTV-JP-05",
+      "density": "Moderate",
+      "vehicle_count": 48,
+      "queue_meters": 65,
+      "status": "AUTO",
+      "signal": "GREEN"
+    },
+    {
+      "id": "J6",
+      "name": "Albert Hall / Ram Niwas Bagh",
+      "road": "JLN Marg / Museum Road",
+      "lat": 26.9116,
+      "lng": 75.8194,
+      "cam_id": "CCTV-JP-06",
+      "density": "Moderate",
+      "vehicle_count": 38,
+      "queue_meters": 50,
+      "status": "AUTO",
+      "signal": "RED"
+    },
+    {
+      "id": "J7",
+      "name": "Narayan Singh Circle",
+      "road": "Tonk Road / JLN Marg Connector",
+      "lat": 26.903,
+      "lng": 75.813,
+      "cam_id": "CCTV-JP-07",
+      "density": "Heavy",
+      "vehicle_count": 76,
+      "queue_meters": 130,
+      "status": "AUTO",
+      "signal": "RED"
+    },
+    {
+      "id": "J8",
+      "name": "Rambagh Circle",
+      "road": "Tonk Road / Bhawani Singh Road",
+      "lat": 26.8935,
+      "lng": 75.809,
+      "cam_id": "CCTV-JP-08",
+      "density": "Heavy",
+      "vehicle_count": 94,
+      "queue_meters": 160,
+      "status": "AUTO",
+      "signal": "RED"
+    },
+    {
+      "id": "J9",
+      "name": "SMS Hospital Crossing",
+      "road": "JLN Marg / Medical College Gate",
+      "lat": 26.8995,
+      "lng": 75.8155,
+      "cam_id": "CCTV-JP-09",
+      "density": "Heavy",
+      "vehicle_count": 89,
+      "queue_meters": 150,
+      "status": "AUTO",
+      "signal": "RED"
+    },
+    {
+      "id": "J10",
+      "name": "Gandhi Circle",
+      "road": "JLN Marg / Rajasthan University",
+      "lat": 26.8845,
+      "lng": 75.8135,
+      "cam_id": "CCTV-JP-10",
+      "density": "Moderate",
+      "vehicle_count": 52,
+      "queue_meters": 80,
+      "status": "AUTO",
+      "signal": "GREEN"
+    },
+    {
+      "id": "J11",
+      "name": "OTS Crossing",
+      "road": "JLN Marg / Malviya Nagar Main Rd",
+      "lat": 26.871,
+      "lng": 75.8105,
+      "cam_id": "CCTV-JP-11",
+      "density": "Moderate",
+      "vehicle_count": 45,
+      "queue_meters": 70,
+      "status": "AUTO",
+      "signal": "RED"
+    },
+    {
+      "id": "J12",
+      "name": "Calgiri Marg Circle",
+      "road": "Malviya Nagar / Fortis Approach",
+      "lat": 26.8565,
+      "lng": 75.808,
+      "cam_id": "CCTV-JP-12",
+      "density": "Moderate",
+      "vehicle_count": 39,
+      "queue_meters": 60,
+      "status": "AUTO",
+      "signal": "GREEN"
+    },
+    {
+      "id": "J13",
+      "name": "Jawahar Circle",
+      "road": "JLN Marg / Airport Approach",
+      "lat": 26.8425,
+      "lng": 75.8015,
+      "cam_id": "CCTV-JP-13",
+      "density": "Low",
+      "vehicle_count": 28,
+      "queue_meters": 35,
+      "status": "AUTO",
+      "signal": "RED"
+    },
+    {
+      "id": "J14",
+      "name": "Gopalpura Bypass - Tonk Road",
+      "road": "Tonk Road / Gopalpura Flyover",
+      "lat": 26.862,
+      "lng": 75.792,
+      "cam_id": "CCTV-JP-14",
+      "density": "Heavy",
+      "vehicle_count": 110,
+      "queue_meters": 180,
+      "status": "AUTO",
+      "signal": "RED"
+    },
+    {
+      "id": "J15",
+      "name": "Gujjar Ki Thadi Crossing",
+      "road": "Gopalpura Bypass / Mansarovar Link",
+      "lat": 26.868,
+      "lng": 75.765,
+      "cam_id": "CCTV-JP-15",
+      "density": "Heavy",
+      "vehicle_count": 78,
+      "queue_meters": 115,
+      "status": "AUTO",
+      "signal": "RED"
+    }
+  ],
+  "routes": {
+    "sindhi_camp__sms": {
+      "origin": "sindhi_camp",
+      "destination": "sms",
+      "primary": {
+        "id": "route_sc_sms_primary",
+        "name": "Green Corridor Primary: MI Road -> Statue Circle -> JLN Marg",
+        "distance_km": 4.6,
+        "standard_eta_mins": 19,
+        "green_corridor_eta_mins": 6.8,
+        "junction_ids": [
+          "J1",
+          "J3",
+          "J5",
+          "J7",
+          "J9"
+        ],
+        "waypoints": [
+          [
+            26.9242,
+            75.7995
+          ],
+          [
+            26.924,
+            75.798
+          ],
+          [
+            26.9215,
+            75.799
+          ],
+          [
+            26.918,
+            75.801
+          ],
+          [
+            26.9145,
+            75.8028
+          ],
+          [
+            26.9115,
+            75.804
+          ],
+          [
+            26.909,
+            75.805
+          ],
+          [
+            26.906,
+            75.808
+          ],
+          [
+            26.903,
+            75.813
+          ],
+          [
+            26.901,
+            75.8145
+          ],
+          [
+            26.8995,
+            75.8155
+          ],
+          [
+            26.8978,
+            75.8164
+          ]
+        ]
+      },
+      "alternate": {
+        "id": "route_sc_sms_alt",
+        "name": "Alternate Route: Station Road -> Ajmer Puliya -> Tonk Road",
+        "distance_km": 5.4,
+        "standard_eta_mins": 24,
+        "green_corridor_eta_mins": 8.9,
+        "junction_ids": [
+          "J1",
+          "J2",
+          "J4",
+          "J8",
+          "J9"
+        ],
+        "waypoints": [
+          [
+            26.9242,
+            75.7995
+          ],
+          [
+            26.922,
+            75.795
+          ],
+          [
+            26.9205,
+            75.7925
+          ],
+          [
+            26.916,
+            75.79
+          ],
+          [
+            26.911,
+            75.789
+          ],
+          [
+            26.902,
+            75.795
+          ],
+          [
+            26.896,
+            75.803
+          ],
+          [
+            26.8935,
+            75.809
+          ],
+          [
+            26.8955,
+            75.813
+          ],
+          [
+            26.8978,
+            75.8164
+          ]
+        ]
+      }
+    },
+    "sindhi_camp__fortis": {
+      "origin": "sindhi_camp",
+      "destination": "fortis",
+      "primary": {
+        "id": "route_sc_fortis_primary",
+        "name": "Green Corridor Primary: JLN Marg Expressway Direct",
+        "distance_km": 9.8,
+        "standard_eta_mins": 34,
+        "green_corridor_eta_mins": 11.5,
+        "junction_ids": [
+          "J1",
+          "J3",
+          "J5",
+          "J7",
+          "J9",
+          "J10",
+          "J11",
+          "J12"
+        ],
+        "waypoints": [
+          [
+            26.9242,
+            75.7995
+          ],
+          [
+            26.924,
+            75.798
+          ],
+          [
+            26.918,
+            75.801
+          ],
+          [
+            26.909,
+            75.805
+          ],
+          [
+            26.903,
+            75.813
+          ],
+          [
+            26.8995,
+            75.8155
+          ],
+          [
+            26.891,
+            75.8145
+          ],
+          [
+            26.8845,
+            75.8135
+          ],
+          [
+            26.878,
+            75.812
+          ],
+          [
+            26.871,
+            75.8105
+          ],
+          [
+            26.863,
+            75.809
+          ],
+          [
+            26.8565,
+            75.808
+          ],
+          [
+            26.853,
+            75.8052
+          ]
+        ]
+      },
+      "alternate": {
+        "id": "route_sc_fortis_alt",
+        "name": "Alternate Route: Tonk Road -> Gopalpura Bypass -> Calgiri Marg",
+        "distance_km": 11.2,
+        "standard_eta_mins": 42,
+        "green_corridor_eta_mins": 14.8,
+        "junction_ids": [
+          "J1",
+          "J2",
+          "J4",
+          "J8",
+          "J14",
+          "J12"
+        ],
+        "waypoints": [
+          [
+            26.9242,
+            75.7995
+          ],
+          [
+            26.9205,
+            75.7925
+          ],
+          [
+            26.911,
+            75.789
+          ],
+          [
+            26.8935,
+            75.809
+          ],
+          [
+            26.88,
+            75.801
+          ],
+          [
+            26.862,
+            75.792
+          ],
+          [
+            26.858,
+            75.8
+          ],
+          [
+            26.8565,
+            75.808
+          ],
+          [
+            26.853,
+            75.8052
+          ]
+        ]
+      }
+    },
+    "mansarovar__sms": {
+      "origin": "mansarovar",
+      "destination": "sms",
+      "primary": {
+        "id": "route_ms_sms_primary",
+        "name": "Green Corridor Primary: Gopalpura Bypass -> Tonk Road -> SMS",
+        "distance_km": 8.7,
+        "standard_eta_mins": 31,
+        "green_corridor_eta_mins": 10.2,
+        "junction_ids": [
+          "J15",
+          "J14",
+          "J8",
+          "J9"
+        ],
+        "waypoints": [
+          [
+            26.864,
+            75.758
+          ],
+          [
+            26.868,
+            75.765
+          ],
+          [
+            26.867,
+            75.776
+          ],
+          [
+            26.862,
+            75.792
+          ],
+          [
+            26.875,
+            75.798
+          ],
+          [
+            26.885,
+            75.804
+          ],
+          [
+            26.8935,
+            75.809
+          ],
+          [
+            26.897,
+            75.813
+          ],
+          [
+            26.8978,
+            75.8164
+          ]
+        ]
+      },
+      "alternate": {
+        "id": "route_ms_sms_alt",
+        "name": "Alternate Route: Queens Road -> Ajmer Road -> Statue Circle -> SMS",
+        "distance_km": 10.1,
+        "standard_eta_mins": 38,
+        "green_corridor_eta_mins": 13.0,
+        "junction_ids": [
+          "J15",
+          "J4",
+          "J5",
+          "J7",
+          "J9"
+        ],
+        "waypoints": [
+          [
+            26.864,
+            75.758
+          ],
+          [
+            26.878,
+            75.759
+          ],
+          [
+            26.892,
+            75.768
+          ],
+          [
+            26.905,
+            75.781
+          ],
+          [
+            26.911,
+            75.789
+          ],
+          [
+            26.909,
+            75.805
+          ],
+          [
+            26.903,
+            75.813
+          ],
+          [
+            26.8978,
+            75.8164
+          ]
+        ]
+      }
+    },
+    "badi_chaupar__ehcc": {
+      "origin": "badi_chaupar",
+      "destination": "ehcc",
+      "primary": {
+        "id": "route_bc_ehcc_primary",
+        "name": "Green Corridor Primary: Sanganeri Gate -> Albert Hall -> JLN Marg -> Jawahar Circle",
+        "distance_km": 11.5,
+        "standard_eta_mins": 39,
+        "green_corridor_eta_mins": 13.2,
+        "junction_ids": [
+          "J6",
+          "J7",
+          "J9",
+          "J10",
+          "J11",
+          "J13"
+        ],
+        "waypoints": [
+          [
+            26.9239,
+            75.8271
+          ],
+          [
+            26.917,
+            75.823
+          ],
+          [
+            26.9116,
+            75.8194
+          ],
+          [
+            26.903,
+            75.813
+          ],
+          [
+            26.8995,
+            75.8155
+          ],
+          [
+            26.8845,
+            75.8135
+          ],
+          [
+            26.871,
+            75.8105
+          ],
+          [
+            26.855,
+            75.807
+          ],
+          [
+            26.8425,
+            75.8015
+          ],
+          [
+            26.8402,
+            75.8005
+          ]
+        ]
+      },
+      "alternate": {
+        "id": "route_bc_ehcc_alt",
+        "name": "Alternate Route: Ram Niwas Bagh -> Tonk Road Arterial -> Jawahar Circle",
+        "distance_km": 12.8,
+        "standard_eta_mins": 46,
+        "green_corridor_eta_mins": 16.0,
+        "junction_ids": [
+          "J6",
+          "J8",
+          "J14",
+          "J13"
+        ],
+        "waypoints": [
+          [
+            26.9239,
+            75.8271
+          ],
+          [
+            26.9116,
+            75.8194
+          ],
+          [
+            26.8935,
+            75.809
+          ],
+          [
+            26.878,
+            75.801
+          ],
+          [
+            26.862,
+            75.792
+          ],
+          [
+            26.85,
+            75.796
+          ],
+          [
+            26.8425,
+            75.8015
+          ],
+          [
+            26.8402,
+            75.8005
+          ]
+        ]
+      }
+    },
+    "raja_park__fortis": {
+      "origin": "raja_park",
+      "destination": "fortis",
+      "primary": {
+        "id": "route_rp_fortis_primary",
+        "name": "Green Corridor Primary: Tilak Nagar -> JLN Marg -> Fortis",
+        "distance_km": 6.2,
+        "standard_eta_mins": 22,
+        "green_corridor_eta_mins": 7.5,
+        "junction_ids": [
+          "J10",
+          "J11",
+          "J12"
+        ],
+        "waypoints": [
+          [
+            26.895,
+            75.832
+          ],
+          [
+            26.89,
+            75.824
+          ],
+          [
+            26.8845,
+            75.8135
+          ],
+          [
+            26.871,
+            75.8105
+          ],
+          [
+            26.8565,
+            75.808
+          ],
+          [
+            26.853,
+            75.8052
+          ]
+        ]
+      },
+      "alternate": {
+        "id": "route_rp_fortis_alt",
+        "name": "Alternate Route: Jawahar Nagar Bypass -> Malviya Nagar Industrial Area",
+        "distance_km": 7.5,
+        "standard_eta_mins": 28,
+        "green_corridor_eta_mins": 9.8,
+        "junction_ids": [
+          "J10",
+          "J12"
+        ],
+        "waypoints": [
+          [
+            26.895,
+            75.832
+          ],
+          [
+            26.885,
+            75.835
+          ],
+          [
+            26.87,
+            75.83
+          ],
+          [
+            26.858,
+            75.82
+          ],
+          [
+            26.853,
+            75.8052
+          ]
+        ]
+      }
+    }
+  }
+}
