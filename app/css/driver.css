@@ -384,6 +384,165 @@ html, body {
   color: var(--accent-crimson);
 }
 
+/* ==========================================================================
+   REAL ANDROID GPS HARDWARE RADAR CARD
+   ========================================================================== */
+.gps-hardware-card {
+  background-color: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  padding: 18px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  box-shadow: var(--shadow-subtle);
+}
+
+.gps-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.gps-status-indicator {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.gps-status-title {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--text-soft);
+  font-family: var(--font-mono);
+}
+
+.btn-gps-refresh {
+  background-color: var(--bg-surface-elevated);
+  border: 1px solid var(--border-subtle);
+  color: var(--text-soft);
+  border-radius: var(--radius-sm);
+  padding: 5px 12px;
+  font-size: 11px;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.2s ease;
+}
+
+.btn-gps-refresh:hover {
+  border-color: var(--border-hover);
+  color: var(--text-white);
+  background-color: rgba(255, 255, 255, 0.08);
+}
+
+.gps-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 8px;
+}
+
+@media (min-width: 440px) {
+  .gps-stats-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+.gps-stat-cell {
+  background-color: var(--bg-card-inner);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-sm);
+  padding: 10px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.gps-stat-lbl {
+  font-size: 9px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-dim);
+}
+
+.gps-stat-val {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text-white);
+}
+
+.font-mono {
+  font-family: var(--font-mono);
+}
+
+.accent-emerald {
+  color: var(--accent-emerald) !important;
+}
+
+/* Android Location Permission Alert Banner */
+.gps-permission-alert {
+  background-color: rgba(245, 158, 11, 0.08);
+  border: 1px solid rgba(245, 158, 11, 0.35);
+  border-radius: var(--radius-sm);
+  padding: 12px 14px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 4px;
+}
+
+.alert-icon {
+  font-size: 20px;
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+.alert-body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.alert-title {
+  font-size: 12px;
+  font-weight: 700;
+  color: #fbbf24;
+}
+
+.alert-msg {
+  font-size: 11px;
+  color: var(--text-soft);
+  line-height: 1.4;
+}
+
+.alert-msg strong {
+  color: #ffffff;
+}
+
+.btn-alert-action {
+  background-color: #f59e0b;
+  color: #000000;
+  border: none;
+  border-radius: var(--radius-sm);
+  font-size: 11px;
+  font-weight: 700;
+  padding: 6px 14px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background-color 0.2s ease;
+}
+
+.btn-alert-action:hover {
+  background-color: #d97706;
+}
+
 /* Mission Planning Card */
 .mission-card {
   background-color: var(--bg-surface);

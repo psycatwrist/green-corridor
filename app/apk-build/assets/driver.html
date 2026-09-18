@@ -11,15 +11,15 @@
   <!-- Web App Manifest for PWA Android Installation -->
   <link rel="manifest" href="manifest.json">
   
-  <!-- Google Fonts: Inter -->
+  <!-- Google Fonts: Inter & JetBrains Mono -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@500;700;800&display=swap" rel="stylesheet">
   
   <!-- Leaflet Map CSS (Offline bundled) -->
   <link rel="stylesheet" href="lib/leaflet/leaflet.css" />
   
-  <!-- Minimalist Emergency CAD Stylesheet -->
+  <!-- Minimalist Executive Stylesheet -->
   <link rel="stylesheet" href="css/driver.css">
 </head>
 <body>
@@ -27,7 +27,7 @@
   <div class="app-container" id="appContainer">
 
     <!-- =======================================================================
-         PART 1: MINIMAL LOGIN SCREEN
+         PART 1: MINIMAL LOGIN SCREEN (Matching Landing Page Mockup Aesthetic)
          ======================================================================= -->
     <section class="login-screen" id="loginScreen">
       <div class="login-panel">
@@ -36,8 +36,8 @@
           <div class="app-brand-badge">
             <span class="brand-plus">+</span>
             <div class="brand-info">
-              <span class="brand-title">GREEN+ CORRIDOR</span>
-              <span class="brand-subtitle">Jaipur Traffic Police CAD</span>
+              <span class="brand-title">GREEN<span class="brand-accent">+</span> CORRIDOR</span>
+              <span class="brand-subtitle">Jaipur Traffic Police CAD Network</span>
             </div>
           </div>
           <button type="button" class="btn-server-config" id="btnServerConfig" title="Configure Fox Backend Server IP">
@@ -47,13 +47,14 @@
         </div>
 
         <div class="login-title-group">
-          <h1 class="login-heading">Driver Terminal Login</h1>
-          <p class="login-desc">Sign in with your assigned fleet credentials to initiate emergency green wave preemption.</p>
+          <span class="tag-badge">MOBILE IN-CAB DISPATCH</span>
+          <h1 class="login-heading">Ambulance Driver Terminal</h1>
+          <p class="login-desc">Sign in with your hospital-issued driver passkey to stream real GPS telemetry and trigger emergency signal preemption.</p>
         </div>
 
         <form id="driverLoginForm" autocomplete="off">
           <div class="login-group">
-            <label for="loginId" class="login-label">Driver ID</label>
+            <label for="loginId" class="login-label">Driver Login ID</label>
             <div class="login-input-wrapper">
               <input 
                 type="text" 
@@ -69,13 +70,13 @@
           </div>
 
           <div class="login-group">
-            <label for="loginPassword" class="login-label">Security Password</label>
+            <label for="loginPassword" class="login-label">Security Passkey</label>
             <div class="login-input-wrapper">
               <input 
                 type="password" 
                 id="loginPassword" 
                 class="login-input" 
-                placeholder="Password" 
+                placeholder="Passkey" 
                 value="Ambulance@123" 
                 required 
                 autocomplete="current-password"
@@ -84,12 +85,12 @@
           </div>
 
           <button type="submit" class="btn-login" id="btnLogin">
-            <span>Enter CAD Terminal</span>
+            <span>Enter CAD Terminal &rarr;</span>
           </button>
         </form>
 
         <div class="login-footer-hint">
-          <span>Connected Fleet Terminal &bull; AIS-140 GPS Telemetry</span>
+          <span>Protected by HMAC-SHA256 &bull; Real Hardware GPS Sensor Link</span>
         </div>
       </div>
     </section>
@@ -104,8 +105,8 @@
         <div class="system-title-group">
           <div class="system-badge-icon">+</div>
           <div>
-            <div class="system-title">Ambulance CAD</div>
-            <div class="system-sub" id="hudDriverBadge">ID: driver.rajesh &bull; RJ-14-AMB-108</div>
+            <div class="system-title">Green+ Ambulance CAD</div>
+            <div class="system-sub" id="hudDriverBadge">ID: driver.rajesh &bull; AMB-SMS-01</div>
           </div>
         </div>
         <div class="system-right-group">
@@ -117,20 +118,63 @@
         </div>
       </header>
 
+      <!-- REAL ANDROID GPS HARDWARE RADAR CARD -->
+      <div class="gps-hardware-card" id="gpsHardwareCard">
+        <div class="gps-card-header">
+          <div class="gps-status-indicator">
+            <span class="status-live-dot" id="gpsIndicatorDot"></span>
+            <span class="gps-status-title" id="gpsStatusHeader">ACQUIRING REAL ANDROID GPS...</span>
+          </div>
+          <button type="button" class="btn-gps-refresh" id="btnRefreshGps" title="Acquire or Recenter Real Device Location">
+            <span>⌖ Recenter GPS</span>
+          </button>
+        </div>
+
+        <div class="gps-stats-grid">
+          <div class="gps-stat-cell">
+            <span class="gps-stat-lbl">REAL LATITUDE</span>
+            <span class="gps-stat-val font-mono" id="gpsLiveLat">--.----°N</span>
+          </div>
+          <div class="gps-stat-cell">
+            <span class="gps-stat-lbl">REAL LONGITUDE</span>
+            <span class="gps-stat-val font-mono" id="gpsLiveLng">--.----°E</span>
+          </div>
+          <div class="gps-stat-cell">
+            <span class="gps-stat-lbl">ACCURACY</span>
+            <span class="gps-stat-val font-mono" id="gpsLiveAccuracy">± --m</span>
+          </div>
+          <div class="gps-stat-cell">
+            <span class="gps-stat-lbl">TELEMETRY LINK</span>
+            <span class="gps-stat-val accent-emerald font-mono" id="gpsStreamPings">Standby</span>
+          </div>
+        </div>
+
+        <!-- Android Location Permission Alert Banner (Hidden by default, shown if permission is denied) -->
+        <div class="gps-permission-alert" id="gpsPermissionAlert" style="display: none;">
+          <div class="alert-icon">⚠️</div>
+          <div class="alert-body">
+            <div class="alert-title">Android Location Permission Required</div>
+            <div class="alert-msg">Allow location access when prompted, or open <strong>Android Settings &rarr; Apps &rarr; Green+ Corridor Ambulance &rarr; Permissions &rarr; Location &rarr; 'Allow only while using the app'</strong>.</div>
+          </div>
+          <button type="button" class="btn-alert-action" id="btnRequestPermission">Grant Access</button>
+        </div>
+      </div>
+
       <!-- Mission Planning & Destination Selector Card -->
       <div class="mission-card">
         <div class="mission-card-header">
           <span class="mission-label">EMERGENCY CORRIDOR DISPATCH</span>
-          <span class="gps-mode-badge" id="telStatusText">GPS Standby</span>
+          <span class="gps-mode-badge" id="telStatusText">Real GPS Standby</span>
         </div>
 
         <form id="routeLocationForm">
           <div class="route-select-grid">
             <div class="route-select-item">
-              <label for="locFrom" class="select-label">Origin Location</label>
+              <label for="locFrom" class="select-label">Trip Origin</label>
               <select id="locFrom" class="minimal-select">
-                <option value="vaishali" selected>Current Location (Vaishali Nagar Depot)</option>
-                <option value="mansarovar">Mansarovar (Shipra Path Station)</option>
+                <option value="real_device_gps" selected>📍 My Real Android Location (Live GPS)</option>
+                <option value="vaishali">Vaishali Nagar Depot</option>
+                <option value="mansarovar">Mansarovar (Shipra Path)</option>
                 <option value="cscheme">C-Scheme (Statue Circle)</option>
               </select>
             </div>
@@ -146,7 +190,7 @@
 
           <div class="mission-actions-row">
             <button type="submit" class="btn-primary-mission" id="btnCalculateRoute">
-              <span>Calculate Optimal Corridor</span>
+              <span>Calculate Optimal Green Wave Corridor</span>
             </button>
           </div>
         </form>
@@ -157,44 +201,42 @@
         <div class="corridor-meta-row">
           <div class="corridor-title-group">
             <h2 class="corridor-title" id="brTitle">JLN Marg Green Corridor</h2>
-            <div class="corridor-path" id="brPath">Vaishali Nagar &bull; Ajmer Road &bull; Ambedkar Circle &bull; SMS Hospital</div>
+            <div class="corridor-path" id="brPath">Real Android Location &bull; JLN Marg &bull; SMS Trauma Bay</div>
           </div>
           <span class="corridor-pill" id="brAvailabilityPill">94% Road Capacity</span>
         </div>
 
-        <!-- 4 Essential Metrics Strip -->
+        <!-- 4 Essential Metrics Strip (Landing Page Mockup Style) -->
         <div class="metrics-strip">
           <div class="metric-cell">
             <span class="m-label">Distance</span>
-            <span class="m-value" id="brDistance">3.8 km</span>
+            <span class="m-value" id="brDistance">-- km</span>
           </div>
           <div class="metric-cell">
             <span class="m-label">Signals</span>
-            <span class="m-value" id="brSignals">3 Pre-empted</span>
+            <span class="m-value" id="brSignals">4 Pre-empted</span>
           </div>
           <div class="metric-cell">
             <span class="m-label">Target ETA</span>
-            <span class="m-value emerald" id="brTime">7m 40s</span>
+            <span class="m-value emerald" id="brTime">--</span>
           </div>
           <div class="metric-cell">
-            <span class="m-label">Availability</span>
+            <span class="m-label">Capacity</span>
             <span class="m-value" id="brAvailabilityVal">94%</span>
           </div>
         </div>
 
-        <!-- Progress bar hidden value holder for JS -->
         <div style="display:none;"><div id="trafficAvailBar" style="width:94%;"></div></div>
       </div>
 
       <!-- Interactive Navigation Map Stage -->
       <div class="map-stage-wrapper">
-        
         <!-- Floating Navigation Maneuver HUD -->
         <div class="map-turn-hud" id="mapTurnHud">
-          <div class="turn-arrow-box">↑</div>
+          <div class="turn-arrow-box">&uarr;</div>
           <div class="turn-text-group">
-            <div class="turn-dist-text" id="turnDistance">In 400m</div>
-            <div class="turn-inst-text" id="turnInstruction">Keep straight &bull; Green Wave Pre-empted at Ambedkar Circle</div>
+            <div class="turn-dist-text" id="turnDistance">In 350m</div>
+            <div class="turn-inst-text" id="turnInstruction">Proceed on Corridor &bull; Green Wave Pre-empted</div>
           </div>
         </div>
 
@@ -202,7 +244,7 @@
 
         <!-- Floating Map Action Buttons -->
         <div class="map-floating-controls">
-          <button type="button" class="btn-map-control" id="btnMapRecenter" title="Recenter on Ambulance">⌖</button>
+          <button type="button" class="btn-map-control" id="btnMapRecenter" title="Recenter on Real GPS">⌖</button>
           <button type="button" class="btn-map-control" id="btnMapZoomIn" title="Zoom In">+</button>
           <button type="button" class="btn-map-control" id="btnMapZoomOut" title="Zoom Out">-</button>
         </div>
@@ -213,19 +255,19 @@
         <div class="telemetry-stats-row">
           <div class="tel-stat-item">
             <span class="tel-stat-label">Live Speed</span>
-            <span class="tel-stat-num" id="telSpeed">58 km/h</span>
+            <span class="tel-stat-num font-mono" id="telSpeed">0 km/h</span>
           </div>
           <div class="tel-stat-item">
-            <span class="tel-stat-label">Dynamic ETA</span>
-            <span class="tel-stat-num emerald" id="telEta">7m 40s</span>
+            <span class="tel-stat-label">Intake ETA</span>
+            <span class="tel-stat-num emerald font-mono" id="telEta">--</span>
           </div>
           <div class="tel-stat-item">
-            <span class="tel-stat-label">Latitude</span>
-            <span class="tel-stat-num mono" id="telLat">26.9045°N</span>
+            <span class="tel-stat-label">GPS Latitude</span>
+            <span class="tel-stat-num font-mono" id="telLat">--.----°N</span>
           </div>
           <div class="tel-stat-item">
-            <span class="tel-stat-label">Longitude</span>
-            <span class="tel-stat-num mono" id="telLng">75.7590°E</span>
+            <span class="tel-stat-label">GPS Longitude</span>
+            <span class="tel-stat-num font-mono" id="telLng">--.----°E</span>
           </div>
         </div>
 
@@ -233,112 +275,133 @@
         <div class="run-buttons-grid">
           <button type="button" class="btn-run-start" id="btnStartRun">
             <span class="run-icon">▲</span>
-            <span>Start Live Run (Stream GPS)</span>
+            <span>Stream Real GPS to Police &amp; Hospital</span>
           </button>
           <button type="button" class="btn-run-reset" id="btnResetRun">
-            <span>Reset Mission</span>
+            <span>Reset Run</span>
           </button>
         </div>
 
         <div class="telemetry-footnote">
-          Real GPS coordinates streamed live to Jaipur Traffic Police Command &amp; Trauma Intake.
+          Real coordinates streamed live to Fox Backend at 12Hz AIS-140 standard for automatic traffic light clearance.
         </div>
       </div>
 
       <!-- Collapsible Signal Timers & Alternate Corridors Accordion -->
       <details class="details-accordion" id="signalsAccordion">
         <summary class="accordion-summary">
-          <span>Signal Clearance Radar &amp; Alternative Routes</span>
-          <span class="accordion-chevron">▾</span>
+          <span>Corridor Signal Timings &amp; Alternatives</span>
+          <span class="accordion-arrow">&darr;</span>
         </summary>
         
         <div class="accordion-content">
-          <p class="traffic-status-text" id="trafficAvailSummary">
-            All corridor junctions pre-empted with Jaipur Traffic Police Green Wave.
-          </p>
-
-          <div class="signal-timing-list" id="signalTimingList">
-            <div class="signal-timing-row">
-              <span class="signal-name">1. Ambedkar Circle Crossing</span>
-              <span class="signal-timing-badge" id="sigHold1">Hold: 00:24s remaining</span>
-            </div>
-            <div class="signal-timing-row">
-              <span class="signal-name">2. Rambagh Circle Crossing</span>
-              <span class="signal-timing-badge" id="sigHold2">Hold: 00:48s remaining</span>
-            </div>
-            <div class="signal-timing-row">
-              <span class="signal-name">3. SMS Hospital Trauma Gate</span>
-              <span class="signal-timing-badge" id="sigHold3">Dock Cleared: 00:00s</span>
+          <div>
+            <h3 class="accordion-subheading">Green Wave Signal Hold Gates</h3>
+            <div class="signal-items-list" id="signalTimingList">
+              <div class="signal-node-row">
+                <div>
+                  <div class="signal-node-name">1. Ambedkar Circle</div>
+                  <div class="signal-node-sub">Density: Light (18%) &bull; Hold active</div>
+                </div>
+                <div class="signal-timer-badge">HOLD: 01:24s</div>
+              </div>
+              <div class="signal-node-row">
+                <div>
+                  <div class="signal-node-name">2. Rambagh Circle</div>
+                  <div class="signal-node-sub">Density: Moderate (42%) &bull; Approaching</div>
+                </div>
+                <div class="signal-timer-badge">HOLD: 02:40s</div>
+              </div>
+              <div class="signal-node-row">
+                <div>
+                  <div class="signal-node-name">3. Narayan Singh Circle</div>
+                  <div class="signal-node-sub">Density: Light (12%) &bull; Arming</div>
+                </div>
+                <div class="signal-timer-badge">HOLD: 04:15s</div>
+              </div>
+              <div class="signal-node-row">
+                <div>
+                  <div class="signal-node-name">4. SMS Trauma Center Gate</div>
+                  <div class="signal-node-sub">Emergency Bay Direct Access</div>
+                </div>
+                <div class="signal-timer-badge" style="color: #10b981;">CLEAR</div>
+              </div>
             </div>
           </div>
 
-          <div class="alt-routes-header">Alternative Corridors (OSRM Comparison)</div>
-          <div class="alt-routes-list" id="altRoutesList">
-            <div class="alt-route-item" data-route-key="alt-a">
-              <div>
-                <div class="alt-route-name">Tonk Road Corridor</div>
-                <div class="alt-route-sub">42% Road Availability &bull; Secondary Option</div>
+          <div>
+            <h3 class="accordion-subheading">Alternative Dynamic Corridors</h3>
+            <div class="alt-routes-list" id="altRoutesList">
+              <div class="alt-route-item selected" data-route-key="optimal">
+                <div>
+                  <div class="alt-route-name">JLN Marg Corridor (Optimal)</div>
+                  <div class="alt-route-via">Via Ambedkar Circle &bull; 4 Pre-empted Signals</div>
+                </div>
+                <div class="alt-route-eta">7m 40s</div>
               </div>
-              <div class="alt-route-stats">5.6 km &bull; 5 Signals &bull; 13m 15s</div>
-            </div>
-            <div class="alt-route-item" data-route-key="alt-b">
-              <div>
-                <div class="alt-route-name">MI Road Corridor</div>
-                <div class="alt-route-sub">18% Road Availability &bull; High Congestion</div>
+              <div class="alt-route-item" data-route-key="alt-a">
+                <div>
+                  <div class="alt-route-name">Tonk Road Emergency Bypass</div>
+                  <div class="alt-route-via">Via B2 Bypass &bull; Higher clearance buffer</div>
+                </div>
+                <div class="alt-route-eta">9m 10s</div>
               </div>
-              <div class="alt-route-stats">7.2 km &bull; 7 Signals &bull; 18m 50s</div>
             </div>
           </div>
         </div>
       </details>
 
     </section>
-    
-    <!-- Server Configuration Modal -->
-    <div class="server-config-modal-backdrop" id="serverModalBackdrop" style="display: none;">
-      <div class="server-config-modal">
-        <div class="server-modal-header">
-          <div class="server-modal-title">Fox Backend Server</div>
-          <button type="button" class="btn-close-server-modal" id="btnCloseServerModal">&times;</button>
-        </div>
-        <div class="server-modal-body">
-          <p class="server-modal-desc">Configure the Fox FastAPI backend URL for live multi-terminal synchronization with Traffic Police Command.</p>
-          <div class="login-group">
-            <label for="inputServerUrl" class="login-label">Server URL</label>
-            <div class="login-input-wrapper">
-              <input type="url" id="inputServerUrl" class="login-input" placeholder="http://192.168.1.100:8000" value="http://localhost:8000">
-            </div>
-          </div>
-          <div class="server-status-info" id="serverStatusInfo">Status: Ready</div>
-        </div>
-        <div class="server-modal-actions">
-          <button type="button" class="btn-test-server" id="btnTestServer">Test Connection</button>
-          <button type="button" class="btn-save-server" id="btnSaveServer">Save &amp; Connect</button>
-        </div>
-      </div>
-    </div>
 
   </div>
 
-  <!-- Toast Notification Bar -->
-  <div class="toast-bar" id="toast" style="display: none;"></div>
+  <!-- =========================================================================
+       MODAL: FOX BACKEND SERVER CONFIGURATION
+       ========================================================================= -->
+  <div class="modal-backdrop" id="serverModalBackdrop" style="display: none;">
+    <div class="modal-dialog">
+      <div class="modal-header-row">
+        <h3 class="modal-heading">Configure Fox Backend Host</h3>
+        <button type="button" class="btn-close-dialog" id="btnCloseServerModal">&times;</button>
+      </div>
+
+      <div style="font-size: 13px; color: var(--text-muted); line-height: 1.5;">
+        Specify the IP and port of your Fox Backend server. If connected to Android hotspot, enter your PC's IP.
+      </div>
+
+      <div class="login-group" style="margin-bottom: 0;">
+        <label for="inputServerUrl" class="login-label">Server Base URL</label>
+        <input 
+          type="text" 
+          id="inputServerUrl" 
+          class="login-input" 
+          placeholder="http://10.24.5.232:8000" 
+          value="http://10.24.5.232:8000"
+        >
+      </div>
+
+      <div id="serverStatusInfo" style="font-size: 12px; font-family: var(--font-mono); color: var(--accent-emerald);">
+        Checking backend status...
+      </div>
+
+      <div style="display: flex; gap: 10px;">
+        <button type="button" class="btn-primary-mission" id="btnTestServer" style="flex: 1;">
+          Test Connection
+        </button>
+        <button type="button" class="btn-login" id="btnSaveServer" style="flex: 1; margin: 0;">
+          Save &amp; Connect
+        </button>
+      </div>
+    </div>
+  </div>
 
   <!-- Leaflet Map JS (Offline bundled) -->
   <script src="lib/leaflet/leaflet.js"></script>
-  
-  <!-- Core Fox API & Data Store -->
+
+  <!-- Core Fox API & Data Layers -->
   <script src="js/api.js"></script>
   <script src="js/data.js"></script>
   <script src="js/state.js"></script>
   <script src="js/driver.js"></script>
-
-  <!-- Service Worker for Offline PWA Installation -->
-  <script>
-    if ('serviceWorker' in navigator) {
-      window.addEventListener('load', function() {
-        navigator.serviceWorker.register('sw.js').catch(function() {});
-      });
-    }
-  </script>
 </body>
 </html>

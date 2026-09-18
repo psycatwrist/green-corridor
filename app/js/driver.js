@@ -2,8 +2,8 @@
  * ==========================================================================
  * GREEN+ CORRIDOR - Ambulance Driver CAD Mobile Application Controller
  * File: js/driver.js
- * Theme: Navy Blue, Black, and White Only
- * Professional Emergency CAD UI/UX & Real-Time AIS-140 GPS Telemetry Engine
+ * Theme: Pure Neutral Charcoal & Obsidian Minimalist Executive CAD
+ * Real-Time Android Hardware GPS Telemetry & OSRM Emergency AI Routing
  * ==========================================================================
  */
 
@@ -12,16 +12,23 @@ document.addEventListener('DOMContentLoaded', () => {
   // --- In-Cab CAD Terminal State ---
   const state = {
     driver: null,
-    fromLoc: 'vaishali',
+    fromLoc: 'real_device_gps',
     toLoc: 'sms',
     activeRouteKey: 'optimal',
     currentRoute: null,
-    coords: [26.9045, 75.7590],
-    speed: 58,
-    heading: 124,
+    coords: [26.9045, 75.7590], // Default fallback Jaipur coordinates
+    realGpsCoords: null,        // True hardware coords [lat, lng]
+    hasRealGps: false,
+    gpsAccuracy: null,
+    gpsWatchId: null,
+    telemetryPingCount: 0,
+    telemetryTimer: null,
+    heartbeatTimer: null,
+    speed: 0,
+    heading: 0,
     distanceKm: 3.8,
-    eta: "7m 40s",
-    availabilityPct: 88,
+    eta: "--",
+    availabilityPct: 94,
     isDriving: false,
     simIndex: 0,
     simTimer: null,
@@ -53,6 +60,19 @@ document.addEventListener('DOMContentLoaded', () => {
   const loginServerDot = document.getElementById('loginServerDot');
   const loginServerText = document.getElementById('loginServerText');
 
+  // Real Android GPS Hardware Radar Elements
+  const gpsHardwareCard = document.getElementById('gpsHardwareCard');
+  const gpsIndicatorDot = document.getElementById('gpsIndicatorDot');
+  const gpsStatusHeader = document.getElementById('gpsStatusHeader');
+  const btnRefreshGps = document.getElementById('btnRefreshGps');
+  const gpsLiveLat = document.getElementById('gpsLiveLat');
+  const gpsLiveLng = document.getElementById('gpsLiveLng');
+  const gpsLiveAccuracy = document.getElementById('gpsLiveAccuracy');
+  const gpsStreamPings = document.getElementById('gpsStreamPings');
+  const gpsPermissionAlert = document.getElementById('gpsPermissionAlert');
+  const btnRequestPermission = document.getElementById('btnRequestPermission');
+
+  // Mission Planning Form
   const routeLocationForm = document.getElementById('routeLocationForm');
   const locFromSelect = document.getElementById('locFrom');
   const locToSelect = document.getElementById('locTo');
@@ -90,6 +110,17 @@ document.addEventListener('DOMContentLoaded', () => {
   // ==========================================================================
   // 1. Lifecycle & Initialization
   // ==========================================================================
+  function haversineDistance(lat1, lon1, lat2, lon2) {
+    const R = 6371; // Earth radius in km
+    const dLat = (lat2 - lat1) * Math.PI / 180;
+    const dLon = (lon2 - lon1) * Math.PI / 180;
+    const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+              Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+              Math.sin(dLon / 2) * Math.sin(dLon / 2);
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    return R * c;
+  }
+
   function populateHospitalDestinations() {
     if (!locToSelect) return;
     const profiles = window.GC_DATA && window.GC_DATA.hospitalProfiles ? window.GC_DATA.hospitalProfiles : {};
@@ -114,6 +145,9 @@ document.addEventListener('DOMContentLoaded', () => {
     startClock();
     startSignalCountdownClock();
     populateHospitalDestinations();
+
+    // Start Real Android GPS immediately on launch
+    initRealDeviceGps();
 
     if (window.GC_DATA && window.GC_DATA.initFromFoxBackend) {
       window.GC_DATA.initFromFoxBackend().then(populateHospitalDestinations).catch(() => {});
@@ -152,7 +186,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 authenticated = apiResp.profile;
               } else if (apiResp.code === 401 || apiResp.error) {
                 btnLogin.disabled = false;
-                btnLogin.innerHTML = '<span>Login</span>';
+                btnLogin.innerHTML = '<span>Enter CAD Terminal &rarr;</span>';
                 vibrate([50, 50, 50]);
                 showToast("Fox Backend: Invalid Driver ID or Password.");
                 return;
@@ -166,7 +200,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         btnLogin.disabled = false;
-        btnLogin.innerHTML = '<span>Login</span>';
+        btnLogin.innerHTML = '<span>Enter CAD Terminal &rarr;</span>';
 
         if (!authenticated) {
           vibrate([50, 50, 50]);
@@ -187,7 +221,8 @@ document.addEventListener('DOMContentLoaded', () => {
     if (btnSignOut) {
       btnSignOut.addEventListener('click', () => {
         vibrate(20);
-        stopSimulation();
+        stopStreamingRun();
+        if (state.heartbeatTimer) clearInterval(state.heartbeatTimer);
         try { sessionStorage.removeItem('gc_driver_app_session'); } catch(e) {}
         state.driver = null;
         if (mainInterface) mainInterface.style.display = 'none';
@@ -203,7 +238,8 @@ document.addEventListener('DOMContentLoaded', () => {
         vibrate(25);
         state.fromLoc = locFromSelect.value;
         state.toLoc = locToSelect.value;
-        calculateAiCorridor(state.fromLoc, state.toLoc);
+        calculateAiCorridor(state.fromLoc, state.toLoc, true);
+        showToast("Calculating optimal Green Wave corridor...");
       });
     }
 
@@ -212,9 +248,9 @@ document.addEventListener('DOMContentLoaded', () => {
       btnStartRun.addEventListener('click', () => {
         vibrate(35);
         if (state.isDriving) {
-          pauseSimulation();
+          stopStreamingRun();
         } else {
-          startSimulation();
+          startStreamingRun();
         }
       });
     }
@@ -222,7 +258,27 @@ document.addEventListener('DOMContentLoaded', () => {
     if (btnResetRun) {
       btnResetRun.addEventListener('click', () => {
         vibrate(25);
-        resetSimulation();
+        resetStreamingRun();
+      });
+    }
+
+    // Recenter GPS Button in Hardware Card
+    if (btnRefreshGps) {
+      btnRefreshGps.addEventListener('click', () => {
+        vibrate(25);
+        initRealDeviceGps();
+        if (state.map && state.coords) {
+          state.map.setView(state.coords, 16, { animate: true });
+        }
+        showToast("Acquiring fresh GPS lock from phone sensors...");
+      });
+    }
+
+    // Request Permission Button in Alert Banner
+    if (btnRequestPermission) {
+      btnRequestPermission.addEventListener('click', () => {
+        vibrate(25);
+        initRealDeviceGps();
       });
     }
 
@@ -231,7 +287,7 @@ document.addEventListener('DOMContentLoaded', () => {
       btnMapRecenter.addEventListener('click', () => {
         vibrate(20);
         if (state.map && state.coords) {
-          state.map.setView(state.coords, 15, { animate: true });
+          state.map.setView(state.coords, 16, { animate: true });
         }
       });
     }
@@ -359,7 +415,7 @@ document.addEventListener('DOMContentLoaded', () => {
       if (!state.currentRoute || !state.currentRoute.trafficSignals) return;
       
       state.signalTimers = state.signalTimers.map((val, idx) => {
-        if (idx === state.signalTimers.length - 1) return 0; // Last gate cleared
+        if (idx === state.signalTimers.length - 1) return 0; // Destination gate cleared
         return val > 1 ? val - 1 : ((idx + 1) * 25);
       });
 
@@ -369,21 +425,140 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function updateSignalBadges() {
     if (!signalTimingList) return;
-    const badges = signalTimingList.querySelectorAll('.signal-timing-badge');
+    const badges = signalTimingList.querySelectorAll('.signal-timing-badge, .signal-timer-badge');
     badges.forEach((badge, idx) => {
       const sec = state.signalTimers[idx] !== undefined ? state.signalTimers[idx] : 0;
       if (sec === 0) {
-        badge.textContent = "Dock Cleared: 00:00s";
-        badge.style.borderColor = "#ffffff";
+        badge.textContent = "CLEAR";
+        badge.style.color = "#10b981";
       } else {
         const s = sec < 10 ? '0' + sec : sec;
-        badge.textContent = `Hold: 00:${s}s remaining`;
+        badge.textContent = `HOLD: 00:${s}s`;
       }
     });
   }
 
   // ==========================================================================
-  // 2. Driver Session Launch
+  // 2. Real Android GPS Hardware Tracking Engine
+  // ==========================================================================
+  function initRealDeviceGps() {
+    if (!('geolocation' in navigator)) {
+      if (gpsStatusHeader) gpsStatusHeader.textContent = "NO HARDWARE GPS SENSOR DETECTED";
+      if (gpsStreamPings) gpsStreamPings.textContent = "Sensor N/A";
+      return;
+    }
+
+    if (gpsStatusHeader) gpsStatusHeader.innerHTML = "ACQUIRING REAL ANDROID GPS...";
+    if (gpsIndicatorDot) gpsIndicatorDot.className = "status-live-dot";
+
+    // Fast initial fix (cell/Wi-Fi assisted) with low timeout
+    navigator.geolocation.getCurrentPosition(
+      (pos) => handleGpsPosition(pos, 'quick'),
+      (err) => handleGpsError(err, 'quick'),
+      { enableHighAccuracy: false, timeout: 12000, maximumAge: 60000 }
+    );
+
+    // Continuous high-accuracy satellite lock
+    if (state.gpsWatchId !== null) {
+      navigator.geolocation.clearWatch(state.gpsWatchId);
+    }
+
+    try {
+      state.gpsWatchId = navigator.geolocation.watchPosition(
+        (pos) => handleGpsPosition(pos, 'satellite'),
+        (err) => handleGpsError(err, 'satellite'),
+        { enableHighAccuracy: true, timeout: 35000, maximumAge: 1000 }
+      );
+    } catch(e) {
+      console.warn("watchPosition exception:", e);
+    }
+  }
+
+  function handleGpsPosition(pos, source) {
+    const lat = pos.coords.latitude;
+    const lng = pos.coords.longitude;
+    const acc = Math.round(pos.coords.accuracy || 0);
+    const spd = (pos.coords.speed !== null && pos.coords.speed !== undefined && !isNaN(pos.coords.speed) && pos.coords.speed > 0)
+      ? Math.round(pos.coords.speed * 3.6)
+      : 0;
+    const hdg = (pos.coords.heading !== null && pos.coords.heading !== undefined && !isNaN(pos.coords.heading))
+      ? Math.round(pos.coords.heading)
+      : 0;
+
+    const isFirstFix = !state.hasRealGps;
+    state.hasRealGps = true;
+    state.realGpsCoords = [lat, lng];
+    state.gpsAccuracy = acc;
+    if (spd > 0) state.speed = spd;
+    if (hdg > 0) state.heading = hdg;
+
+    // Hide permission banner if previously shown
+    if (gpsPermissionAlert) gpsPermissionAlert.style.display = 'none';
+
+    // Update GPS status indicator
+    if (gpsIndicatorDot) gpsIndicatorDot.className = 'status-live-dot online';
+    if (gpsStatusHeader) {
+      gpsStatusHeader.innerHTML = `REAL ANDROID GPS LOCKED &bull; ${source === 'satellite' ? '12Hz SATELLITE' : 'FAST FIX'}`;
+    }
+
+    // Update GPS Stat Cells
+    if (gpsLiveLat) gpsLiveLat.textContent = `${lat.toFixed(5)}°N`;
+    if (gpsLiveLng) gpsLiveLng.textContent = `${lng.toFixed(5)}°E`;
+    if (gpsLiveAccuracy) {
+      gpsLiveAccuracy.textContent = `± ${acc}m`;
+      gpsLiveAccuracy.style.color = acc <= 25 ? '#10b981' : '#f59e0b';
+    }
+
+    // If trip origin is real_device_gps, update active state coordinates
+    if (state.fromLoc === 'real_device_gps') {
+      const prevCoords = state.coords;
+      state.coords = [lat, lng];
+
+      if (telLat) telLat.textContent = `${lat.toFixed(5)}°N`;
+      if (telLng) telLng.textContent = `${lng.toFixed(5)}°E`;
+      if (telSpeed) telSpeed.textContent = `${state.speed} km/h`;
+
+      // Update vehicle marker on map
+      if (state.mapElements.marker) {
+        state.mapElements.marker.setLatLng(state.coords);
+      }
+
+      // If first fix, center the map on the real device position
+      if (isFirstFix && state.map) {
+        state.map.setView(state.coords, 15, { animate: true });
+      }
+
+      // Dynamically recalculate route if first fix or moved > 60m
+      if (!state.currentRoute || isFirstFix || haversineDistance(prevCoords[0], prevCoords[1], lat, lng) > 0.06) {
+        calculateAiCorridor('real_device_gps', state.toLoc, isFirstFix);
+      }
+    }
+
+    // Transmit telemetry update
+    broadcastTelemetry();
+  }
+
+  function handleGpsError(err, source) {
+    console.warn(`GPS error (${source}): [code ${err.code}] ${err.message}`);
+    if (err.code === 1) { // PERMISSION_DENIED
+      if (gpsPermissionAlert) gpsPermissionAlert.style.display = 'flex';
+      if (gpsStatusHeader) gpsStatusHeader.textContent = "LOCATION PERMISSION REQUIRED";
+      if (gpsIndicatorDot) gpsIndicatorDot.className = 'status-indicator-dot offline';
+      if (telStatusText) telStatusText.textContent = "Permission Needed";
+      if (gpsStreamPings) gpsStreamPings.textContent = "Blocked";
+    } else if (err.code === 2) { // POSITION_UNAVAILABLE
+      if (!state.hasRealGps && gpsStatusHeader) {
+        gpsStatusHeader.textContent = "SEARCHING FOR SATELLITE FIX...";
+      }
+    } else if (err.code === 3) { // TIMEOUT
+      if (!state.hasRealGps && gpsStatusHeader) {
+        gpsStatusHeader.textContent = "GPS TIMEOUT • RETRYING FIX...";
+      }
+    }
+  }
+
+  // ==========================================================================
+  // 3. Driver Session Launch
   // ==========================================================================
   function launchDriverSession(driver) {
     state.driver = driver;
@@ -412,16 +587,27 @@ document.addEventListener('DOMContentLoaded', () => {
       state.toLoc = locToSelect.value;
     }
 
-    // Compute Real OSRM AI Corridor
-    calculateAiCorridor(state.fromLoc, state.toLoc);
+    // Refresh GPS on login
+    initRealDeviceGps();
+
+    // Compute Initial OSRM AI Corridor
+    calculateAiCorridor(state.fromLoc, state.toLoc, true);
 
     // Initialize Map
     setTimeout(() => {
       initMap();
     }, 250);
 
-    // Broadcast Initial Telemetry
+    // Initial Telemetry Broadcast
     broadcastTelemetry();
+
+    // Start background heartbeat (every 6 seconds)
+    if (state.heartbeatTimer) clearInterval(state.heartbeatTimer);
+    state.heartbeatTimer = setInterval(() => {
+      if (!state.isDriving) {
+        broadcastTelemetry();
+      }
+    }, 6000);
 
     // Listen for Green Corridor clearances from Fox Backend
     if (window.GC_API) {
@@ -432,8 +618,8 @@ document.addEventListener('DOMContentLoaded', () => {
             const badge = document.getElementById('telStatusText');
             if (badge) {
               badge.textContent = "GREEN CORRIDOR AUTHORIZED BY JTP COMMAND";
-              badge.style.backgroundColor = "#059669";
-              badge.style.color = "#ffffff";
+              badge.style.backgroundColor = "rgba(16, 185, 129, 0.2)";
+              badge.style.color = "#10b981";
             }
           }
         }
@@ -442,9 +628,9 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // ==========================================================================
-  // 3. AI Traffic Engine: Real OSRM Street Driving & Green Wave Preemption
+  // 4. AI Traffic Engine: Real OSRM Street Driving & Green Wave Preemption
   // ==========================================================================
-  async function calculateAiCorridor(fromLoc, toLoc) {
+  async function calculateAiCorridor(fromLoc, toLoc, fitMapBounds = true) {
     const locMap = {
       vaishali: [26.9045, 75.7590],
       mansarovar: [26.8550, 75.7660],
@@ -453,17 +639,27 @@ document.addEventListener('DOMContentLoaded', () => {
       apex: [26.8550, 75.8242]
     };
 
-    const startCoords = locMap[fromLoc] || [26.9045, 75.7590];
+    let startCoords;
+    if (fromLoc === 'real_device_gps') {
+      startCoords = state.realGpsCoords || state.coords || [26.9045, 75.7590];
+    } else {
+      startCoords = locMap[fromLoc] || [26.9045, 75.7590];
+    }
+
     const targetProfile = (window.GC_DATA && window.GC_DATA.hospitalProfiles && (window.GC_DATA.hospitalProfiles[toLoc] || window.GC_DATA.hospitalProfiles.sms)) || {};
     const destCoords = targetProfile.coords || locMap[toLoc] || [26.8978, 75.8156];
 
     let routeData = null;
     if (window.GC_API && window.GC_API.getRoute) {
-      routeData = await window.GC_API.getRoute(startCoords[0], startCoords[1], destCoords[0], destCoords[1], 'emergency');
+      try {
+        routeData = await window.GC_API.getRoute(startCoords[0], startCoords[1], destCoords[0], destCoords[1], 'emergency');
+      } catch(e) {
+        console.warn("Routing query failed:", e);
+      }
     }
 
-    const distKm = routeData ? routeData.distance_km : 3.8;
-    const etaStr = routeData ? routeData.eta : "7m 40s";
+    const distKm = routeData ? routeData.distance_km : +(haversineDistance(startCoords[0], startCoords[1], destCoords[0], destCoords[1])).toFixed(1);
+    const etaStr = routeData ? routeData.eta : `${Math.ceil(distKm * 2)}m 10s`;
     const pathPoints = routeData && routeData.coordinates && routeData.coordinates.length > 1
       ? routeData.coordinates
       : [startCoords, [(startCoords[0] + destCoords[0]) / 2, (startCoords[1] + destCoords[1]) / 2], destCoords];
@@ -471,7 +667,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const currentRoute = {
       id: "osrm-optimal",
       name: `Green Corridor ➔ ${targetProfile.name ? targetProfile.name.split(',')[0] : 'Hospital'}`,
-      via: `OSRM Express Routing ➔ ${targetProfile.name ? targetProfile.name.split(',')[0] : 'Trauma Bay'}`,
+      via: fromLoc === 'real_device_gps' ? `Live Android GPS ➔ ${targetProfile.name || 'Trauma Bay'}` : `Depot ➔ ${targetProfile.name || 'Trauma Bay'}`,
       distanceKm: distKm,
       distanceStr: `${distKm} km`,
       corridorDurationStr: etaStr,
@@ -484,7 +680,9 @@ document.addEventListener('DOMContentLoaded', () => {
     state.currentRoute = currentRoute;
     state.distanceKm = distKm;
     state.eta = etaStr;
-    state.coords = [...pathPoints[0]];
+    if (fromLoc !== 'real_device_gps') {
+      state.coords = [...pathPoints[0]];
+    }
     state.availabilityPct = 94;
     state.signalTimers = [24, 48, 0];
 
@@ -499,50 +697,24 @@ document.addEventListener('DOMContentLoaded', () => {
     if (brAvailabilityVal) brAvailabilityVal.textContent = `94%`;
     if (trafficAvailBar) trafficAvailBar.style.width = `94%`;
 
-    if (trafficAvailSummary) {
-      trafficAvailSummary.textContent = `OSRM Live Street Calculation: Exact road driving geometry fetched. All traffic signals along ${targetProfile.name || 'destination'} pre-empted by JTP Command.`;
-    }
-
     // Update Telemetry Grid
-    if (telLat) telLat.textContent = `${state.coords[0].toFixed(4)}°N`;
-    if (telLng) telLng.textContent = `${state.coords[1].toFixed(4)}°E`;
+    if (telLat) telLat.textContent = `${state.coords[0].toFixed(5)}°N`;
+    if (telLng) telLng.textContent = `${state.coords[1].toFixed(5)}°E`;
     if (telSpeed) telSpeed.textContent = `${state.speed} km/h`;
     if (telEta) telEta.textContent = state.eta;
 
-    // Update Turn Guidance HUD with OSRM Steps
-    if (turnDistance) turnDistance.textContent = "In 400m";
+    // Update Turn Guidance HUD
+    if (turnDistance) turnDistance.textContent = distKm < 0.5 ? `In ${(distKm * 1000).toFixed(0)}m` : `In 450m`;
     if (turnInstruction) {
       if (currentRoute.steps && currentRoute.steps.length > 0) {
         turnInstruction.innerHTML = `<strong>${currentRoute.steps[0].instruction}</strong> &bull; Green Wave Pre-empted`;
       } else {
-        turnInstruction.innerHTML = `Keep straight &bull; Green Wave Pre-empted to <strong>${targetProfile.name || 'Trauma Bay'}</strong>`;
+        turnInstruction.innerHTML = `Proceed along corridor &bull; Green Wave Pre-empted to <strong>${targetProfile.name || 'Trauma Bay'}</strong>`;
       }
     }
 
     // Update Map
-    updateMapLine(currentRoute);
-    showToast("OSRM Driving Path Synchronized with Green Wave Preemption.");
-  }
-
-  function renderSignalTimes(route) {
-    if (!signalTimingList) return;
-    signalTimingList.innerHTML = '';
-
-    if (route.trafficSignals) {
-      route.trafficSignals.forEach((sig, index) => {
-        const holdSec = state.signalTimers[index] !== undefined ? state.signalTimers[index] : (index + 1) * 24;
-        const row = document.createElement('div');
-        row.className = 'signal-timing-row';
-        row.innerHTML = `
-          <div class="signal-name-group">
-            <span class="signal-index">${index + 1}</span>
-            <span class="signal-name">${sig.name}</span>
-          </div>
-          <span class="signal-timing-badge">${holdSec === 0 ? 'Dock Cleared: 00:00s' : `Hold: 00:${holdSec < 10 ? '0' + holdSec : holdSec}s remaining`}</span>
-        `;
-        signalTimingList.appendChild(row);
-      });
-    }
+    updateMapLine(currentRoute, fitMapBounds);
   }
 
   function switchRoute(routeKey) {
@@ -571,17 +743,12 @@ document.addEventListener('DOMContentLoaded', () => {
     if (brAvailabilityVal) brAvailabilityVal.textContent = `${state.availabilityPct}%`;
     if (trafficAvailBar) trafficAvailBar.style.width = `${state.availabilityPct}%`;
 
-    if (trafficAvailSummary) {
-      trafficAvailSummary.textContent = `AI Analysis: ${selected.name} (${state.availabilityPct}% availability). Expect moderate delays at unsynchronized junctions.`;
-    }
-
-    renderSignalTimes(selected);
-    updateMapLine(selected);
+    updateMapLine(selected, true);
     showToast(`Switched to: ${selected.name}`);
   }
 
   // ==========================================================================
-  // 4. Map Implementation (Navy Blue, Black, and White Only)
+  // 5. Interactive Navigation Map (Neutral Obsidian & Emerald Theme)
   // ==========================================================================
   function initMap() {
     if (state.map) {
@@ -594,7 +761,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     state.map = L.map('navMapLeaflet', {
       center: state.coords,
-      zoom: 14,
+      zoom: 15,
       zoomControl: false,
       attributionControl: false
     });
@@ -602,15 +769,15 @@ document.addEventListener('DOMContentLoaded', () => {
     // OpenStreetMap standard tiles
     L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
       maxZoom: 19,
-      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+      attribution: '&copy; OpenStreetMap'
     }).addTo(state.map);
 
-    // Vehicle Marker (Emerald emergency beacon with radar ring)
+    // Vehicle Marker (Emerald emergency beacon with pulse ring)
     const vehicleIcon = L.divIcon({
       className: 'custom-vehicle-marker',
       html: `
         <div style="position:relative; width:34px; height:34px; display:flex; align-items:center; justify-content:center;">
-          <div style="position:absolute; width:34px; height:34px; border-radius:50%; background:rgba(16,185,129,0.3); animation:pulseDot 1.5s infinite;"></div>
+          <div style="position:absolute; width:34px; height:34px; border-radius:50%; background:rgba(16,185,129,0.35); animation:pulseDot 1.5s infinite;"></div>
           <div style="width:26px; height:26px; border-radius:50%; background:#10b981; border:2.5px solid #09090b; box-shadow:0 0 14px rgba(16,185,129,0.8); display:flex; align-items:center; justify-content:center; color:#042f2e; font-size:14px; font-weight:900;">+</div>
         </div>
       `,
@@ -621,11 +788,11 @@ document.addEventListener('DOMContentLoaded', () => {
     state.mapElements.marker = L.marker(state.coords, { icon: vehicleIcon }).addTo(state.map);
 
     if (state.currentRoute) {
-      updateMapLine(state.currentRoute);
+      updateMapLine(state.currentRoute, true);
     }
   }
 
-  function updateMapLine(route) {
+  function updateMapLine(route, fitBounds = true) {
     const map = state.map;
     if (!map || !route.coordinates) return;
 
@@ -644,7 +811,7 @@ document.addEventListener('DOMContentLoaded', () => {
     state.mapElements.lineGlow = L.polyline(route.coordinates, {
       color: '#10b981',
       weight: 10,
-      opacity: 0.3
+      opacity: 0.28
     }).addTo(map);
 
     // Inner crisp polyline (Deep Emerald)
@@ -669,182 +836,75 @@ document.addEventListener('DOMContentLoaded', () => {
       });
     }
 
-    map.fitBounds(state.mapElements.line.getBounds(), { padding: [40, 40] });
+    if (fitBounds && state.mapElements.line) {
+      map.fitBounds(state.mapElements.line.getBounds(), { padding: [40, 40] });
+    }
   }
 
   // ==========================================================================
-  // 5. Real-Time AIS-140 GPS Telemetry & OSRM Driving Engine
+  // 6. Live Telemetry Streaming Controls
   // ==========================================================================
-  function startSimulation() {
-    if (state.isDriving) return;
+  function startStreamingRun() {
     state.isDriving = true;
 
     if (btnStartRun) {
       btnStartRun.classList.add('active');
-      btnStartRun.innerHTML = '<span class="run-icon">❚❚</span><span>Pause Mission</span>';
+      btnStartRun.innerHTML = '<span class="run-icon">❚❚</span><span>Pause Live GPS Telemetry</span>';
     }
 
-    // 1. Attempt Real GPS Hardware Streaming via Geolocation API
-    if ('geolocation' in navigator) {
-      if (telStatusText) telStatusText.textContent = "Acquiring Real GPS...";
-      
-      try {
-        state.watchId = navigator.geolocation.watchPosition(
-          (pos) => {
-            state.useRealGps = true;
-            const lat = pos.coords.latitude;
-            const lng = pos.coords.longitude;
-            const spd = pos.coords.speed ? Math.round(pos.coords.speed * 3.6) : (state.speed || 56);
-            const hdg = pos.coords.heading || state.heading || 0;
-
-            state.coords = [lat, lng];
-            state.speed = spd;
-            state.heading = hdg;
-
-            if (telLat) telLat.textContent = `${lat.toFixed(4)}°N`;
-            if (telLng) telLng.textContent = `${lng.toFixed(4)}°E`;
-            if (telSpeed) telSpeed.textContent = `${spd} km/h`;
-            if (telStatusText) telStatusText.textContent = "Real GPS Live (AIS-140)";
-
-            if (state.mapElements.marker) {
-              state.mapElements.marker.setLatLng(state.coords);
-            }
-            if (state.map) {
-              state.map.panTo(state.coords, { animate: true });
-            }
-
-            broadcastTelemetry();
-          },
-          (err) => {
-            console.warn("GPS hardware unavailable or denied, falling back to route simulation:", err.message);
-            state.useRealGps = false;
-            if (telStatusText) telStatusText.textContent = "OSRM Route Sim • Live";
-            showToast("Running high-precision corridor route simulation.");
-            runRouteSimulation();
-          },
-          { enableHighAccuracy: true, timeout: 8000, maximumAge: 1000 }
-        );
-      } catch(e) {
-        runRouteSimulation();
-      }
-    } else {
-      runRouteSimulation();
+    if (telStatusText) {
+      telStatusText.textContent = "Real GPS Live (12Hz AIS-140)";
+      telStatusText.style.backgroundColor = "rgba(16, 185, 129, 0.15)";
+      telStatusText.style.color = "#10b981";
     }
 
-    showToast("Mission Active: Live coordinates streaming to Jaipur Police Command.");
+    // High-frequency telemetry interval (every 1.5 seconds)
+    if (state.telemetryTimer) clearInterval(state.telemetryTimer);
+    state.telemetryTimer = setInterval(broadcastTelemetry, 1500);
+
+    // Immediate ping
     broadcastTelemetry();
+    showToast("Active: Real phone GPS streaming live to Fox Backend!");
   }
 
-  function runRouteSimulation() {
-    if (state.simTimer) clearInterval(state.simTimer);
-    const route = state.currentRoute;
-    if (!route || !route.coordinates) return;
-    const path = generatePath(route.coordinates, 40);
-
-    state.simTimer = setInterval(() => {
-      if (!state.isDriving || state.useRealGps) {
-        clearInterval(state.simTimer);
-        return;
-      }
-
-      if (state.simIndex >= path.length - 1) {
-        pauseSimulation();
-        showToast("Arrival: Destination Hospital Trauma Bay Reached.");
-        vibrate([100, 50, 100]);
-        return;
-      }
-
-      state.simIndex++;
-      const p = path[state.simIndex];
-      state.coords = [p.lat, p.lng];
-
-      const pctRemaining = 1 - (state.simIndex / (path.length - 1));
-      const dist = Math.max(0.1, route.distanceKm * pctRemaining);
-      const etaSec = Math.round((dist / (state.speed || 55)) * 3600);
-      const etaMin = Math.floor(etaSec / 60);
-      state.eta = `${etaMin}m ${etaSec % 60}s`;
-
-      if (telLat) telLat.textContent = `${state.coords[0].toFixed(4)}°N`;
-      if (telLng) telLng.textContent = `${state.coords[1].toFixed(4)}°E`;
-      if (telEta) telEta.textContent = state.eta;
-      if (turnDistance) turnDistance.textContent = `In ${(dist * 1000).toFixed(0)}m`;
-
-      if (state.mapElements.marker) {
-        state.mapElements.marker.setLatLng(state.coords);
-      }
-
-      broadcastTelemetry();
-    }, 1200);
-  }
-
-  function pauseSimulation() {
+  function stopStreamingRun() {
     state.isDriving = false;
-    if (state.simTimer) {
-      clearInterval(state.simTimer);
-      state.simTimer = null;
-    }
-    if (state.watchId && 'geolocation' in navigator) {
-      navigator.geolocation.clearWatch(state.watchId);
-      state.watchId = null;
-    }
-    if (btnStartRun) {
-      btnStartRun.classList.remove('active');
-      btnStartRun.innerHTML = '<span class="run-icon">▲</span><span>Resume Mission</span>';
-    }
-    if (telStatusText) {
-      telStatusText.textContent = "GPS STREAM PAUSED";
-    }
-  }
 
-  function resetSimulation() {
-    pauseSimulation();
-    state.simIndex = 0;
-    state.useRealGps = false;
+    if (state.telemetryTimer) {
+      clearInterval(state.telemetryTimer);
+      state.telemetryTimer = null;
+    }
+
     if (btnStartRun) {
       btnStartRun.classList.remove('active');
-      btnStartRun.innerHTML = '<span class="run-icon">▲</span><span>Start Live Run (Stream GPS)</span>';
+      btnStartRun.innerHTML = '<span class="run-icon">▲</span><span>Stream Real GPS to Police &amp; Hospital</span>';
     }
-    if (state.currentRoute) {
-      state.coords = [...state.currentRoute.coordinates[0]];
-      state.distanceKm = state.currentRoute.distanceKm;
-      state.eta = state.currentRoute.corridorDurationStr;
-      if (telLat) telLat.textContent = `${state.coords[0].toFixed(4)}°N`;
-      if (telLng) telLng.textContent = `${state.coords[1].toFixed(4)}°E`;
-      if (telEta) telEta.textContent = state.eta;
-      if (turnDistance) turnDistance.textContent = "In 400m";
-      if (state.mapElements.marker) {
-        state.mapElements.marker.setLatLng(state.coords);
-      }
-      if (state.map && state.mapElements.line) {
-        state.map.fitBounds(state.mapElements.line.getBounds(), { padding: [40, 40] });
-      }
-    }
+
     if (telStatusText) {
-      telStatusText.textContent = "GPS Standby";
+      telStatusText.textContent = "Real GPS Standby";
+      telStatusText.style.backgroundColor = "";
+      telStatusText.style.color = "";
     }
+
     broadcastTelemetry();
+    showToast("Telemetry stream paused (Standby).");
   }
 
-  function generatePath(coords, count) {
-    const list = [];
-    for (let i = 0; i < coords.length - 1; i++) {
-      const c1 = coords[i];
-      const c2 = coords[i + 1];
-      for (let j = 0; j < count; j++) {
-        const r = j / count;
-        list.push({
-          lat: c1[0] + (c2[0] - c1[0]) * r,
-          lng: c1[1] + (c2[1] - c1[1]) * r
-        });
-      }
-    }
-    list.push({ lat: coords[coords.length - 1][0], lng: coords[coords.length - 1][1] });
-    return list;
+  function resetStreamingRun() {
+    stopStreamingRun();
+    initRealDeviceGps();
+    calculateAiCorridor(state.fromLoc, state.toLoc, true);
+    showToast("Run reset to current device GPS fix.");
   }
 
+  // ==========================================================================
+  // 7. AIS-140 Telemetry Broadcast to Fox Backend & Hospital CAD
+  // ==========================================================================
   function broadcastTelemetry() {
     const driver = state.driver;
     if (!driver) return;
+
+    state.telemetryPingCount++;
 
     const packet = {
       ambulanceId: driver.ambulanceId || "AMB-SMS-01",
@@ -853,7 +913,7 @@ document.addEventListener('DOMContentLoaded', () => {
       hospitalKey: driver.hospitalKey || "sms_hospital",
       vehicleType: driver.vehicleType || "ALS",
       coords: state.coords,
-      speed: state.isDriving ? state.speed : 0,
+      speed: state.speed,
       heading: state.heading,
       distanceRemaining: `${state.distanceKm.toFixed(1)} km`,
       eta: state.eta,
@@ -863,28 +923,34 @@ document.addEventListener('DOMContentLoaded', () => {
       timestamp: Date.now()
     };
 
+    // Update Telemetry Link indicator
+    if (gpsStreamPings) {
+      gpsStreamPings.innerHTML = `Live &bull; ${state.telemetryPingCount} tx`;
+      gpsStreamPings.className = "gps-stat-val accent-emerald font-mono";
+    }
+
     // 1. Post directly to Fox Backend API
     if (window.GC_API && window.GC_API.pushTelemetry) {
       const hospKey = driver.hospitalKey || "sms_hospital";
       const carId = driver.ambulanceId || "AMB-SMS-01";
-      const carkey = driver.carkey || "CARKEY_SMS_01_SECURE";
+      const carkey = driver.carkey || "40f865c02598096f5539d62e658e21bf5bb8fb142d9a0aa652deda275ea7cad7";
 
       window.GC_API.pushTelemetry(hospKey, carId, {
         carkey: carkey,
         latitude: state.coords[0],
         longitude: state.coords[1],
-        speed_kmh: state.isDriving ? state.speed : 0,
+        speed_kmh: state.speed,
         status: state.isDriving ? "in-service" : "standby",
         heading: state.heading,
         eta: state.eta,
         distance_remaining: `${state.distanceKm.toFixed(1)} km`,
         driver_name: driver.name
       }).catch(err => {
-        console.debug("Backend telemetry note:", err);
+        console.debug("Fox telemetry note:", err);
       });
     }
 
-    // 2. Broadcast via BroadcastChannel & LocalStorage for cross-window / cross-iframe communication
+    // 2. Broadcast via BroadcastChannel & LocalStorage for cross-window / cross-device sync
     try {
       const ch = new BroadcastChannel('gc_telemetry_channel');
       ch.postMessage({ type: 'AMBULANCE_GPS_TELEMETRY', telemetry: packet });

@@ -147,6 +147,7 @@ class AuthService:
                 "phone": "+91-98290-11234",
                 "hospitalKey": "sms_hospital",
                 "ambulanceId": "AMB-SMS-01",
+                "carkey": "40f865c02598096f5539d62e658e21bf5bb8fb142d9a0aa652deda275ea7cad7",
                 "vehicleType": "Advanced Life Support (ALS-01)",
                 "licenseNumber": "RJ14-2015-004512",
                 "status": "on-duty"
