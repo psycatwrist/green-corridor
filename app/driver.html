@@ -32,7 +32,13 @@
          ======================================================================= -->
     <section class="login-screen" id="loginScreen">
       <div class="login-panel">
-        <h1 class="login-heading">Login</h1>
+        <div class="login-header-row">
+          <h1 class="login-heading">Login</h1>
+          <button type="button" class="btn-server-config" id="btnServerConfig" title="Configure Fox Backend IP">
+            <span class="status-indicator-dot" id="loginServerDot"></span>
+            <span id="loginServerText">Fox Backend</span>
+          </button>
+        </div>
 
         <form id="driverLoginForm" autocomplete="off">
           <div class="login-group">
@@ -313,6 +319,30 @@
       </div>
 
     </section>
+    
+    <!-- Server Configuration Modal -->
+    <div class="server-config-modal-backdrop" id="serverModalBackdrop" style="display: none;">
+      <div class="server-config-modal">
+        <div class="server-modal-header">
+          <div class="server-modal-title">Fox Backend Server</div>
+          <button type="button" class="btn-close-server-modal" id="btnCloseServerModal">&times;</button>
+        </div>
+        <div class="server-modal-body">
+          <p class="server-modal-desc">Configure the Fox FastAPI backend URL for live synchronization with Jaipur Traffic Police Command.</p>
+          <div class="login-group">
+            <label for="inputServerUrl" class="login-label">Server URL</label>
+            <div class="login-input-wrapper">
+              <input type="url" id="inputServerUrl" class="login-input" placeholder="http://192.168.1.100:8000" value="http://localhost:8000">
+            </div>
+          </div>
+          <div class="server-status-info" id="serverStatusInfo">Status: Ready</div>
+        </div>
+        <div class="server-modal-actions">
+          <button type="button" class="btn-test-server" id="btnTestServer">Test Connection</button>
+          <button type="button" class="btn-save-server" id="btnSaveServer">Save &amp; Connect</button>
+        </div>
+      </div>
+    </div>
 
   </div>
 

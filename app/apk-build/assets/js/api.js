@@ -9,9 +9,28 @@
  */
 
 window.GC_API = (function() {
-  const API_BASE = window.FOX_API_URL || 'http://localhost:8000';
+  let API_BASE = (function() {
+    try {
+      const stored = localStorage.getItem('gc_fox_api_url');
+      if (stored) return stored;
+    } catch(e) {}
+    return window.FOX_API_URL || 'http://localhost:8000';
+  })();
   let isBackendReachable = true;
   let token = null;
+
+  function setBaseUrl(url) {
+    if (!url) return API_BASE;
+    API_BASE = url.replace(/\/+$/, '');
+    try {
+      localStorage.setItem('gc_fox_api_url', API_BASE);
+    } catch(e) {}
+    return API_BASE;
+  }
+
+  function getBaseUrl() {
+    return API_BASE;
+  }
 
   // Load existing token from session
   try {
@@ -379,7 +398,9 @@ window.GC_API = (function() {
   }
 
   return {
-    API_BASE,
+    API_BASE: () => API_BASE,
+    getBaseUrl,
+    setBaseUrl,
     sha256,
     checkHealth,
     login,

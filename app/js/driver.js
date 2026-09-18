@@ -42,6 +42,17 @@ document.addEventListener('DOMContentLoaded', () => {
   const hudDriverBadge = document.getElementById('hudDriverBadge');
   const systemClock = document.getElementById('systemClock');
 
+  // Fox Backend Server Config Selectors
+  const btnServerConfig = document.getElementById('btnServerConfig');
+  const serverModalBackdrop = document.getElementById('serverModalBackdrop');
+  const btnCloseServerModal = document.getElementById('btnCloseServerModal');
+  const inputServerUrl = document.getElementById('inputServerUrl');
+  const serverStatusInfo = document.getElementById('serverStatusInfo');
+  const btnTestServer = document.getElementById('btnTestServer');
+  const btnSaveServer = document.getElementById('btnSaveServer');
+  const loginServerDot = document.getElementById('loginServerDot');
+  const loginServerText = document.getElementById('loginServerText');
+
   const routeLocationForm = document.getElementById('routeLocationForm');
   const locFromSelect = document.getElementById('locFrom');
   const locToSelect = document.getElementById('locTo');
@@ -249,6 +260,86 @@ document.addEventListener('DOMContentLoaded', () => {
         });
       });
     }
+
+    // Fox Backend Server Configuration Handlers
+    async function checkServerConnection() {
+      if (!window.GC_API) return;
+      try {
+        const isOnline = await window.GC_API.checkHealth();
+        if (loginServerDot && loginServerText) {
+          if (isOnline) {
+            loginServerDot.className = 'status-indicator-dot online';
+            loginServerText.textContent = 'Fox Connected';
+          } else {
+            loginServerDot.className = 'status-indicator-dot offline';
+            loginServerText.textContent = 'Fox Standalone';
+          }
+        }
+        if (serverStatusInfo) {
+          serverStatusInfo.textContent = isOnline 
+            ? `Online: Connected to ${window.GC_API.getBaseUrl()}`
+            : `Offline: Using local mocks (${window.GC_API.getBaseUrl()})`;
+        }
+      } catch(e) {}
+    }
+
+    if (btnServerConfig && serverModalBackdrop) {
+      btnServerConfig.addEventListener('click', () => {
+        vibrate(20);
+        if (inputServerUrl && window.GC_API) {
+          inputServerUrl.value = window.GC_API.getBaseUrl();
+        }
+        serverModalBackdrop.style.display = 'flex';
+        checkServerConnection();
+      });
+    }
+
+    if (btnCloseServerModal && serverModalBackdrop) {
+      btnCloseServerModal.addEventListener('click', () => {
+        vibrate(15);
+        serverModalBackdrop.style.display = 'none';
+      });
+    }
+
+    if (btnTestServer && inputServerUrl) {
+      btnTestServer.addEventListener('click', async () => {
+        vibrate(20);
+        const url = inputServerUrl.value.trim().replace(/\/+$/, '');
+        if (serverStatusInfo) serverStatusInfo.textContent = `Testing ${url}...`;
+        try {
+          const resp = await fetch(`${url}/`, { signal: AbortSignal.timeout(3000) });
+          const json = await resp.json();
+          if (json && json.status === 'online') {
+            if (serverStatusInfo) serverStatusInfo.textContent = `SUCCESS: Connected to Fox Backend (Jaipur)`;
+            vibrate([30, 30]);
+          } else {
+            if (serverStatusInfo) serverStatusInfo.textContent = `Response received from host.`;
+          }
+        } catch(err) {
+          if (serverStatusInfo) serverStatusInfo.textContent = `FAILED: Cannot reach ${url} (${err.message})`;
+          vibrate([50, 50, 50]);
+        }
+      });
+    }
+
+    if (btnSaveServer && inputServerUrl) {
+      btnSaveServer.addEventListener('click', async () => {
+        vibrate(30);
+        const url = inputServerUrl.value.trim().replace(/\/+$/, '');
+        if (url && window.GC_API) {
+          window.GC_API.setBaseUrl(url);
+          showToast(`Fox Backend URL updated: ${url}`);
+        }
+        serverModalBackdrop.style.display = 'none';
+        checkServerConnection();
+        if (window.GC_DATA && window.GC_DATA.initFromFoxBackend) {
+          window.GC_DATA.initFromFoxBackend().then(populateHospitalDestinations).catch(() => {});
+        }
+      });
+    }
+
+    // Initial backend ping
+    checkServerConnection();
   }
 
   function startClock() {

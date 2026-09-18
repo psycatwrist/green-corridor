@@ -144,29 +144,163 @@ html, body {
   100% { opacity: 1; transform: translateY(0) scale(1); }
 }
 
+.login-header-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 24px;
+}
+
 .login-heading {
   font-size: 22px;
   font-weight: 900;
   color: var(--c-white);
   text-transform: uppercase;
   letter-spacing: 0.16em;
-  margin-bottom: 28px;
-  text-align: center;
+  margin-bottom: 0;
+  text-align: left;
   position: relative;
-  padding-bottom: 14px;
+  padding-bottom: 8px;
 }
 
 .login-heading::after {
   content: "";
   position: absolute;
   bottom: 0;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 48px;
+  left: 0;
+  width: 36px;
   height: 3px;
   background-color: var(--c-white);
   border-radius: 2px;
   box-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
+}
+
+.btn-server-config {
+  background: var(--c-navy-deep);
+  border: 1px solid var(--c-navy-border);
+  border-radius: 20px;
+  padding: 5px 12px;
+  color: var(--c-white-muted);
+  font-size: 11px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-server-config:hover {
+  border-color: var(--c-white);
+  color: var(--c-white);
+}
+
+.status-indicator-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background-color: var(--c-white-dim);
+}
+
+.status-indicator-dot.online {
+  background-color: var(--c-white);
+  box-shadow: 0 0 8px #ffffff;
+}
+
+.status-indicator-dot.offline {
+  background-color: var(--c-white-dim);
+}
+
+/* Server Configuration Modal */
+.server-config-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.85);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.server-config-modal {
+  background: var(--c-black-card);
+  border: 1px solid var(--c-white);
+  border-radius: var(--radius-lg);
+  width: 100%;
+  max-width: 380px;
+  padding: 22px;
+  box-shadow: var(--shadow-elevated);
+}
+
+.server-modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+.server-modal-title {
+  font-size: 14px;
+  font-weight: 900;
+  color: var(--c-white);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.btn-close-server-modal {
+  background: transparent;
+  border: none;
+  color: var(--c-white-muted);
+  font-size: 24px;
+  cursor: pointer;
+  line-height: 1;
+}
+
+.server-modal-desc {
+  font-size: 11px;
+  color: var(--c-white-dim);
+  line-height: 1.4;
+  margin-bottom: 16px;
+}
+
+.server-status-info {
+  font-size: 11px;
+  color: var(--c-white-muted);
+  margin-top: 10px;
+  font-family: var(--font-mono);
+}
+
+.server-modal-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 18px;
+}
+
+.btn-test-server {
+  flex: 1;
+  background: var(--c-navy-surface);
+  border: 1px solid var(--c-navy-border);
+  color: var(--c-white);
+  padding: 10px;
+  border-radius: var(--radius-sm);
+  font-size: 11px;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.btn-save-server {
+  flex: 1;
+  background: var(--c-white);
+  border: 1px solid var(--c-white);
+  color: var(--c-black-true);
+  padding: 10px;
+  border-radius: var(--radius-sm);
+  font-size: 11px;
+  font-weight: 900;
+  cursor: pointer;
 }
 
 .login-group {
