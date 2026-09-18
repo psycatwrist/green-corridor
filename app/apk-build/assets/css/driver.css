@@ -1,0 +1,1131 @@
+/* ==========================================================================
+   GREEN+ CORRIDOR - Ambulance Driver Mobile Application
+   Theme: NAVY BLUE, BLACK, AND WHITE ONLY
+   Designed by: Professional Emergency CAD UI/UX Engineering
+   ========================================================================== */
+
+:root {
+  /* Strict Navy Blue, Black, and White Palette */
+  --c-black-true: #000000;
+  --c-black-base: #030712;
+  --c-black-card: #060c1a;
+  
+  --c-navy-deep: #0a1326;
+  --c-navy-surface: #0f1c3b;
+  --c-navy-card: #132247;
+  --c-navy-elevated: #172a59;
+  
+  --c-navy-border: #1e2e5c;
+  --c-navy-border-glow: #2563eb;
+  --c-navy-border-light: rgba(255, 255, 255, 0.15);
+  
+  --c-navy-accent: #1e3a8a;
+  --c-navy-hover: #1e40af;
+  
+  --c-white: #ffffff;
+  --c-white-soft: #f8fafc;
+  --c-white-muted: #94a3b8;
+  --c-white-dim: #64748b;
+  --c-white-ghost: rgba(255, 255, 255, 0.08);
+
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif;
+  --font-mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+  
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 14px;
+  --radius-xl: 20px;
+  
+  --shadow-card: 0 10px 30px rgba(0, 0, 0, 0.6), 0 0 0 1px var(--c-navy-border);
+  --shadow-glow: 0 0 20px rgba(37, 99, 235, 0.25);
+  --shadow-elevated: 0 20px 50px rgba(0, 0, 0, 0.8), 0 0 0 1px rgba(255, 255, 255, 0.12);
+}
+
+/* Reset & Base Setup */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  -webkit-tap-highlight-color: transparent;
+}
+
+html, body {
+  width: 100%;
+  min-height: 100%;
+  background-color: var(--c-black-true);
+  color: var(--c-white);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+  user-select: none;
+}
+
+/* Main Container: Mobile & In-Cab Tablet Viewport */
+.app-container {
+  width: 100%;
+  max-width: 500px;
+  margin: 0 auto;
+  min-height: 100vh;
+  background-color: var(--c-black-base);
+  border-left: 1px solid var(--c-navy-border);
+  border-right: 1px solid var(--c-navy-border);
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  box-shadow: 0 0 80px rgba(0, 0, 0, 0.9);
+}
+
+@media (min-width: 768px) {
+  .app-container {
+    max-width: 720px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .app-container {
+    max-width: 820px;
+  }
+}
+
+/* Safe area padding for notched mobile phones */
+@supports (padding-top: env(safe-area-inset-top)) {
+  .app-container {
+    padding-top: env(safe-area-inset-top);
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+}
+
+/* ==========================================================================
+   PART 1: LOGIN SCREEN (Navy Blue, Black, White • Only ID, Password, Login)
+   World-Class Sleek Minimal Security CAD Terminal
+   ========================================================================== */
+.login-screen {
+  flex: 1;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  background: radial-gradient(ellipse at 50% 30%, #0f1c3b 0%, #070e1e 50%, #000000 100%);
+  position: relative;
+}
+
+.login-screen::before {
+  content: "";
+  position: absolute;
+  top: 15%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 320px;
+  height: 320px;
+  background: radial-gradient(circle, rgba(37, 99, 235, 0.15) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.login-panel {
+  width: 100%;
+  max-width: 380px;
+  background-color: rgba(15, 28, 59, 0.85);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid var(--c-navy-border-light);
+  border-radius: var(--radius-xl);
+  padding: 36px 28px;
+  box-shadow: var(--shadow-elevated), 0 0 40px rgba(10, 19, 38, 0.6);
+  position: relative;
+  z-index: 2;
+  animation: loginAppear 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes loginAppear {
+  0% { opacity: 0; transform: translateY(16px) scale(0.98); }
+  100% { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.login-heading {
+  font-size: 22px;
+  font-weight: 900;
+  color: var(--c-white);
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+  margin-bottom: 28px;
+  text-align: center;
+  position: relative;
+  padding-bottom: 14px;
+}
+
+.login-heading::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 48px;
+  height: 3px;
+  background-color: var(--c-white);
+  border-radius: 2px;
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
+}
+
+.login-group {
+  margin-bottom: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+
+.login-label {
+  font-size: 11px;
+  font-weight: 800;
+  color: var(--c-white);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.login-input-wrapper {
+  position: relative;
+  width: 100%;
+}
+
+.login-input {
+  width: 100%;
+  height: 50px;
+  background-color: var(--c-black-true);
+  border: 1.5px solid var(--c-navy-border);
+  border-radius: var(--radius-md);
+  padding: 0 16px;
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--c-white);
+  outline: none;
+  font-family: inherit;
+  letter-spacing: 0.03em;
+  transition: all 0.25s ease;
+}
+
+.login-input:focus {
+  border-color: var(--c-white);
+  background-color: #030712;
+  box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.18), 0 0 20px rgba(37, 99, 235, 0.2);
+}
+
+.login-input::placeholder {
+  color: var(--c-white-dim);
+  font-weight: 500;
+}
+
+.btn-toggle-pw {
+  position: absolute;
+  right: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: transparent;
+  border: none;
+  color: var(--c-white-muted);
+  cursor: pointer;
+  padding: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.btn-toggle-pw:hover {
+  color: var(--c-white);
+}
+
+.btn-login {
+  width: 100%;
+  height: 52px;
+  background-color: var(--c-white);
+  color: var(--c-black-true);
+  border: none;
+  border-radius: var(--radius-md);
+  font-size: 14px;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  cursor: pointer;
+  margin-top: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5), 0 0 15px rgba(255, 255, 255, 0.2);
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.btn-login:hover {
+  background-color: var(--c-white-soft);
+  transform: translateY(-1px);
+  box-shadow: 0 14px 30px rgba(0, 0, 0, 0.6), 0 0 20px rgba(255, 255, 255, 0.35);
+}
+
+.btn-login:active {
+  transform: scale(0.98);
+}
+
+.btn-login:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* ==========================================================================
+   PART 2 & 3: MAIN EMERGENCY CAD INTERFACE
+   ========================================================================== */
+.main-interface {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  background-color: var(--c-black-base);
+  animation: fadeIn 0.3s ease forwards;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* Header Top Status Bar */
+.top-system-bar {
+  height: 48px;
+  background-color: var(--c-black-true);
+  border-bottom: 1px solid var(--c-navy-border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 16px;
+  font-size: 12px;
+  color: var(--c-white-muted);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  backdrop-filter: blur(12px);
+}
+
+.system-title-group {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.system-badge-icon {
+  width: 22px;
+  height: 22px;
+  border-radius: 4px;
+  background-color: var(--c-white);
+  color: var(--c-black-true);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 900;
+  font-size: 14px;
+}
+
+.system-title {
+  font-weight: 800;
+  color: var(--c-white);
+  letter-spacing: 0.08em;
+  font-size: 13px;
+  text-transform: uppercase;
+}
+
+.system-status {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-mono);
+  font-weight: 600;
+  font-size: 12px;
+  color: var(--c-white);
+}
+
+.status-dot-white {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: var(--c-white);
+  box-shadow: 0 0 8px var(--c-white);
+  animation: pulseDot 1.5s infinite ease-in-out;
+}
+
+@keyframes pulseDot {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.35; transform: scale(0.8); }
+}
+
+/* Sub-header with Driver ID & Vehicle details */
+.nav-sub-header {
+  background: linear-gradient(90deg, #0a1326 0%, #0d1b3b 100%);
+  border-bottom: 1px solid var(--c-navy-border);
+  padding: 10px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.driver-id-badge {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--c-white);
+  font-family: var(--font-mono);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.driver-id-badge::before {
+  content: "";
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background-color: var(--c-white);
+}
+
+.btn-signout {
+  background: transparent;
+  border: 1px solid var(--c-navy-border-light);
+  color: var(--c-white-muted);
+  padding: 5px 12px;
+  border-radius: var(--radius-sm);
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-signout:hover {
+  color: var(--c-white);
+  border-color: var(--c-white);
+  background-color: var(--c-white-ghost);
+}
+
+/* ==========================================================================
+   PART 2: LOCATION SELECTOR (From Origin -> To Destination)
+   ========================================================================== */
+.location-panel {
+  background-color: var(--c-navy-surface);
+  border-bottom: 1px solid var(--c-navy-border);
+  padding: 16px;
+  position: relative;
+}
+
+.location-title-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 14px;
+}
+
+.location-title {
+  font-size: 11px;
+  font-weight: 900;
+  color: var(--c-white);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.location-badge-gps {
+  font-size: 10px;
+  font-weight: 800;
+  padding: 2px 8px;
+  border-radius: 4px;
+  background-color: var(--c-black-true);
+  border: 1px solid var(--c-navy-border);
+  color: var(--c-white-muted);
+  font-family: var(--font-mono);
+}
+
+/* Visual Route Spine Form */
+.route-inputs-card {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  background-color: var(--c-black-true);
+  border: 1px solid var(--c-navy-border);
+  border-radius: var(--radius-lg);
+  padding: 14px;
+  margin-bottom: 14px;
+}
+
+.route-node-spine {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  height: 82px;
+  padding: 4px 0;
+}
+
+.node-origin {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  border: 3px solid var(--c-white);
+  background-color: var(--c-black-true);
+  box-shadow: 0 0 8px rgba(255, 255, 255, 0.4);
+}
+
+.node-line {
+  width: 2px;
+  flex: 1;
+  background: repeating-linear-gradient(to bottom, var(--c-white) 0, var(--c-white) 4px, transparent 4px, transparent 8px);
+  margin: 4px 0;
+}
+
+.node-dest {
+  width: 14px;
+  height: 14px;
+  border-radius: 3px;
+  background-color: var(--c-white);
+  box-shadow: 0 0 8px var(--c-white);
+}
+
+.route-fields-col {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.loc-field-group {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.loc-label {
+  font-size: 10px;
+  font-weight: 800;
+  color: var(--c-white-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.loc-select {
+  width: 100%;
+  height: 38px;
+  background-color: var(--c-navy-deep);
+  border: 1px solid var(--c-navy-border);
+  border-radius: var(--radius-sm);
+  padding: 0 10px;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--c-white);
+  outline: none;
+  font-family: inherit;
+  cursor: pointer;
+  transition: border-color 0.2s;
+}
+
+.loc-select:focus {
+  border-color: var(--c-white);
+}
+
+.btn-calculate-route {
+  width: 100%;
+  height: 48px;
+  background-color: var(--c-white);
+  color: var(--c-black-true);
+  border: none;
+  border-radius: var(--radius-md);
+  font-size: 13px;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.6);
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.btn-calculate-route:hover {
+  background-color: var(--c-white-soft);
+  transform: translateY(-1px);
+}
+
+.btn-calculate-route:active {
+  transform: scale(0.98);
+}
+
+/* ==========================================================================
+   PART 3: AI TRAFFIC CALCULATION & SHORTEST / FASTEST CORRIDOR HUD
+   ========================================================================== */
+.ai-results-panel {
+  padding: 16px;
+  background-color: var(--c-black-base);
+  border-bottom: 1px solid var(--c-navy-border);
+}
+
+.ai-calculation-header {
+  font-size: 11px;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--c-white-muted);
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.ai-pill {
+  border: 1px solid var(--c-white);
+  color: var(--c-white);
+  background-color: var(--c-black-true);
+  padding: 3px 10px;
+  border-radius: 20px;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.ai-pill::before {
+  content: "";
+  display: inline-block;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background-color: var(--c-white);
+  box-shadow: 0 0 6px var(--c-white);
+}
+
+/* Hero Card: Shortest & Fastest Route */
+.best-route-card {
+  background: linear-gradient(180deg, #101e40 0%, #0b152d 100%);
+  border: 2px solid var(--c-white);
+  border-radius: var(--radius-lg);
+  padding: 18px;
+  margin-bottom: 14px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7), 0 0 20px rgba(255, 255, 255, 0.15);
+  position: relative;
+  overflow: hidden;
+}
+
+.br-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 6px;
+}
+
+.br-title {
+  font-size: 17px;
+  font-weight: 900;
+  color: var(--c-white);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.br-tag {
+  background-color: var(--c-white);
+  color: var(--c-black-true);
+  font-size: 10px;
+  font-weight: 900;
+  padding: 3px 8px;
+  border-radius: 4px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.br-path {
+  font-size: 11px;
+  color: var(--c-white-muted);
+  margin-bottom: 14px;
+  line-height: 1.5;
+  font-weight: 500;
+}
+
+/* 4-Box Key Metric Bar */
+.ai-metrics-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+  background-color: var(--c-black-true);
+  border: 1px solid var(--c-navy-border);
+  border-radius: var(--radius-md);
+  padding: 10px 8px;
+  margin-bottom: 14px;
+}
+
+.ai-metric {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 2px;
+}
+
+.ai-m-label {
+  font-size: 9px;
+  font-weight: 800;
+  text-transform: uppercase;
+  color: var(--c-white-dim);
+  letter-spacing: 0.05em;
+}
+
+.ai-m-val {
+  font-size: 13px;
+  font-weight: 900;
+  font-family: var(--font-mono);
+  color: var(--c-white);
+}
+
+.ai-m-badge {
+  font-size: 8px;
+  font-weight: 800;
+  color: var(--c-white);
+  border: 1px solid var(--c-navy-border);
+  padding: 1px 4px;
+  border-radius: 3px;
+  margin-top: 2px;
+  text-transform: uppercase;
+}
+
+/* Traffic Availability & Countdown Times */
+.ai-signals-section {
+  background-color: var(--c-navy-deep);
+  border: 1px solid var(--c-navy-border);
+  border-radius: var(--radius-md);
+  padding: 14px;
+}
+
+.signals-section-title {
+  font-size: 11px;
+  font-weight: 900;
+  color: var(--c-white);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.br-avail-pill {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 800;
+  color: var(--c-white);
+  border: 1px solid var(--c-navy-border-light);
+  padding: 2px 8px;
+  border-radius: 4px;
+  background-color: var(--c-black-true);
+}
+
+.traffic-avail-bar-wrap {
+  width: 100%;
+  height: 6px;
+  background-color: var(--c-black-true);
+  border-radius: 3px;
+  margin-bottom: 10px;
+  overflow: hidden;
+  border: 1px solid var(--c-navy-border);
+}
+
+.traffic-avail-bar-fill {
+  height: 100%;
+  background: var(--c-white);
+  border-radius: 3px;
+  box-shadow: 0 0 8px var(--c-white);
+  transition: width 0.5s ease;
+}
+
+.traffic-avail-text {
+  font-size: 11px;
+  color: var(--c-white-soft);
+  margin-bottom: 12px;
+  line-height: 1.4;
+  font-weight: 500;
+}
+
+.signal-timing-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.signal-timing-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 11px;
+  padding: 8px 10px;
+  background-color: var(--c-black-true);
+  border: 1px solid var(--c-navy-border);
+  border-radius: var(--radius-sm);
+}
+
+.signal-name-group {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.signal-index {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background-color: var(--c-white);
+  color: var(--c-black-true);
+  font-size: 10px;
+  font-weight: 900;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.signal-name {
+  color: var(--c-white);
+  font-weight: 700;
+}
+
+.signal-timing-badge {
+  font-family: var(--font-mono);
+  font-weight: 800;
+  color: var(--c-white);
+  border: 1px solid var(--c-navy-border);
+  padding: 3px 8px;
+  border-radius: 4px;
+  background-color: var(--c-navy-surface);
+  letter-spacing: 0.05em;
+}
+
+/* Alternative Routes Comparison List */
+.alt-routes-wrapper {
+  margin-top: 14px;
+}
+
+.alt-routes-label {
+  font-size: 10px;
+  font-weight: 800;
+  text-transform: uppercase;
+  color: var(--c-white-dim);
+  letter-spacing: 0.08em;
+  margin-bottom: 8px;
+}
+
+.alt-routes-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.alt-route-item {
+  background-color: var(--c-navy-deep);
+  border: 1px solid var(--c-navy-border);
+  border-radius: var(--radius-md);
+  padding: 10px 14px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 11px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.alt-route-item:hover {
+  border-color: var(--c-white-muted);
+  background-color: var(--c-navy-surface);
+}
+
+.alt-route-name {
+  font-weight: 800;
+  color: var(--c-white);
+  margin-bottom: 2px;
+}
+
+.alt-route-sub {
+  font-size: 10px;
+  color: var(--c-white-dim);
+}
+
+.alt-route-stats {
+  font-family: var(--font-mono);
+  font-weight: 700;
+  color: var(--c-white-muted);
+  text-align: right;
+}
+
+/* ==========================================================================
+   PART 4: NAVIGATION MAP & CAD TELEMETRY HUD
+   ========================================================================== */
+.map-view-box {
+  width: 100%;
+  height: 300px;
+  background-color: var(--c-black-true);
+  position: relative;
+  border-bottom: 1px solid var(--c-navy-border);
+}
+
+#navMapLeaflet {
+  width: 100%;
+  height: 100%;
+  background-color: #050811;
+}
+
+/* Floating Turn-By-Turn HUD Card */
+.map-turn-hud {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  right: 12px;
+  background-color: rgba(10, 19, 38, 0.92);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--c-white);
+  border-radius: var(--radius-md);
+  padding: 10px 14px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  z-index: 1000;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.8);
+}
+
+.turn-icon-box {
+  width: 28px;
+  height: 28px;
+  border-radius: 6px;
+  background-color: var(--c-white);
+  color: var(--c-black-true);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 900;
+  font-size: 15px;
+  flex-shrink: 0;
+}
+
+.turn-details {
+  flex: 1;
+}
+
+.turn-distance {
+  font-size: 13px;
+  font-weight: 900;
+  color: var(--c-white);
+}
+
+.turn-instruction {
+  font-size: 10px;
+  color: var(--c-white-muted);
+  font-weight: 600;
+}
+
+/* Floating Map Buttons */
+.map-float-actions {
+  position: absolute;
+  bottom: 12px;
+  right: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  z-index: 1000;
+}
+
+.btn-map-float {
+  width: 36px;
+  height: 36px;
+  background-color: var(--c-navy-card);
+  border: 1px solid var(--c-white);
+  border-radius: 8px;
+  color: var(--c-white);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  font-weight: 900;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.7);
+}
+
+.btn-map-float:active {
+  transform: scale(0.92);
+}
+
+/* ==========================================================================
+   PART 5: REAL-TIME GPS TELEMETRY & DISPATCH TRANSMITTER
+   ========================================================================== */
+.telemetry-live-panel {
+  background-color: var(--c-navy-surface);
+  border-top: 1px solid var(--c-navy-border);
+  padding: 16px;
+}
+
+.telemetry-title-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+.telemetry-title {
+  font-size: 11px;
+  font-weight: 900;
+  color: var(--c-white);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.telemetry-link-badge {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 800;
+  color: var(--c-white);
+  background-color: var(--c-black-true);
+  border: 1px solid var(--c-navy-border);
+  padding: 3px 8px;
+  border-radius: 4px;
+}
+
+/* 4-Quadrant Telemetry Gauges */
+.telemetry-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+  background-color: var(--c-black-true);
+  border: 1px solid var(--c-navy-border);
+  border-radius: var(--radius-md);
+  padding: 12px 8px;
+  margin-bottom: 14px;
+  text-align: center;
+}
+
+.tel-box {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.tel-label {
+  font-size: 9px;
+  font-weight: 800;
+  text-transform: uppercase;
+  color: var(--c-white-dim);
+  letter-spacing: 0.05em;
+}
+
+.tel-value {
+  font-size: 14px;
+  font-weight: 900;
+  font-family: var(--font-mono);
+  color: var(--c-white);
+}
+
+.tel-sub {
+  font-size: 8px;
+  color: var(--c-white-muted);
+  text-transform: uppercase;
+}
+
+/* Tactical Emergency Action Buttons */
+.tel-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.btn-tel-run {
+  flex: 2;
+  height: 50px;
+  background-color: var(--c-white);
+  color: var(--c-black-true);
+  border: none;
+  border-radius: var(--radius-md);
+  font-size: 13px;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.6);
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.btn-tel-run:hover {
+  background-color: var(--c-white-soft);
+}
+
+.btn-tel-run:active {
+  transform: scale(0.98);
+}
+
+.btn-tel-reset {
+  flex: 1;
+  height: 50px;
+  background-color: var(--c-black-true);
+  color: var(--c-white);
+  border: 1px solid var(--c-navy-border-light);
+  border-radius: var(--radius-md);
+  font-size: 12px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-tel-reset:hover {
+  border-color: var(--c-white);
+}
+
+.btn-tel-reset:active {
+  transform: scale(0.98);
+}
+
+.tel-footer-text {
+  font-size: 10px;
+  color: var(--c-white-muted);
+  margin-top: 12px;
+  text-align: center;
+  line-height: 1.4;
+}
+
+/* Toast Message */
+.app-toast {
+  position: fixed;
+  bottom: 30px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: var(--c-navy-card);
+  border: 1.5px solid var(--c-white);
+  color: var(--c-white);
+  padding: 12px 22px;
+  border-radius: var(--radius-md);
+  font-size: 13px;
+  font-weight: 800;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.9);
+  z-index: 10000;
+  animation: toastSlide 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  max-width: 90%;
+  text-align: center;
+}
+
+@keyframes toastSlide {
+  from { opacity: 0; transform: translate(-50%, 15px); }
+  to { opacity: 1; transform: translate(-50%, 0); }
+}

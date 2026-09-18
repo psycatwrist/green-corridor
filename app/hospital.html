@@ -1,0 +1,1422 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Green+ Corridor | Hospital CAD & Driver Management System</title>
+  
+  <!-- Favicon & Icons -->
+  <link rel="icon" type="image/png" href="icons/icon-192.png">
+  <meta name="theme-color" content="#064e3b">
+
+  <!-- Google Fonts: Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <!-- Leaflet Map CSS (Offline bundled) -->
+  <link rel="stylesheet" href="lib/leaflet/leaflet.css" />
+
+  <style>
+    :root {
+      --bg-dark: #090d16;
+      --bg-card: #0f172a;
+      --bg-elevated: #1e293b;
+      --border-color: #334155;
+      --border-light: rgba(255, 255, 255, 0.12);
+      
+      --med-primary: #059669;
+      --med-primary-hover: #10b981;
+      --med-deep: #064e3b;
+      --med-glow: rgba(16, 185, 129, 0.25);
+      
+      --text-white: #ffffff;
+      --text-soft: #f8fafc;
+      --text-muted: #94a3b8;
+      --text-dim: #64748b;
+
+      --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    }
+
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: var(--font-sans);
+      background-color: var(--bg-dark);
+      color: var(--text-soft);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      overflow-x: hidden;
+    }
+
+    /* Top Desktop CAD Header */
+    .cad-header {
+      height: 60px;
+      background: linear-gradient(90deg, #064e3b 0%, #0f172a 100%);
+      border-bottom: 1px solid var(--border-color);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 24px;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+
+    .cad-logo-group {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .cad-logo-badge {
+      width: 36px;
+      height: 36px;
+      border-radius: 8px;
+      background-color: var(--text-white);
+      color: var(--med-deep);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 900;
+      font-size: 20px;
+      box-shadow: 0 0 15px rgba(255, 255, 255, 0.4);
+    }
+
+    .cad-title-col {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .cad-system-name {
+      font-size: 15px;
+      font-weight: 800;
+      color: var(--text-white);
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+
+    .cad-system-sub {
+      font-size: 11px;
+      color: #a7f3d0;
+      font-weight: 600;
+    }
+
+    .cad-header-actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .btn-header-pill {
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid var(--border-light);
+      color: var(--text-white);
+      padding: 6px 14px;
+      border-radius: 6px;
+      font-size: 12px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      cursor: pointer;
+      text-decoration: none;
+      transition: all 0.2s;
+    }
+
+    .btn-header-pill:hover {
+      background: rgba(255, 255, 255, 0.2);
+      border-color: var(--text-white);
+    }
+
+    /* =========================================================================
+       VIEW 1: HOSPITAL AUTHENTICATION PORTAL (Sign In & Sign Up)
+       ========================================================================= */
+    .auth-viewport {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 32px 16px;
+      background: radial-gradient(ellipse at 50% 20%, #064e3b 0%, #090d16 65%);
+    }
+
+    .auth-card {
+      width: 100%;
+      max-width: 520px;
+      background-color: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 16px;
+      padding: 32px;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.8), 0 0 30px var(--med-glow);
+    }
+
+    .auth-tabs {
+      display: flex;
+      border-bottom: 2px solid var(--border-color);
+      margin-bottom: 24px;
+      gap: 8px;
+    }
+
+    .auth-tab-btn {
+      flex: 1;
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      font-size: 14px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      padding: 12px 0;
+      cursor: pointer;
+      position: relative;
+      transition: all 0.2s;
+    }
+
+    .auth-tab-btn.active {
+      color: var(--text-white);
+    }
+
+    .auth-tab-btn.active::after {
+      content: "";
+      position: absolute;
+      bottom: -2px;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background-color: var(--med-primary-hover);
+      box-shadow: 0 0 10px var(--med-primary-hover);
+    }
+
+    .form-group {
+      margin-bottom: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .form-row {
+      display: flex;
+      gap: 12px;
+    }
+
+    .form-label {
+      font-size: 11px;
+      font-weight: 800;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .form-input, .form-select {
+      width: 100%;
+      height: 44px;
+      background-color: var(--bg-dark);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 0 14px;
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text-white);
+      outline: none;
+      font-family: inherit;
+      transition: all 0.2s;
+    }
+
+    .form-input:focus, .form-select:focus {
+      border-color: var(--med-primary-hover);
+      box-shadow: 0 0 0 2px var(--med-glow);
+    }
+
+    .btn-submit {
+      width: 100%;
+      height: 48px;
+      background: linear-gradient(135deg, var(--med-primary) 0%, var(--med-deep) 100%);
+      color: var(--text-white);
+      border: 1px solid #34d399;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      cursor: pointer;
+      margin-top: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      box-shadow: 0 6px 20px rgba(5, 150, 105, 0.4);
+      transition: all 0.2s;
+    }
+
+    .btn-submit:hover {
+      background: linear-gradient(135deg, var(--med-primary-hover) 0%, var(--med-primary) 100%);
+      transform: translateY(-1px);
+    }
+
+    .quick-creds-box {
+      margin-top: 20px;
+      padding: 12px;
+      background-color: rgba(6, 78, 59, 0.3);
+      border: 1px dashed var(--med-primary);
+      border-radius: 8px;
+      font-size: 12px;
+    }
+
+    .quick-creds-title {
+      font-weight: 800;
+      color: #6ee7b7;
+      margin-bottom: 6px;
+    }
+
+    .quick-creds-list {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      color: var(--text-soft);
+      font-family: var(--font-mono);
+      font-size: 11px;
+    }
+
+    /* =========================================================================
+       VIEW 2: HOSPITAL CONTROL PANEL (Logged-In Dashboard)
+       ========================================================================= */
+    .dashboard-viewport {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      padding: 20px 24px;
+      max-width: 1400px;
+      margin: 0 auto;
+      width: 100%;
+    }
+
+    .facility-banner {
+      background: linear-gradient(135deg, #064e3b 0%, #0f172a 100%);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 18px 24px;
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+    }
+
+    .facility-info {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .facility-icon {
+      width: 48px;
+      height: 48px;
+      border-radius: 10px;
+      background-color: var(--text-white);
+      color: var(--med-deep);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      font-weight: 900;
+    }
+
+    .facility-name {
+      font-size: 20px;
+      font-weight: 900;
+      color: var(--text-white);
+    }
+
+    .facility-meta {
+      font-size: 12px;
+      color: #a7f3d0;
+      display: flex;
+      gap: 14px;
+      margin-top: 4px;
+    }
+
+    .facility-metrics {
+      display: flex;
+      gap: 16px;
+    }
+
+    .f-metric {
+      background-color: rgba(0, 0, 0, 0.3);
+      border: 1px solid var(--border-light);
+      padding: 8px 16px;
+      border-radius: 8px;
+      text-align: center;
+    }
+
+    .f-metric-val {
+      font-size: 16px;
+      font-weight: 900;
+      color: var(--text-white);
+      font-family: var(--font-mono);
+    }
+
+    .f-metric-lbl {
+      font-size: 10px;
+      font-weight: 700;
+      color: var(--text-muted);
+      text-transform: uppercase;
+    }
+
+    /* Sub Navigation Tabs */
+    .panel-subnav {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+
+    .panel-tab-btn {
+      background-color: var(--bg-card);
+      border: 1px solid var(--border-color);
+      color: var(--text-muted);
+      padding: 10px 20px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.2s;
+    }
+
+    .panel-tab-btn.active {
+      background-color: var(--med-deep);
+      border-color: #34d399;
+      color: var(--text-white);
+      box-shadow: 0 4px 14px var(--med-glow);
+    }
+
+    /* Driver Management Section */
+    .driver-section-card {
+      background-color: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 24px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    }
+
+    .section-header-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 20px;
+    }
+
+    .section-heading {
+      font-size: 17px;
+      font-weight: 900;
+      color: var(--text-white);
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    .section-desc {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
+
+    .btn-create-driver {
+      background: linear-gradient(135deg, var(--med-primary) 0%, var(--med-deep) 100%);
+      border: 1px solid #34d399;
+      color: var(--text-white);
+      padding: 8px 18px;
+      border-radius: 6px;
+      font-size: 13px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.2s;
+    }
+
+    .btn-create-driver:hover {
+      background: linear-gradient(135deg, var(--med-primary-hover) 0%, var(--med-primary) 100%);
+    }
+
+    /* Drivers Data Table */
+    .drivers-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 14px;
+    }
+
+    .drivers-table th {
+      background-color: var(--bg-dark);
+      color: var(--text-muted);
+      font-size: 11px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      padding: 12px 16px;
+      text-align: left;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .drivers-table td {
+      padding: 14px 16px;
+      border-bottom: 1px solid var(--border-color);
+      font-size: 13px;
+      color: var(--text-soft);
+      vertical-align: middle;
+    }
+
+    .drivers-table tr:hover td {
+      background-color: var(--bg-elevated);
+    }
+
+    .cred-id-badge {
+      font-family: var(--font-mono);
+      font-size: 12px;
+      font-weight: 800;
+      color: #a7f3d0;
+      background-color: rgba(6, 78, 59, 0.4);
+      border: 1px solid var(--med-primary);
+      padding: 4px 8px;
+      border-radius: 4px;
+    }
+
+    .cred-pw-cell {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-family: var(--font-mono);
+      font-size: 12px;
+    }
+
+    .btn-copy-cred {
+      background: transparent;
+      border: 1px solid var(--border-light);
+      color: var(--text-muted);
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-size: 11px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .btn-copy-cred:hover {
+      color: var(--text-white);
+      border-color: var(--text-white);
+    }
+
+    .status-pill {
+      font-size: 10px;
+      font-weight: 800;
+      text-transform: uppercase;
+      padding: 3px 8px;
+      border-radius: 12px;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .status-pill.online {
+      background-color: rgba(16, 185, 129, 0.2);
+      color: #34d399;
+      border: 1px solid #059669;
+    }
+
+    .status-pill.standby {
+      background-color: rgba(148, 163, 184, 0.2);
+      color: #cbd5e1;
+      border: 1px solid var(--border-color);
+    }
+
+    /* Driver Register Modal */
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: rgba(0, 0, 0, 0.8);
+      backdrop-filter: blur(8px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 10000;
+      padding: 16px;
+    }
+
+    .modal-box {
+      width: 100%;
+      max-width: 560px;
+      background-color: var(--bg-card);
+      border: 1px solid #34d399;
+      border-radius: 16px;
+      padding: 28px;
+      box-shadow: 0 24px 60px rgba(0, 0, 0, 0.9), 0 0 40px var(--med-glow);
+    }
+
+    .modal-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 20px;
+      border-bottom: 1px solid var(--border-color);
+      padding-bottom: 14px;
+    }
+
+    .modal-title {
+      font-size: 17px;
+      font-weight: 900;
+      color: var(--text-white);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .btn-close-modal {
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      cursor: pointer;
+      font-size: 20px;
+    }
+
+    /* Map Box */
+    .map-container-box {
+      width: 100%;
+      height: 380px;
+      border-radius: 12px;
+      overflow: hidden;
+      border: 1px solid var(--border-color);
+      margin-top: 14px;
+    }
+
+    #hospitalMap {
+      width: 100%;
+      height: 100%;
+    }
+
+    /* Notification Toast */
+    .toast-box {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      background-color: #064e3b;
+      border: 1.5px solid #34d399;
+      color: var(--text-white);
+      padding: 12px 20px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 800;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8);
+      z-index: 100000;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      animation: slideIn 0.3s ease;
+    }
+
+    @keyframes slideIn {
+      from { transform: translateY(20px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top System Header Bar -->
+  <header class="cad-header">
+    <div class="cad-logo-group">
+      <div class="cad-logo-badge">+</div>
+      <div class="cad-title-col">
+        <span class="cad-system-name">Hospital CAD Intake</span>
+        <span class="cad-system-sub">Jaipur Municipal Emergency Healthcare Network</span>
+      </div>
+    </div>
+
+    <div class="cad-header-actions">
+      <!-- Direct Download for Windows EXE -->
+      <a href="HospitalControlPanel.exe" download="HospitalControlPanel.exe" class="btn-header-pill" title="Download Desktop Windows Application">
+        <i data-lucide="download"></i>
+        <span>Download EXE</span>
+      </a>
+
+      <!-- Direct Download for Driver Android APK -->
+      <a href="GreenCorridorAmbulance.apk" download="GreenCorridorAmbulance.apk" class="btn-header-pill" title="Download Driver Android APK">
+        <i data-lucide="smartphone"></i>
+        <span>Driver APK</span>
+      </a>
+
+      <!-- Sign Out / Exit Session -->
+      <button type="button" class="btn-header-pill" id="btnSignOutTop" style="display: none;">
+        <i data-lucide="log-out"></i>
+        <span>Sign Out</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- =========================================================================
+       VIEW 1: HOSPITAL AUTHENTICATION VIEW (Sign In & Sign Up)
+       ========================================================================= -->
+  <div class="auth-viewport" id="authViewport">
+    <div class="auth-card">
+      
+      <!-- Dual Auth Navigation Tabs -->
+      <div class="auth-tabs">
+        <button type="button" class="auth-tab-btn active" id="tabSignIn">Sign In</button>
+        <button type="button" class="auth-tab-btn" id="tabSignUp">Sign Up Hospital</button>
+      </div>
+
+      <!-- Form 1: Hospital Sign In -->
+      <form id="formSignIn">
+        <div class="form-group">
+          <label class="form-label" for="inputSignEmail">Hospital Dispatch Email</label>
+          <input type="email" id="inputSignEmail" class="form-input" placeholder="e.g. sms@jaipurhealth.gov.in" value="sms@jaipurhealth.gov.in" required>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="inputSignPassword">Hospital Access Password</label>
+          <input type="password" id="inputSignPassword" class="form-input" placeholder="Password" value="SMS@Jaipur2026" required>
+        </div>
+
+        <button type="submit" class="btn-submit" id="btnSignInSubmit">
+          <i data-lucide="log-in"></i>
+          <span>Sign In to Hospital Portal</span>
+        </button>
+
+        <!-- Quick Demo Accounts -->
+        <div class="quick-creds-box">
+          <div class="quick-creds-title">Enrolled Hospital Access Reference:</div>
+          <div class="quick-creds-list">
+            <span>• SMS Hospital: <strong>sms@jaipurhealth.gov.in</strong> / <strong>SMS@Jaipur2026</strong></span>
+            <span>• Apex Hospital: <strong>apex@jaipurhealth.gov.in</strong> / <strong>Apex@Jaipur2026</strong></span>
+          </div>
+        </div>
+      </form>
+
+      <!-- Form 2: Hospital Sign Up (New Facility Registration) -->
+      <form id="formSignUp" style="display: none;">
+        <div class="form-group">
+          <label class="form-label" for="regHospName">Hospital / Medical Center Name *</label>
+          <input type="text" id="regHospName" class="form-input" placeholder="e.g. Fortis Escorts Hospital Jaipur" required>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group" style="flex: 1;">
+            <label class="form-label" for="regHospLicense">Facility Reg / License ID *</label>
+            <input type="text" id="regHospLicense" class="form-input" placeholder="e.g. RJ-HOSP-2026-904" required>
+          </div>
+          <div class="form-group" style="flex: 1;">
+            <label class="form-label" for="regHospZone">City Zone / Corridor *</label>
+            <select id="regHospZone" class="form-select">
+              <option value="JLN Marg">JLN Marg Corridor</option>
+              <option value="Malviya Nagar">Malviya Nagar Hub</option>
+              <option value="Tonk Road">Tonk Road Arterial</option>
+              <option value="Mansarovar">Mansarovar Zone</option>
+              <option value="C-Scheme">C-Scheme / Central</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group" style="flex: 1;">
+            <label class="form-label" for="regHospEmail">Official Dispatch Email *</label>
+            <input type="email" id="regHospEmail" class="form-input" placeholder="e.g. dispatch@fortisjaipur.org" required>
+          </div>
+          <div class="form-group" style="flex: 1;">
+            <label class="form-label" for="regHospPhone">Emergency Triage Phone *</label>
+            <input type="tel" id="regHospPhone" class="form-input" placeholder="+91 141 277 XXXX" value="+91 141 277 8899" required>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group" style="flex: 1;">
+            <label class="form-label" for="regHospBays">Trauma Intake Bays *</label>
+            <input type="number" id="regHospBays" class="form-input" value="12" min="2" max="60" required>
+          </div>
+          <div class="form-group" style="flex: 1;">
+            <label class="form-label" for="regHospPass">Hospital Access Password *</label>
+            <input type="password" id="regHospPass" class="form-input" value="Hospital@123" required>
+          </div>
+        </div>
+
+        <button type="submit" class="btn-submit" id="btnSignUpSubmit">
+          <i data-lucide="building-2"></i>
+          <span>Register Hospital &amp; Enter CAD</span>
+        </button>
+      </form>
+
+    </div>
+  </div>
+
+  <!-- =========================================================================
+       VIEW 2: HOSPITAL CONTROL PANEL (Active Dashboard View)
+       ========================================================================= -->
+  <div class="dashboard-viewport" id="dashboardViewport" style="display: none;">
+    
+    <!-- Facility Status Banner -->
+    <div class="facility-banner">
+      <div class="facility-info">
+        <div class="facility-icon">+</div>
+        <div>
+          <h1 class="facility-name" id="hudFacilityName">Sawai Man Singh (SMS) Hospital</h1>
+          <div class="facility-meta">
+            <span id="hudFacilityTier">LEVEL 1 APEX TRAUMA CENTER</span>
+            <span>&bull;</span>
+            <span id="hudFacilityLicense">LIC: RJ-HOSP-2026-001</span>
+            <span>&bull;</span>
+            <span id="hudFacilityZone">JLN Marg Corridor</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="facility-metrics">
+        <div class="f-metric">
+          <div class="f-metric-val" id="hudBaysCount">14 / 18</div>
+          <div class="f-metric-lbl">Trauma Bays Free</div>
+        </div>
+        <div class="f-metric">
+          <div class="f-metric-val" id="hudDriversCount">4 Active</div>
+          <div class="f-metric-lbl">CAD Drivers</div>
+        </div>
+        <div class="f-metric">
+          <div class="f-metric-val" style="color: #34d399;">12Hz LIVE</div>
+          <div class="f-metric-lbl">AIS-140 GPS Radar</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Panel Navigation Tabs -->
+    <div class="panel-subnav">
+      <button type="button" class="panel-tab-btn active" id="btnSubTabDrivers">
+        <i data-lucide="user-check"></i>
+        <span>Driver Mobile Terminals (Set Up ID &amp; Password)</span>
+      </button>
+      <button type="button" class="panel-tab-btn" id="btnSubTabFleet">
+        <i data-lucide="truck"></i>
+        <span>Ambulance Fleet &amp; Clearance</span>
+      </button>
+      <button type="button" class="panel-tab-btn" id="btnSubTabMap">
+        <i data-lucide="map-pin"></i>
+        <span>Live Emergency GPS Radar Map</span>
+      </button>
+    </div>
+
+    <!-- Section 1: Driver Mobile Terminals & ID / Password Setup -->
+    <section class="driver-section-card" id="sectionDrivers">
+      <div class="section-header-row">
+        <div>
+          <h2 class="section-heading">Ambulance Driver Terminals &amp; Credentials</h2>
+          <p class="section-desc">Issue unique login IDs and passwords to ambulance drivers for the In-Cab CAD Mobile App.</p>
+        </div>
+
+        <button type="button" class="btn-create-driver" id="btnOpenDriverModal">
+          <i data-lucide="user-plus"></i>
+          <span>+ Set Up New Driver</span>
+        </button>
+      </div>
+
+      <div style="overflow-x: auto;">
+        <table class="drivers-table">
+          <thead>
+            <tr>
+              <th>Driver Name</th>
+              <th>Assigned Vehicle</th>
+              <th>Unique Login ID</th>
+              <th>Password (In-Cab Passkey)</th>
+              <th>Shift / Telemetry Link</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="hospitalDriversTableBody">
+            <!-- Populated dynamically via JS -->
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- Section 2: Fleet Management -->
+    <section class="driver-section-card" id="sectionFleet" style="display: none;">
+      <div class="section-header-row">
+        <div>
+          <h2 class="section-heading">Hospital Ambulance Fleet</h2>
+          <p class="section-desc">Monitored emergency vehicles assigned to this medical intake facility.</p>
+        </div>
+      </div>
+
+      <div style="overflow-x: auto;">
+        <table class="drivers-table">
+          <thead>
+            <tr>
+              <th>Unit ID</th>
+              <th>Vehicle Type</th>
+              <th>Current Status</th>
+              <th>Location</th>
+              <th>ETA to Hospital</th>
+              <th>Speed</th>
+            </tr>
+          </thead>
+          <tbody id="hospitalFleetTableBody">
+            <!-- Populated dynamically via JS -->
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- Section 3: Live Radar Map -->
+    <section class="driver-section-card" id="sectionMap" style="display: none;">
+      <div class="section-header-row">
+        <div>
+          <h2 class="section-heading">Live Emergency Intake Radar Map</h2>
+          <p class="section-desc">Real-time AIS-140 GPS link tracking ambulance approaching this facility.</p>
+        </div>
+      </div>
+
+      <div class="map-container-box">
+        <div id="hospitalMap"></div>
+      </div>
+    </section>
+
+  </div>
+
+  <!-- =========================================================================
+       MODAL: SET UP DRIVER INFO, ID, AND PASSWORD
+       ========================================================================= -->
+  <div class="modal-overlay" id="driverModalOverlay" style="display: none;">
+    <div class="modal-box">
+      <div class="modal-header">
+        <h3 class="modal-title">Set Up Ambulance Driver</h3>
+        <button type="button" class="btn-close-modal" id="btnCloseDriverModal">&times;</button>
+      </div>
+
+      <form id="formDriverSetup">
+        <div class="form-row">
+          <div class="form-group" style="flex: 1;">
+            <label class="form-label" for="setupDriverName">Driver Full Name *</label>
+            <input type="text" id="setupDriverName" class="form-input" placeholder="e.g. Rajesh Sharma" required>
+          </div>
+          <div class="form-group" style="flex: 1;">
+            <label class="form-label" for="setupDriverPhone">Contact Mobile Number *</label>
+            <input type="tel" id="setupDriverPhone" class="form-input" placeholder="+91 98290 XXXXX" value="+91 98290 44102" required>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group" style="flex: 1;">
+            <label class="form-label" for="setupDriverId">Unique Driver Login ID *</label>
+            <input type="text" id="setupDriverId" class="form-input" placeholder="e.g. driver.rajesh" required>
+            <span style="font-size: 10px; color: var(--text-muted);">Used on driver mobile app login screen</span>
+          </div>
+          <div class="form-group" style="flex: 1;">
+            <label class="form-label" for="setupDriverPassword">Driver In-Cab Password *</label>
+            <input type="password" id="setupDriverPassword" class="form-input" value="Ambulance@123" required>
+            <span style="font-size: 10px; color: var(--text-muted);">Passkey for in-cab mobile CAD</span>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="setupDriverAmbulance">Assign Hospital Ambulance Vehicle *</label>
+          <select id="setupDriverAmbulance" class="form-select" required>
+            <!-- Populated dynamically based on hospital fleet -->
+          </select>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group" style="flex: 1;">
+            <label class="form-label" for="setupDriverStatus">Shift / Availability Status</label>
+            <select id="setupDriverStatus" class="form-select">
+              <option value="on-duty" selected>On Duty • Active Emergency</option>
+              <option value="standby">Standby • Terminal Armed</option>
+              <option value="off-duty">Off Duty</option>
+            </select>
+          </div>
+          <div class="form-group" style="flex: 1;">
+            <label class="form-label" for="setupDriverLicense">Commercial Driving License (CDL)</label>
+            <input type="text" id="setupDriverLicense" class="form-input" value="RJ-14-2023-008912">
+          </div>
+        </div>
+
+        <button type="submit" class="btn-submit" style="margin-top: 14px;">
+          <i data-lucide="check"></i>
+          <span>Save Driver Info &amp; Issue Passkey</span>
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Leaflet Map JS (Offline bundled) -->
+  <script src="lib/leaflet/leaflet.js"></script>
+
+  <!-- Central Fox API Integration & Data Store -->
+  <script src="js/api.js"></script>
+  <script src="js/data.js"></script>
+
+  <!-- Application Controller -->
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      // Initialize Lucide Icons
+      if (window.lucide) window.lucide.createIcons();
+
+      let currentHospital = null;
+      let map = null;
+      let mapMarker = null;
+      let activeRouteLine = null;
+
+      // Element References
+      const authViewport = document.getElementById('authViewport');
+      const dashboardViewport = document.getElementById('dashboardViewport');
+      const tabSignIn = document.getElementById('tabSignIn');
+      const tabSignUp = document.getElementById('tabSignUp');
+      const formSignIn = document.getElementById('formSignIn');
+      const formSignUp = document.getElementById('formSignUp');
+      const btnSignOutTop = document.getElementById('btnSignOutTop');
+
+      // Dashboard Header
+      const hudFacilityName = document.getElementById('hudFacilityName');
+      const hudFacilityTier = document.getElementById('hudFacilityTier');
+      const hudFacilityLicense = document.getElementById('hudFacilityLicense');
+      const hudFacilityZone = document.getElementById('hudFacilityZone');
+      const hudBaysCount = document.getElementById('hudBaysCount');
+      const hudDriversCount = document.getElementById('hudDriversCount');
+
+      // Subtabs
+      const btnSubTabDrivers = document.getElementById('btnSubTabDrivers');
+      const btnSubTabFleet = document.getElementById('btnSubTabFleet');
+      const btnSubTabMap = document.getElementById('btnSubTabMap');
+      const sectionDrivers = document.getElementById('sectionDrivers');
+      const sectionFleet = document.getElementById('sectionFleet');
+      const sectionMap = document.getElementById('sectionMap');
+
+      // Driver Modal Elements
+      const btnOpenDriverModal = document.getElementById('btnOpenDriverModal');
+      const driverModalOverlay = document.getElementById('driverModalOverlay');
+      const btnCloseDriverModal = document.getElementById('btnCloseDriverModal');
+      const formDriverSetup = document.getElementById('formDriverSetup');
+      const setupDriverAmbulance = document.getElementById('setupDriverAmbulance');
+
+      // 1. Auth Tabs Switcher
+      tabSignIn.addEventListener('click', () => {
+        tabSignIn.classList.add('active');
+        tabSignUp.classList.remove('active');
+        formSignIn.style.display = 'block';
+        formSignUp.style.display = 'none';
+      });
+
+      tabSignUp.addEventListener('click', () => {
+        tabSignUp.classList.add('active');
+        tabSignIn.classList.remove('active');
+        formSignUp.style.display = 'block';
+        formSignIn.style.display = 'none';
+      });
+
+      // 2. Sign In Submission (Connected to Fox Backend Role 9 Auth)
+      formSignIn.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const inputVal = document.getElementById('inputSignEmail').value.trim();
+        const password = document.getElementById('inputSignPassword').value.trim();
+
+        // 1. Try Fox Backend API authentication
+        if (window.GC_API && window.GC_API.login) {
+          const apiResp = await window.GC_API.login(9, inputVal, password);
+          if (apiResp && apiResp.code === 100) {
+            const hKey = apiResp.hospital_key || (apiResp.sub ? apiResp.sub.replace('_key_jaipur', '_hospital') : 'sms_hospital');
+            let profile = window.GC_DATA.hospitalProfiles[hKey] || window.GC_DATA.hospitalProfiles.sms;
+            try {
+              const apiDetail = await window.GC_API.getHospitalDetail(hKey);
+              if (apiDetail && apiDetail.coordinates) {
+                profile = {
+                  ...profile,
+                  name: apiDetail.name,
+                  tier: apiDetail.trauma_level || profile.tier,
+                  coords: [apiDetail.coordinates.latitude, apiDetail.coordinates.longitude],
+                  beds: `${apiDetail.facilities.icu_beds_count} ICU / ${apiDetail.facilities.total_beds} Total`
+                };
+              }
+            } catch(e) {}
+
+            launchHospitalSession({
+              email: inputVal,
+              hospitalKey: hKey,
+              displayName: apiResp.entity_name || profile.name,
+              profile: profile
+            });
+            return;
+          }
+        }
+
+        // 2. Resilient local credential fallback
+        const auth = window.GC_DATA.authenticateHospital(inputVal, password);
+        if (!auth) {
+          showToast("Invalid Credentials. Please check hospital key/email and password.");
+          return;
+        }
+
+        launchHospitalSession(auth);
+      });
+
+      // 3. Sign Up Submission (New Hospital Facility Registration)
+      formSignUp.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const name = document.getElementById('regHospName').value.trim();
+        const licenseId = document.getElementById('regHospLicense').value.trim();
+        const zone = document.getElementById('regHospZone').value;
+        const email = document.getElementById('regHospEmail').value.trim();
+        const phone = document.getElementById('regHospPhone').value.trim();
+        const bays = document.getElementById('regHospBays').value;
+        const password = document.getElementById('regHospPass').value.trim();
+
+        const record = window.GC_DATA.registerHospital({
+          name,
+          licenseId,
+          zone,
+          email,
+          phone,
+          bays,
+          password
+        });
+
+        showToast(`Hospital Registered! Welcome, ${record.name}`);
+        launchHospitalSession({
+          email: record.email,
+          hospitalKey: record.hospitalKey,
+          displayName: record.name,
+          profile: window.GC_DATA.hospitalProfiles[record.hospitalKey]
+        });
+      });
+
+      // 4. Launch Hospital Session
+      function launchHospitalSession(auth) {
+        currentHospital = auth;
+        authViewport.style.display = 'none';
+        dashboardViewport.style.display = 'flex';
+        btnSignOutTop.style.display = 'flex';
+
+        // Update HUD
+        const profile = window.GC_DATA.hospitalProfiles[auth.hospitalKey] || {};
+        hudFacilityName.textContent = auth.displayName;
+        hudFacilityTier.textContent = profile.tier || "TERTIARY EMERGENCY TRAUMA CENTER";
+        hudFacilityLicense.textContent = `LIC: ${auth.profile && auth.profile.licenseId ? auth.profile.licenseId : 'RJ-HOSP-2026'}`;
+        hudFacilityZone.textContent = profile.address ? profile.address.split(',')[0] : 'Jaipur Grid';
+        hudBaysCount.textContent = profile.beds || "12 Ready";
+
+        renderDriversTable();
+        renderFleetTable();
+        populateAmbulanceDropdown();
+        showToast(`Signed into Hospital CAD: ${auth.displayName}`);
+      }
+
+      // 5. Sign Out
+      btnSignOutTop.addEventListener('click', () => {
+        currentHospital = null;
+        dashboardViewport.style.display = 'none';
+        btnSignOutTop.style.display = 'none';
+        authViewport.style.display = 'flex';
+        showToast("Signed out from Hospital CAD.");
+      });
+
+      // 6. Subtab Switchers
+      btnSubTabDrivers.addEventListener('click', () => {
+        btnSubTabDrivers.classList.add('active');
+        btnSubTabFleet.classList.remove('active');
+        btnSubTabMap.classList.remove('active');
+        sectionDrivers.style.display = 'block';
+        sectionFleet.style.display = 'none';
+        sectionMap.style.display = 'none';
+      });
+
+      btnSubTabFleet.addEventListener('click', () => {
+        btnSubTabFleet.classList.add('active');
+        btnSubTabDrivers.classList.remove('active');
+        btnSubTabMap.classList.remove('active');
+        sectionFleet.style.display = 'block';
+        sectionDrivers.style.display = 'none';
+        sectionMap.style.display = 'none';
+      });
+
+      btnSubTabMap.addEventListener('click', () => {
+        btnSubTabMap.classList.add('active');
+        btnSubTabDrivers.classList.remove('active');
+        btnSubTabFleet.classList.remove('active');
+        sectionMap.style.display = 'block';
+        sectionDrivers.style.display = 'none';
+        sectionFleet.style.display = 'none';
+        setTimeout(initMap, 200);
+      });
+
+      // 7. Driver Modal Handlers
+      btnOpenDriverModal.addEventListener('click', () => {
+        driverModalOverlay.style.display = 'flex';
+      });
+
+      btnCloseDriverModal.addEventListener('click', () => {
+        driverModalOverlay.style.display = 'none';
+      });
+
+      // 8. Driver Setup Form Submission (Add/Update Driver)
+      formDriverSetup.addEventListener('submit', (e) => {
+        e.preventDefault();
+        if (!currentHospital) return;
+
+        const name = document.getElementById('setupDriverName').value.trim();
+        const phone = document.getElementById('setupDriverPhone').value.trim();
+        const id = document.getElementById('setupDriverId').value.trim();
+        const password = document.getElementById('setupDriverPassword').value.trim();
+        const ambulanceId = setupDriverAmbulance.value;
+        const status = document.getElementById('setupDriverStatus').value;
+        const licenseNumber = document.getElementById('setupDriverLicense').value.trim();
+
+        window.GC_DATA.saveDriver({
+          id,
+          password,
+          name,
+          phone,
+          hospitalKey: currentHospital.hospitalKey,
+          ambulanceId,
+          status,
+          licenseNumber
+        });
+
+        driverModalOverlay.style.display = 'none';
+        renderDriversTable();
+        showToast(`Driver ID '${id}' saved! Ready for in-cab mobile app login.`);
+      });
+
+      // 9. Render Drivers Table
+      function renderDriversTable() {
+        if (!currentHospital) return;
+        const tbody = document.getElementById('hospitalDriversTableBody');
+        tbody.innerHTML = '';
+
+        const drivers = window.GC_DATA.getHospitalDrivers(currentHospital.hospitalKey);
+        hudDriversCount.textContent = `${drivers.length} Active`;
+
+        if (drivers.length === 0) {
+          tbody.innerHTML = `
+            <tr>
+              <td colspan="6" style="text-align: center; color: var(--text-dim); padding: 24px;">
+                No drivers registered yet. Click <strong>"+ Set Up New Driver"</strong> to issue the first ID and password.
+              </td>
+            </tr>
+          `;
+          return;
+        }
+
+        drivers.forEach(d => {
+          const tr = document.createElement('tr');
+          tr.innerHTML = `
+            <td>
+              <div style="font-weight: 800; color: var(--text-white);">${d.name}</div>
+              <div style="font-size: 11px; color: var(--text-muted);">${d.phone}</div>
+            </td>
+            <td>
+              <span style="font-family: var(--font-mono); font-weight: 700;">${d.ambulanceId}</span>
+            </td>
+            <td>
+              <span class="cred-id-badge">${d.id}</span>
+            </td>
+            <td>
+              <div class="cred-pw-cell">
+                <span id="pwText_${d.id}">••••••••</span>
+                <button type="button" class="btn-copy-cred" onclick="togglePw('${d.id}', '${d.password}')">Reveal</button>
+                <button type="button" class="btn-copy-cred" onclick="copyCreds('${d.id}', '${d.password}')">Copy</button>
+              </div>
+            </td>
+            <td>
+              <span class="status-pill ${d.status === 'on-duty' ? 'online' : 'standby'}">
+                <span style="width:6px; height:6px; border-radius:50%; background:currentColor;"></span>
+                ${d.status === 'on-duty' ? 'ON DUTY • 12Hz GPS' : 'STANDBY'}
+              </span>
+            </td>
+            <td>
+              <button type="button" class="btn-copy-cred" style="color: #f87171; border-color: rgba(248,113,113,0.3);" onclick="removeDriver('${d.id}')">Delete</button>
+            </td>
+          `;
+          tbody.appendChild(tr);
+        });
+
+        if (window.lucide) window.lucide.createIcons();
+      }
+
+      // 10. Render Fleet Table
+      function renderFleetTable() {
+        if (!currentHospital) return;
+        const tbody = document.getElementById('hospitalFleetTableBody');
+        tbody.innerHTML = '';
+
+        const list = window.GC_DATA.ambulances.filter(a => a.hospitalKey === currentHospital.hospitalKey);
+        list.forEach(a => {
+          const tr = document.createElement('tr');
+          tr.innerHTML = `
+            <td><strong style="font-family: var(--font-mono);">${a.id}</strong></td>
+            <td>${a.type}</td>
+            <td><span class="status-pill ${a.inService ? 'online' : 'standby'}">${a.statusLabel || (a.inService ? 'IN SERVICE' : 'MAINTENANCE')}</span></td>
+            <td>${a.location || 'Hospital Intake Bay'}</td>
+            <td><strong style="font-family: var(--font-mono); color: #34d399;">${a.eta || '0 min'}</strong></td>
+            <td>${a.speed || '0 km/h'}</td>
+          `;
+          tbody.appendChild(tr);
+        });
+      }
+
+      // 11. Populate Ambulance Dropdown
+      function populateAmbulanceDropdown() {
+        if (!currentHospital) return;
+        setupDriverAmbulance.innerHTML = '';
+        const list = window.GC_DATA.ambulances.filter(a => a.hospitalKey === currentHospital.hospitalKey);
+        if (list.length === 0) {
+          const opt = document.createElement('option');
+          opt.value = "RJ-14-EA-4091";
+          opt.textContent = "RJ-14-EA-4091 (Default ALS Unit)";
+          setupDriverAmbulance.appendChild(opt);
+        } else {
+          list.forEach(a => {
+            const opt = document.createElement('option');
+            opt.value = a.id;
+            opt.textContent = `${a.id} - ${a.type}`;
+            setupDriverAmbulance.appendChild(opt);
+          });
+        }
+      }
+
+      // 12. Map Initialization
+      function initMap() {
+        if (map) {
+          map.invalidateSize();
+          return;
+        }
+        const container = document.getElementById('hospitalMap');
+        if (!container) return;
+
+        const coords = currentHospital && currentHospital.profile && currentHospital.profile.coords ? currentHospital.profile.coords : [26.8929, 75.8155];
+        map = L.map('hospitalMap', {
+          center: coords,
+          zoom: 14,
+          attributionControl: false
+        });
+
+        L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+          maxZoom: 19,
+          attribution: '&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank">OpenStreetMap</a> contributors'
+        }).addTo(map);
+
+        // Hospital Marker
+        const hospIcon = L.divIcon({
+          className: 'hosp-map-marker',
+          html: `<div style="width:32px; height:32px; border-radius:8px; background:#064e3b; border:2px solid #34d399; color:#ffffff; font-size:18px; font-weight:900; display:flex; align-items:center; justify-content:center; box-shadow:0 0 15px #34d399;">+</div>`,
+          iconSize: [32, 32],
+          iconAnchor: [16, 16]
+        });
+        L.marker(coords, { icon: hospIcon }).addTo(map).bindPopup(`<strong>${currentHospital.displayName}</strong><br>Emergency Trauma Bay Intake`).openPopup();
+      }
+
+      // 13. Telemetry & Real OSRM Route Tracing (Fox Backend Stream)
+      function onTelemetryUpdate(t) {
+        if (!map || !t || !t.coords) return;
+        const destCoords = currentHospital && currentHospital.profile && currentHospital.profile.coords ? currentHospital.profile.coords : [26.8978, 75.8156];
+
+        if (mapMarker) {
+          mapMarker.setLatLng(t.coords);
+        } else {
+          const ambIcon = L.divIcon({
+            className: 'amb-map-marker',
+            html: `<div style="width:28px; height:28px; border-radius:50%; background:#ffffff; border:2px solid #064e3b; color:#064e3b; font-size:14px; font-weight:900; display:flex; align-items:center; justify-content:center; box-shadow:0 0 10px #ffffff;">🚑</div>`,
+            iconSize: [28, 28],
+            iconAnchor: [14, 14]
+          });
+          mapMarker = L.marker(t.coords, { icon: ambIcon }).addTo(map);
+        }
+
+        // Trace real OSRM path from ambulance to hospital
+        if (window.GC_API && window.GC_API.getRoute) {
+          window.GC_API.getRoute(t.coords[0], t.coords[1], destCoords[0], destCoords[1], 'emergency').then(res => {
+            if (res && res.coordinates && res.coordinates.length > 1) {
+              if (activeRouteLine) map.removeLayer(activeRouteLine);
+              activeRouteLine = L.polyline(res.coordinates, {
+                color: '#10b981',
+                weight: 5,
+                opacity: 0.9,
+                lineCap: 'round'
+              }).addTo(map);
+            }
+          }).catch(() => {});
+        }
+      }
+
+      // Subscribe to Fox Backend API Telemetry Stream
+      if (window.GC_API) {
+        window.GC_API.subscribeTelemetry(fleet => {
+          if (Array.isArray(fleet) && fleet.length > 0) {
+            const myAmb = fleet.find(a => a.hospital_key === (currentHospital ? currentHospital.hospitalKey : 'sms_hospital')) || fleet[0];
+            if (myAmb) {
+              onTelemetryUpdate({ coords: [myAmb.latitude, myAmb.longitude], speed: myAmb.speed_kmh, eta: myAmb.eta });
+            }
+          }
+        });
+      }
+
+      // Cross-tab broadcast fallback
+      try {
+        const ch = new BroadcastChannel('gc_telemetry_channel');
+        ch.onmessage = (event) => {
+          if (event.data && event.data.type === 'AMBULANCE_GPS_TELEMETRY' && event.data.telemetry) {
+            onTelemetryUpdate(event.data.telemetry);
+          }
+        };
+      } catch(e) {}
+
+      // Global Helpers on window
+      window.togglePw = (id, pw) => {
+        const el = document.getElementById(`pwText_${id}`);
+        if (!el) return;
+        if (el.textContent === '••••••••') {
+          el.textContent = pw;
+        } else {
+          el.textContent = '••••••••';
+        }
+      };
+
+      window.copyCreds = (id, pw) => {
+        const text = `Driver Login ID: ${id}\nPassword: ${pw}`;
+        navigator.clipboard.writeText(text).then(() => {
+          showToast(`Copied ID & Password for '${id}' to clipboard!`);
+        }).catch(() => {
+          showToast(`ID: ${id} | PW: ${pw}`);
+        });
+      };
+
+      window.removeDriver = (id) => {
+        if (confirm(`Are you sure you want to revoke credentials for driver '${id}'?`)) {
+          window.GC_DATA.deleteDriver(id);
+          renderDriversTable();
+          showToast(`Driver '${id}' revoked.`);
+        }
+      };
+
+      // Toast Notification
+      function showToast(msg) {
+        const prev = document.querySelector('.toast-box');
+        if (prev) prev.remove();
+        const t = document.createElement('div');
+        t.className = 'toast-box';
+        t.innerHTML = `<i data-lucide="info"></i><span>${msg}</span>`;
+        document.body.appendChild(t);
+        if (window.lucide) window.lucide.createIcons();
+        setTimeout(() => t.remove(), 4000);
+      }
+    });
+  </script>
+</body>
+</html>

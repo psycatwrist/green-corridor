@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <meta name="theme-color" content="#0a1326">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <title>Green+ Corridor | Ambulance CAD In-Cab Terminal</title>
+  
+  <!-- Web App Manifest for PWA Android Installation -->
+  <link rel="manifest" href="manifest.json">
+  
+  <!-- Google Fonts: Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  
+  <!-- Leaflet Map CSS (Offline bundled) -->
+  <link rel="stylesheet" href="lib/leaflet/leaflet.css" />
+  
+  <!-- Professional Emergency CAD Stylesheet (Navy Blue, Black, White Only) -->
+  <link rel="stylesheet" href="css/driver.css">
+</head>
+<body>
+
+  <div class="app-container" id="appContainer">
+
+    <!-- =======================================================================
+         PART 1: LOGIN PANEL (Strict: Only ID, Password, and Login)
+         Ultra-sleek, High-Security Emergency CAD Design
+         ======================================================================= -->
+    <section class="login-screen" id="loginScreen">
+      <div class="login-panel">
+        <h1 class="login-heading">Login</h1>
+
+        <form id="driverLoginForm" autocomplete="off">
+          <div class="login-group">
+            <label for="loginId" class="login-label">ID</label>
+            <div class="login-input-wrapper">
+              <input 
+                type="text" 
+                id="loginId" 
+                class="login-input" 
+                placeholder="ID" 
+                value="driver.rajesh" 
+                required 
+                autocomplete="username"
+                autocapitalize="none"
+              >
+            </div>
+          </div>
+
+          <div class="login-group">
+            <label for="loginPassword" class="login-label">Password</label>
+            <div class="login-input-wrapper">
+              <input 
+                type="password" 
+                id="loginPassword" 
+                class="login-input" 
+                placeholder="Password" 
+                value="Ambulance@123" 
+                required 
+                autocomplete="current-password"
+              >
+            </div>
+          </div>
+
+          <button type="submit" class="btn-login" id="btnLogin">
+            <span>Login</span>
+          </button>
+        </form>
+      </div>
+    </section>
+
+    <!-- =======================================================================
+         PART 2 & 3: MAIN CAD INTERFACE (From/To Location -> AI Traffic Engine)
+         ======================================================================= -->
+    <section class="main-interface" id="mainInterface" style="display: none;">
+      
+      <!-- Top System Status Bar -->
+      <header class="top-system-bar">
+        <div class="system-title-group">
+          <div class="system-badge-icon">+</div>
+          <div class="system-title">Ambulance CAD</div>
+        </div>
+        <div class="system-status">
+          <span class="status-dot-white"></span>
+          <span id="systemClock">12:00:00</span>
+        </div>
+      </header>
+
+      <!-- Sub-header with Active Driver ID Badge & Sign Out -->
+      <div class="nav-sub-header">
+        <div class="driver-id-badge" id="hudDriverBadge">ID: driver.rajesh • RJ-14-AMB-108</div>
+        <button type="button" class="btn-signout" id="btnSignOut">Sign Out</button>
+      </div>
+
+      <!-- Location From & Destination To Selector -->
+      <div class="location-panel">
+        <div class="location-title-row">
+          <div class="location-title">Route Location</div>
+          <div class="location-badge-gps">GPS Active</div>
+        </div>
+
+        <form id="routeLocationForm">
+          <div class="route-inputs-card">
+            <!-- Left Journey Route Spine -->
+            <div class="route-node-spine">
+              <div class="node-origin" title="Origin"></div>
+              <div class="node-line"></div>
+              <div class="node-dest" title="Destination"></div>
+            </div>
+
+            <!-- Right Inputs Column -->
+            <div class="route-fields-col">
+              <!-- From Location -->
+              <div class="loc-field-group">
+                <label for="locFrom" class="loc-label">From</label>
+                <select id="locFrom" class="loc-select">
+                  <option value="vaishali" selected>Current GPS Location (Vaishali Nagar Depot)</option>
+                  <option value="mansarovar">Mansarovar (Shipra Path Station)</option>
+                  <option value="cscheme">C-Scheme (Statue Circle)</option>
+                </select>
+              </div>
+
+              <!-- To Destination Location -->
+              <div class="loc-field-group">
+                <label for="locTo" class="loc-label">To</label>
+                <select id="locTo" class="loc-select">
+                  <option value="sms" selected>Sawai Man Singh (SMS) Hospital Trauma Center</option>
+                  <option value="apex">Apex Super Speciality Hospital (Malviya Nagar)</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <button type="submit" class="btn-calculate-route" id="btnCalculateRoute">
+            <span>Calculate Route</span>
+          </button>
+        </form>
+      </div>
+
+      <!-- AI Traffic Calculation Results (Shortest & Fastest Way) -->
+      <div class="ai-results-panel" id="aiResultsPanel">
+        
+        <div class="ai-calculation-header">
+          <span>AI Traffic Engine</span>
+          <span class="ai-pill">Real-Time Analysis</span>
+        </div>
+
+        <!-- Shortest and Fastest Way Highlighted Card -->
+        <div class="best-route-card" id="bestRouteCard">
+          <div class="br-header">
+            <h2 class="br-title" id="brTitle">JLN Marg Green Corridor</h2>
+            <span class="br-tag">Shortest &amp; Fastest</span>
+          </div>
+
+          <p class="br-path" id="brPath">Vaishali Nagar &bull; Ajmer Road &bull; Ambedkar Circle &bull; Rambagh Circle &bull; SMS Hospital</p>
+
+          <!-- 4-Box Key Metric Bar -->
+          <div class="ai-metrics-grid">
+            <div class="ai-metric">
+              <span class="ai-m-label">Distance</span>
+              <span class="ai-m-val" id="brDistance">3.8 km</span>
+              <span class="ai-m-badge">Shortest</span>
+            </div>
+            <div class="ai-metric">
+              <span class="ai-m-label">Signals</span>
+              <span class="ai-m-val" id="brSignals">3 Signals</span>
+              <span class="ai-m-badge">Min Delay</span>
+            </div>
+            <div class="ai-metric">
+              <span class="ai-m-label">Time</span>
+              <span class="ai-m-val" id="brTime">7m 40s</span>
+              <span class="ai-m-badge">Fastest</span>
+            </div>
+            <div class="ai-metric">
+              <span class="ai-m-label">Road Avail</span>
+              <span class="ai-m-val" id="brAvailabilityVal">88%</span>
+              <span class="ai-m-badge">Clear</span>
+            </div>
+          </div>
+
+          <!-- Traffic Signal Times & Road Availability Breakdown -->
+          <div class="ai-signals-section">
+            <div class="signals-section-title">
+              <span>Traffic Signal Times</span>
+              <span class="br-avail-pill" id="brAvailabilityPill">88% Road Availability</span>
+            </div>
+
+            <!-- Visual Progress Bar for Traffic Availability -->
+            <div class="traffic-avail-bar-wrap">
+              <div class="traffic-avail-bar-fill" id="trafficAvailBar" style="width: 88%;"></div>
+            </div>
+
+            <p class="traffic-avail-text" id="trafficAvailSummary">
+              AI Analysis: Optimal roadway capacity available. All 3 traffic signals synchronized with Jaipur Police Green Wave pre-emption.
+            </p>
+
+            <div class="signal-timing-list" id="signalTimingList">
+              <div class="signal-timing-row">
+                <div class="signal-name-group">
+                  <span class="signal-index">1</span>
+                  <span class="signal-name">Ambedkar Circle Crossing</span>
+                </div>
+                <span class="signal-timing-badge" id="sigHold1">Hold: 00:24s remaining</span>
+              </div>
+              <div class="signal-timing-row">
+                <div class="signal-name-group">
+                  <span class="signal-index">2</span>
+                  <span class="signal-name">Rambagh Circle Crossing</span>
+                </div>
+                <span class="signal-timing-badge" id="sigHold2">Hold: 00:48s remaining</span>
+              </div>
+              <div class="signal-timing-row">
+                <div class="signal-name-group">
+                  <span class="signal-index">3</span>
+                  <span class="signal-name">SMS Trauma Reception Gate</span>
+                </div>
+                <span class="signal-timing-badge" id="sigHold3">Dock Cleared: 00:00s</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Alternative Routes Comparison -->
+        <div class="alt-routes-wrapper">
+          <div class="alt-routes-label">Alternative Routes (AI Comparison)</div>
+          <div class="alt-routes-list" id="altRoutesList">
+            <div class="alt-route-item" data-route-key="alt-a">
+              <div>
+                <div class="alt-route-name">Tonk Road Route</div>
+                <div class="alt-route-sub">42% Traffic Availability &bull; Secondary Option</div>
+              </div>
+              <div class="alt-route-stats">5.6 km &bull; 5 Signals &bull; 13m 15s</div>
+            </div>
+            <div class="alt-route-item" data-route-key="alt-b">
+              <div>
+                <div class="alt-route-name">MI Road Route</div>
+                <div class="alt-route-sub">18% Traffic Availability &bull; High Congestion</div>
+              </div>
+              <div class="alt-route-stats">7.2 km &bull; 7 Signals &bull; 18m 50s</div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Navigation Map View -->
+      <div class="map-view-box">
+        <!-- Floating Turn-By-Turn Navigation Guidance HUD -->
+        <div class="map-turn-hud" id="mapTurnHud">
+          <div class="turn-icon-box">↑</div>
+          <div class="turn-details">
+            <div class="turn-distance" id="turnDistance">In 800m</div>
+            <div class="turn-instruction" id="turnInstruction">Keep straight &bull; Green Wave Pre-empted at Ambedkar Circle</div>
+          </div>
+        </div>
+
+        <div id="navMapLeaflet"></div>
+
+        <!-- Floating Map Action Buttons -->
+        <div class="map-float-actions">
+          <button type="button" class="btn-map-float" id="btnMapRecenter" title="Recenter on Ambulance">⌖</button>
+          <button type="button" class="btn-map-float" id="btnMapZoomIn" title="Zoom In">+</button>
+          <button type="button" class="btn-map-float" id="btnMapZoomOut" title="Zoom Out">-</button>
+        </div>
+      </div>
+
+      <!-- Real-Time GPS Telemetry Panel -->
+      <div class="telemetry-live-panel">
+        <div class="telemetry-title-row">
+          <div class="telemetry-title">Real-Time GPS Telemetry</div>
+          <div class="telemetry-link-badge" id="telStatusText">AIS-140 GPS • 12Hz LIVE</div>
+        </div>
+
+        <div class="telemetry-grid">
+          <div class="tel-box">
+            <span class="tel-label">Latitude</span>
+            <span class="tel-value" id="telLat">26.9045°N</span>
+            <span class="tel-sub">GPS Fix</span>
+          </div>
+          <div class="tel-box">
+            <span class="tel-label">Longitude</span>
+            <span class="tel-value" id="telLng">75.7590°E</span>
+            <span class="tel-sub">AIS-140</span>
+          </div>
+          <div class="tel-box">
+            <span class="tel-label">Speed</span>
+            <span class="tel-value" id="telSpeed">58 km/h</span>
+            <span class="tel-sub">Current</span>
+          </div>
+          <div class="tel-box">
+            <span class="tel-label">ETA</span>
+            <span class="tel-value" id="telEta">7m 40s</span>
+            <span class="tel-sub">SMS Dock</span>
+          </div>
+        </div>
+
+        <div class="tel-actions">
+          <button type="button" class="btn-tel-run" id="btnStartRun">
+            <span>Start Run</span>
+          </button>
+          <button type="button" class="btn-tel-reset" id="btnResetRun">
+            <span>Reset</span>
+          </button>
+        </div>
+
+        <div class="tel-footer-text">
+          Live encrypted telemetry broadcast connected to Jaipur Traffic Police Command &amp; Hospital Trauma Intake.
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <!-- Leaflet Map JS (Offline bundled) -->
+  <script src="lib/leaflet/leaflet.js"></script>
+  
+  <!-- Core Fox API & Data Store -->
+  <script src="js/api.js"></script>
+  <script src="js/data.js"></script>
+  <script src="js/state.js"></script>
+  <script src="js/driver.js"></script>
+
+  <!-- Service Worker for Offline PWA Installation -->
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', function() {
+        navigator.serviceWorker.register('sw.js').catch(function() {});
+      });
+    }
+  </script>
+</body>
+</html>
