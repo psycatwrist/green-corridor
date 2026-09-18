@@ -1,0 +1,40 @@
+{
+  "traffic_admins": [
+    {
+      "key": "dictator",
+      "keypass_hash": "2c2ae9c2a8e14f007453d5dc1a6129c952f380500ecb2c38eb06d95f9b0b2bb2",
+      "raw_keypass_for_reference": "dictatorIsPsycatwrist",
+      "admin_id": "ADM-DICTATOR-SUPREME-01",
+      "name": "The Dictator Supreme Traffic Command & Green Corridor Control",
+      "jurisdiction": "State Emergency Corridors & Jaipur High-Priority Transit Grid",
+      "is_active": true
+    },
+    {
+      "key": "jaipur_traffic_hq_admin",
+      "keypass_hash": "1431ef737664c0309c9d5ceb6ac157d483ecc0b4e1ed7b3c2610641993f4501a",
+      "raw_keypass_for_reference": "jaipur_traffic_pass_2026",
+      "admin_id": "ADM-JPR-HQ-01",
+      "name": "Jaipur Police Traffic Control Headquarters (Yadgar, Ajmeri Gate)",
+      "jurisdiction": "Jaipur Urban Police Commissionerate",
+      "is_active": true
+    },
+    {
+      "key": "green_corridor_dispatch_admin",
+      "keypass_hash": "e267555d57427e7bffb0e699dddc0f19b344b0ee965e174b2d6c93d1004f7922",
+      "raw_keypass_for_reference": "corridor_pass_2026",
+      "admin_id": "ADM-JPR-GC-02",
+      "name": "Jaipur Green Corridor Emergency Dispatch Unit",
+      "jurisdiction": "All Jaipur Emergency Medical Corridors",
+      "is_active": true
+    },
+    {
+      "key": "south_zone_traffic_admin",
+      "keypass_hash": "9a52cdedccec79c2926efe148d06d2096e6f3f7cef3b22c416694df2f715da2b",
+      "raw_keypass_for_reference": "south_traffic_pass_2026",
+      "admin_id": "ADM-JPR-SOUTH-03",
+      "name": "South Zone Traffic Command (Malviya Nagar & Sanganer)",
+      "jurisdiction": "South Jaipur & Airport Corridor",
+      "is_active": true
+    }
+  ]
+}

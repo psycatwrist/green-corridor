@@ -1,0 +1,140 @@
+{
+  "hospital_key": "dictator_hospital",
+  "hospital_name": "The Dictator Apex Trauma & Super-Speciality Hospital",
+  "total_cars": 4,
+  "in_service_count": 3,
+  "out_service_count": 1,
+  "in_service": [
+    {
+      "car_id": "AMB-DICT-01",
+      "carkey": "2a17248bd0fb95750a935e5e483ee97bae1b245c119a36751c830ead2d1c8d98",
+      "status": "in-service",
+      "car_info": {
+        "vehicle_number": "RJ-14-PA-9991",
+        "make_model": "Mercedes-Benz Sprinter 519 CDI Mobile ICU / ALS",
+        "type": "ALS",
+        "equipment": [
+          "Biphasic Defibrillator with External Transcutaneous Pacing",
+          "Hamilton-T1 Military Grade ICU Transport Ventilator",
+          "Getinge Cardiohelp Portable ECMO Unit",
+          "Mindray BeneVision N12 Patient Monitor (ECG, SpO2, EtCO2, IBP, Temp)",
+          "B. Braun Perfusor Space Dual Syringe Infusion Pumps",
+          "Cryo-Transport Organ Perfusion Preservation Box",
+          "Heavy-Duty Stryker Power-PRO XT Electric Stretcher"
+        ],
+        "fuel_level_percent": 98,
+        "oxygen_tank_level_percent": 100
+      },
+      "driver_info": {
+        "driver_id": "DRV-DICT-01",
+        "name": "Captain Vikramaditya Rathore",
+        "phone": "+91-98290-99001",
+        "license_number": "RJ14-2010-009988-HMV",
+        "blood_group": "O+",
+        "shift": "Primary Priority Duty (24/7 Standby)",
+        "experience_years": 15
+      },
+      "current_location": {
+        "latitude": 26.9079,
+        "longitude": 75.7895,
+        "speed_kmh": 0.0,
+        "last_ping": "2026-09-18T17:10:00+05:30"
+      }
+    },
+    {
+      "car_id": "AMB-DICT-02",
+      "carkey": "c74b5032871a402543746fee43536feff8dc2e4105a83a660f64c9216e65edde",
+      "status": "in-service",
+      "car_info": {
+        "vehicle_number": "RJ-14-PA-9992",
+        "make_model": "Force Motors Traveller 3700 Super-ALS",
+        "type": "ALS",
+        "equipment": [
+          "Zoll X Series Advanced Defibrillator",
+          "Maquet Servo-air Transport Ventilator",
+          "Lucas 3 Chest Compression System (Mechanical CPR)",
+          "Central Dual 46.7L Liquid Oxygen Cylinders",
+          "Portable Blood Gas & Electrolyte Analyzer (i-STAT)"
+        ],
+        "fuel_level_percent": 91,
+        "oxygen_tank_level_percent": 94
+      },
+      "driver_info": {
+        "driver_id": "DRV-DICT-02",
+        "name": "Karanveer Chauhan",
+        "phone": "+91-98290-99002",
+        "license_number": "RJ14-2014-007766-HMV",
+        "blood_group": "B+",
+        "shift": "Rotational Day (08:00 - 20:00 IST)",
+        "experience_years": 10
+      },
+      "current_location": {
+        "latitude": 26.899,
+        "longitude": 75.801,
+        "speed_kmh": 48.2,
+        "last_ping": "2026-09-18T17:12:45+05:30"
+      }
+    },
+    {
+      "car_id": "AMB-DICT-03",
+      "carkey": "4fba22ffc8a380f2ef3016143ed11acc197bad0982f670b4567acaeea178a24d",
+      "status": "in-service",
+      "car_info": {
+        "vehicle_number": "RJ-14-PA-9993",
+        "make_model": "Tata Winger Fast-Response BLS Unit",
+        "type": "BLS",
+        "equipment": [
+          "Philips HeartStart FRx AED Defibrillator",
+          "Portable Suction Unit",
+          "High-Flow Oxygen Therapy Kit",
+          "Spine Board & Head Immobilizer",
+          "Trauma Dressing & Burn Kit"
+        ],
+        "fuel_level_percent": 85,
+        "oxygen_tank_level_percent": 90
+      },
+      "driver_info": {
+        "driver_id": "DRV-DICT-03",
+        "name": "Dharmendra Shekhawat",
+        "phone": "+91-98290-99003",
+        "license_number": "RJ14-2018-005544-LMV",
+        "blood_group": "A+",
+        "shift": "Evening (16:00 - 00:00 IST)",
+        "experience_years": 6
+      },
+      "current_location": {
+        "latitude": 26.912,
+        "longitude": 75.782,
+        "speed_kmh": 15.0,
+        "last_ping": "2026-09-18T17:11:10+05:30"
+      }
+    }
+  ],
+  "out_service": [
+    {
+      "car_id": "AMB-DICT-04",
+      "carkey": "583aa67197e52d2e89f8b580f168897bf7e7c24a57f34f000a37c797b7e07f3f",
+      "status": "out-service",
+      "car_info": {
+        "vehicle_number": "RJ-14-PA-9994",
+        "make_model": "Force Gurkha 4x4 Off-Road Disaster Response Ambulance",
+        "type": "ALS",
+        "equipment": [
+          "Rugged All-Terrain Ventilator",
+          "Defibrillator",
+          "Heavy Winch & Off-Road Recovery",
+          "Field Triage Medical Kit"
+        ],
+        "fuel_level_percent": 100,
+        "oxygen_tank_level_percent": 100
+      },
+      "driver_info": null,
+      "current_location": {
+        "latitude": 26.9075,
+        "longitude": 75.789,
+        "speed_kmh": 0.0,
+        "last_ping": "2026-09-18T16:00:00+05:30"
+      }
+    }
+  ]
+}

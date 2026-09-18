@@ -1,0 +1,37 @@
+{
+  "key": "sdmh_hospital",
+  "name": "Santokba Durlabhji Memorial Hospital (SDMH)",
+  "estd": 1971,
+  "zone": "Central Jaipur",
+  "trauma_level": "Level 1 Multidisciplinary Hospital",
+  "overview": "SDMH is a reputed non-profit multidisciplinary private trust hospital in Bapu Nagar providing comprehensive medical, pediatric, cardiac, and oncological treatments across 450 beds.",
+  "contact_details": {
+    "emergency_helpline": "+91-141-2566251",
+    "reception_phone": "+91-141-2566252",
+    "ambulance_direct": "+91-141-2566258",
+    "email": "sdmhjaipur@gmail.com",
+    "website": "https://www.sdmh.in"
+  },
+  "address": {
+    "street": "Bhawani Singh Road, Near Rambagh Circle",
+    "locality": "Bapu Nagar",
+    "city": "Jaipur",
+    "state": "Rajasthan",
+    "pin_code": "302015",
+    "landmark": "Near SMS Stadium and Rambagh Palace"
+  },
+  "coordinates": {
+    "latitude": 26.8942,
+    "longitude": 75.8041
+  },
+  "facilities": {
+    "emergency_24x7": true,
+    "total_beds": 450,
+    "icu_beds_count": 90,
+    "blood_bank": true,
+    "organ_transplant_unit": true,
+    "cardiac_catheterization_lab": true,
+    "green_corridor_certified": true
+  },
+  "cars_endpoint": "/hospitals/sdmh_hospital/cars"
+}

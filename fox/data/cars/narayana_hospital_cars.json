@@ -1,0 +1,106 @@
+{
+  "hospital_key": "narayana_hospital",
+  "hospital_name": "Narayana Multispeciality Hospital",
+  "total_cars": 3,
+  "in_service_count": 2,
+  "out_service_count": 1,
+  "in_service": [
+    {
+      "car_id": "AMB-NARAYANA-01",
+      "carkey": "e57fd56e3c14a44ed0dddf0e56d240aa67e135334379f1d3062533793b00a299",
+      "status": "in-service",
+      "car_info": {
+        "vehicle_number": "RJ-14-PA-1031",
+        "make_model": "Force Motors Traveller 3350 ALS",
+        "type": "ALS",
+        "equipment": [
+          "Biphasic Defibrillator with pacing",
+          "Transport ICU Ventilator (Hamilton-T1)",
+          "Multi-para Patient Monitor (SpO2, ECG, NIBP, EtCO2)",
+          "Dual Syringe Infusion Pumps",
+          "Medical Vacuum Suction Unit",
+          "Centralized Oxygen with 2 x D-type cylinders",
+          "Advanced Trauma Spine Board & Cervical Collars"
+        ],
+        "fuel_level_percent": 92,
+        "oxygen_tank_level_percent": 95
+      },
+      "driver_info": {
+        "driver_id": "DRV-NARAYANA-01",
+        "name": "Sunil Choudhary",
+        "phone": "+91-98290-77890",
+        "license_number": "RJ14-2014-006612",
+        "blood_group": "A-",
+        "shift": "Morning (08:00 - 16:00 IST)",
+        "experience_years": 10
+      },
+      "current_location": {
+        "latitude": 26.8054,
+        "longitude": 75.8234,
+        "speed_kmh": 0.0,
+        "last_ping": "2026-09-18T16:55:00+05:30"
+      }
+    },
+    {
+      "car_id": "AMB-NARAYANA-02",
+      "carkey": "67ab0abdcdbb0242a81d5f334526bfb3c4d0ca123654bd2c181bc9c289b17c54",
+      "status": "in-service",
+      "car_info": {
+        "vehicle_number": "RJ-14-PA-1032",
+        "make_model": "Tata Winger Ambulance BLS",
+        "type": "BLS",
+        "equipment": [
+          "Automated External Defibrillator (AED)",
+          "Portable Suction Apparatus",
+          "Oxygen Delivery System (2 x 10L)",
+          "Foldable Wheelchair & Scoop Stretcher",
+          "First Aid & Splints Kit"
+        ],
+        "fuel_level_percent": 80,
+        "oxygen_tank_level_percent": 88
+      },
+      "driver_info": {
+        "driver_id": "DRV-NARAYANA-02",
+        "name": "Anil Saini",
+        "phone": "+91-98290-88901",
+        "license_number": "RJ14-2020-001156",
+        "blood_group": "O+",
+        "shift": "Rotational Day (08:00 - 20:00 IST)",
+        "experience_years": 4
+      },
+      "current_location": {
+        "latitude": 26.8024,
+        "longitude": 75.8208,
+        "speed_kmh": 24.5,
+        "last_ping": "2026-09-18T16:56:12+05:30"
+      }
+    }
+  ],
+  "out_service": [
+    {
+      "car_id": "AMB-NARAYANA-03",
+      "carkey": "403867501f89d0cf26ab0236f63f57de01cb94539deff05c3978ed18b4fc4dcb",
+      "status": "out-service",
+      "car_info": {
+        "vehicle_number": "RJ-14-PA-1033",
+        "make_model": "Force Motors Traveller 3050 ALS",
+        "type": "ALS",
+        "equipment": [
+          "Defibrillator",
+          "Ventilator (Routine Maintenance)",
+          "Oxygen Cylinder Kit",
+          "Stretcher"
+        ],
+        "fuel_level_percent": 45,
+        "oxygen_tank_level_percent": 30
+      },
+      "driver_info": null,
+      "current_location": {
+        "latitude": 26.8042,
+        "longitude": 75.8219,
+        "speed_kmh": 0.0,
+        "last_ping": "2026-09-18T14:30:00+05:30"
+      }
+    }
+  ]
+}

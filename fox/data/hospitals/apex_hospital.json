@@ -1,0 +1,37 @@
+{
+  "key": "apex_hospital",
+  "name": "Apex Hospital Malviya Nagar",
+  "estd": 1994,
+  "zone": "South Jaipur",
+  "trauma_level": "Level 2 Multispeciality Centre",
+  "overview": "Apex Hospitals is a leading super-speciality chain in Rajasthan, with its flagship 200-bed unit in Malviya Nagar providing round-the-clock emergency, trauma, and neuro-care.",
+  "contact_details": {
+    "emergency_helpline": "+91-141-2751871",
+    "reception_phone": "+91-141-4101111",
+    "ambulance_direct": "+91-141-2751108",
+    "email": "contact@apexhospitals.com",
+    "website": "https://www.apexhospitals.com"
+  },
+  "address": {
+    "street": "SP-6, Malviya Industrial Area",
+    "locality": "Malviya Nagar",
+    "city": "Jaipur",
+    "state": "Rajasthan",
+    "pin_code": "302017",
+    "landmark": "Near Apex Circle & Calgiri Marg"
+  },
+  "coordinates": {
+    "latitude": 26.855,
+    "longitude": 75.8242
+  },
+  "facilities": {
+    "emergency_24x7": true,
+    "total_beds": 200,
+    "icu_beds_count": 45,
+    "blood_bank": true,
+    "organ_transplant_unit": false,
+    "cardiac_catheterization_lab": true,
+    "green_corridor_certified": true
+  },
+  "cars_endpoint": "/hospitals/apex_hospital/cars"
+}

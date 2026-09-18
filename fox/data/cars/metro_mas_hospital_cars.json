@@ -1,0 +1,106 @@
+{
+  "hospital_key": "metro_mas_hospital",
+  "hospital_name": "Metro MAS Hospital",
+  "total_cars": 3,
+  "in_service_count": 2,
+  "out_service_count": 1,
+  "in_service": [
+    {
+      "car_id": "AMB-METROMAS-01",
+      "carkey": "1144cf0db158148ad1fcce46722a2bb45bf9e4e51a01b1dc5515c7eed3f23a10",
+      "status": "in-service",
+      "car_info": {
+        "vehicle_number": "RJ-14-PA-1111",
+        "make_model": "Force Motors Traveller 3350 ALS",
+        "type": "ALS",
+        "equipment": [
+          "Biphasic Defibrillator with pacing",
+          "Transport ICU Ventilator (Hamilton-T1)",
+          "Multi-para Patient Monitor (SpO2, ECG, NIBP, EtCO2)",
+          "Dual Syringe Infusion Pumps",
+          "Medical Vacuum Suction Unit",
+          "Centralized Oxygen with 2 x D-type cylinders",
+          "Advanced Trauma Spine Board & Cervical Collars"
+        ],
+        "fuel_level_percent": 92,
+        "oxygen_tank_level_percent": 95
+      },
+      "driver_info": {
+        "driver_id": "DRV-METROMAS-01",
+        "name": "Sunil Choudhary",
+        "phone": "+91-98290-77890",
+        "license_number": "RJ14-2014-006612",
+        "blood_group": "A-",
+        "shift": "Morning (08:00 - 16:00 IST)",
+        "experience_years": 10
+      },
+      "current_location": {
+        "latitude": 26.8595,
+        "longitude": 75.7636,
+        "speed_kmh": 0.0,
+        "last_ping": "2026-09-18T16:55:00+05:30"
+      }
+    },
+    {
+      "car_id": "AMB-METROMAS-02",
+      "carkey": "1f78f007a793d7e557b42e218ea6655dc8498949c7910ced9a257ed7ca7a43e4",
+      "status": "in-service",
+      "car_info": {
+        "vehicle_number": "RJ-14-PA-1112",
+        "make_model": "Tata Winger Ambulance BLS",
+        "type": "BLS",
+        "equipment": [
+          "Automated External Defibrillator (AED)",
+          "Portable Suction Apparatus",
+          "Oxygen Delivery System (2 x 10L)",
+          "Foldable Wheelchair & Scoop Stretcher",
+          "First Aid & Splints Kit"
+        ],
+        "fuel_level_percent": 80,
+        "oxygen_tank_level_percent": 88
+      },
+      "driver_info": {
+        "driver_id": "DRV-METROMAS-02",
+        "name": "Anil Saini",
+        "phone": "+91-98290-88901",
+        "license_number": "RJ14-2020-001156",
+        "blood_group": "O+",
+        "shift": "Rotational Day (08:00 - 20:00 IST)",
+        "experience_years": 4
+      },
+      "current_location": {
+        "latitude": 26.8565,
+        "longitude": 75.761,
+        "speed_kmh": 24.5,
+        "last_ping": "2026-09-18T16:56:12+05:30"
+      }
+    }
+  ],
+  "out_service": [
+    {
+      "car_id": "AMB-METROMAS-03",
+      "carkey": "a519258a7439ed7181add258745d819c50619c561a917dfcc624e0dc12e262d6",
+      "status": "out-service",
+      "car_info": {
+        "vehicle_number": "RJ-14-PA-1113",
+        "make_model": "Force Motors Traveller 3050 ALS",
+        "type": "ALS",
+        "equipment": [
+          "Defibrillator",
+          "Ventilator (Routine Maintenance)",
+          "Oxygen Cylinder Kit",
+          "Stretcher"
+        ],
+        "fuel_level_percent": 45,
+        "oxygen_tank_level_percent": 30
+      },
+      "driver_info": null,
+      "current_location": {
+        "latitude": 26.8583,
+        "longitude": 75.7621,
+        "speed_kmh": 0.0,
+        "last_ping": "2026-09-18T14:30:00+05:30"
+      }
+    }
+  ]
+}

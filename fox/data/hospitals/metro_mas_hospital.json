@@ -1,0 +1,37 @@
+{
+  "key": "metro_mas_hospital",
+  "name": "Metro MAS Hospital",
+  "estd": 2012,
+  "zone": "South-West Jaipur",
+  "trauma_level": "Level 2 Heart & Multispeciality Centre",
+  "overview": "Metro MAS Heart & Multispeciality Hospital in Mansarovar is a 220-bed hospital equipped with state-of-the-art cath labs, critical care units, and emergency response teams.",
+  "contact_details": {
+    "emergency_helpline": "+91-141-6644444",
+    "reception_phone": "+91-141-6644400",
+    "ambulance_direct": "+91-141-6644108",
+    "email": "metro.mas@metrohospitals.com",
+    "website": "https://www.metrohospitals.com"
+  },
+  "address": {
+    "street": "Shipra Path, Near Mansarovar Metro Station",
+    "locality": "Mansarovar",
+    "city": "Jaipur",
+    "state": "Rajasthan",
+    "pin_code": "302020",
+    "landmark": "Near Technology Park, Shipra Path"
+  },
+  "coordinates": {
+    "latitude": 26.8583,
+    "longitude": 75.7621
+  },
+  "facilities": {
+    "emergency_24x7": true,
+    "total_beds": 220,
+    "icu_beds_count": 48,
+    "blood_bank": true,
+    "organ_transplant_unit": false,
+    "cardiac_catheterization_lab": true,
+    "green_corridor_certified": true
+  },
+  "cars_endpoint": "/hospitals/metro_mas_hospital/cars"
+}

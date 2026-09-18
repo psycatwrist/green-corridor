@@ -1,0 +1,106 @@
+{
+  "hospital_key": "manipal_hospital",
+  "hospital_name": "Manipal Hospital Jaipur",
+  "total_cars": 3,
+  "in_service_count": 2,
+  "out_service_count": 1,
+  "in_service": [
+    {
+      "car_id": "AMB-MANIPAL-01",
+      "carkey": "937bf55fb43481e8218119dfd5ba20973dcbc40b5b1f7f23d6f5793ee2c49d62",
+      "status": "in-service",
+      "car_info": {
+        "vehicle_number": "RJ-14-PA-1041",
+        "make_model": "Force Motors Traveller 3350 ALS",
+        "type": "ALS",
+        "equipment": [
+          "Biphasic Defibrillator with pacing",
+          "Transport ICU Ventilator (Hamilton-T1)",
+          "Multi-para Patient Monitor (SpO2, ECG, NIBP, EtCO2)",
+          "Dual Syringe Infusion Pumps",
+          "Medical Vacuum Suction Unit",
+          "Centralized Oxygen with 2 x D-type cylinders",
+          "Advanced Trauma Spine Board & Cervical Collars"
+        ],
+        "fuel_level_percent": 92,
+        "oxygen_tank_level_percent": 95
+      },
+      "driver_info": {
+        "driver_id": "DRV-MANIPAL-01",
+        "name": "Rajesh Meena",
+        "phone": "+91-98290-11234",
+        "license_number": "RJ14-2015-004512",
+        "blood_group": "B+",
+        "shift": "Morning (08:00 - 16:00 IST)",
+        "experience_years": 8
+      },
+      "current_location": {
+        "latitude": 26.9644,
+        "longitude": 75.774,
+        "speed_kmh": 0.0,
+        "last_ping": "2026-09-18T16:55:00+05:30"
+      }
+    },
+    {
+      "car_id": "AMB-MANIPAL-02",
+      "carkey": "82ab91c353ad2cd6fd767771765fda00f0b77c09785a1860765e8958bab5e527",
+      "status": "in-service",
+      "car_info": {
+        "vehicle_number": "RJ-14-PA-1042",
+        "make_model": "Tata Winger Ambulance BLS",
+        "type": "BLS",
+        "equipment": [
+          "Automated External Defibrillator (AED)",
+          "Portable Suction Apparatus",
+          "Oxygen Delivery System (2 x 10L)",
+          "Foldable Wheelchair & Scoop Stretcher",
+          "First Aid & Splints Kit"
+        ],
+        "fuel_level_percent": 80,
+        "oxygen_tank_level_percent": 88
+      },
+      "driver_info": {
+        "driver_id": "DRV-MANIPAL-02",
+        "name": "Mukesh Sharma",
+        "phone": "+91-98290-22345",
+        "license_number": "RJ14-2012-008921",
+        "blood_group": "O+",
+        "shift": "Rotational Day (08:00 - 20:00 IST)",
+        "experience_years": 12
+      },
+      "current_location": {
+        "latitude": 26.9614,
+        "longitude": 75.7714,
+        "speed_kmh": 24.5,
+        "last_ping": "2026-09-18T16:56:12+05:30"
+      }
+    }
+  ],
+  "out_service": [
+    {
+      "car_id": "AMB-MANIPAL-03",
+      "carkey": "4972ba2f845ff45ef188c81dbc377c60ee2cf44986e531de2c893e61b7608899",
+      "status": "out-service",
+      "car_info": {
+        "vehicle_number": "RJ-14-PA-1043",
+        "make_model": "Force Motors Traveller 3050 ALS",
+        "type": "ALS",
+        "equipment": [
+          "Defibrillator",
+          "Ventilator (Routine Maintenance)",
+          "Oxygen Cylinder Kit",
+          "Stretcher"
+        ],
+        "fuel_level_percent": 45,
+        "oxygen_tank_level_percent": 30
+      },
+      "driver_info": null,
+      "current_location": {
+        "latitude": 26.9632,
+        "longitude": 75.7725,
+        "speed_kmh": 0.0,
+        "last_ping": "2026-09-18T14:30:00+05:30"
+      }
+    }
+  ]
+}

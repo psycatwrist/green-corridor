@@ -1,0 +1,37 @@
+{
+  "key": "ck_birla_hospital",
+  "name": "Rukmani Birla Hospital (CK Birla)",
+  "estd": 2016,
+  "zone": "South Jaipur",
+  "trauma_level": "Level 2 Tertiary Centre",
+  "overview": "Rukmani Birla Hospital by CK Birla Healthcare is a 100-bed modern multi-speciality tertiary care hospital located conveniently along the Gopalpura Bypass in South Jaipur.",
+  "contact_details": {
+    "emergency_helpline": "+91-141-3093333",
+    "reception_phone": "+91-141-3093300",
+    "ambulance_direct": "+91-141-3093108",
+    "email": "info.rbh@ckbirlahospitals.com",
+    "website": "https://www.rbh.ckbirlahospitals.com"
+  },
+  "address": {
+    "street": "Gopalpura Bypass Road, Near Triveni Flyover",
+    "locality": "Shanti Nagar, Surya Nagar",
+    "city": "Jaipur",
+    "state": "Rajasthan",
+    "pin_code": "302018",
+    "landmark": "Near Triveni Nagar Flyover"
+  },
+  "coordinates": {
+    "latitude": 26.8665,
+    "longitude": 75.7834
+  },
+  "facilities": {
+    "emergency_24x7": true,
+    "total_beds": 120,
+    "icu_beds_count": 30,
+    "blood_bank": true,
+    "organ_transplant_unit": false,
+    "cardiac_catheterization_lab": true,
+    "green_corridor_certified": true
+  },
+  "cars_endpoint": "/hospitals/ck_birla_hospital/cars"
+}

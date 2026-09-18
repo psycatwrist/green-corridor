@@ -1,0 +1,37 @@
+{
+  "key": "shalby_hospital",
+  "name": "Shalby Multispeciality Hospital",
+  "estd": 2017,
+  "zone": "West Jaipur",
+  "trauma_level": "Level 2 Multispeciality Centre",
+  "overview": "Shalby Multispeciality Hospital in Vaishali Nagar offers 235 beds with renowned expertise in orthopaedic joint replacement, cardiology, oncology, and comprehensive trauma management.",
+  "contact_details": {
+    "emergency_helpline": "+91-141-7123888",
+    "reception_phone": "+91-141-7123100",
+    "ambulance_direct": "+91-141-7123108",
+    "email": "info.jaipur@shalby.in",
+    "website": "https://www.shalby.org/locations/jaipur-hospital"
+  },
+  "address": {
+    "street": "Underpass Road, Sector 3, Chitrakoot",
+    "locality": "Vaishali Nagar",
+    "city": "Jaipur",
+    "state": "Rajasthan",
+    "pin_code": "302021",
+    "landmark": "Near Chitrakoot Stadium"
+  },
+  "coordinates": {
+    "latitude": 26.9031,
+    "longitude": 75.7352
+  },
+  "facilities": {
+    "emergency_24x7": true,
+    "total_beds": 235,
+    "icu_beds_count": 50,
+    "blood_bank": true,
+    "organ_transplant_unit": false,
+    "cardiac_catheterization_lab": true,
+    "green_corridor_certified": true
+  },
+  "cars_endpoint": "/hospitals/shalby_hospital/cars"
+}

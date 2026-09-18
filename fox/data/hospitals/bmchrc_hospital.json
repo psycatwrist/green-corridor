@@ -1,0 +1,37 @@
+{
+  "key": "bmchrc_hospital",
+  "name": "Bhagwan Mahaveer Cancer Hospital & Research Centre",
+  "estd": 1997,
+  "zone": "Central Jaipur",
+  "trauma_level": "Comprehensive Cancer Institute",
+  "overview": "BMCHRC is a premier NABH accredited comprehensive cancer hospital with 300 beds offering advanced surgical, medical, radiation, and pediatric oncology services.",
+  "contact_details": {
+    "emergency_helpline": "+91-141-2700107",
+    "reception_phone": "+91-141-2700108",
+    "ambulance_direct": "+91-141-2700109",
+    "email": "bmchrc@datainfosys.net",
+    "website": "https://www.bmchrc.org"
+  },
+  "address": {
+    "street": "Jawahar Lal Nehru Marg",
+    "locality": "Ashok Nagar",
+    "city": "Jaipur",
+    "state": "Rajasthan",
+    "pin_code": "302017",
+    "landmark": "Next to World Trade Park (WTP) junction"
+  },
+  "coordinates": {
+    "latitude": 26.854,
+    "longitude": 75.809
+  },
+  "facilities": {
+    "emergency_24x7": true,
+    "total_beds": 300,
+    "icu_beds_count": 40,
+    "blood_bank": true,
+    "organ_transplant_unit": true,
+    "cardiac_catheterization_lab": false,
+    "green_corridor_certified": true
+  },
+  "cars_endpoint": "/hospitals/bmchrc_hospital/cars"
+}

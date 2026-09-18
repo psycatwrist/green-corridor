@@ -1,0 +1,37 @@
+{
+  "key": "narayana_hospital",
+  "name": "Narayana Multispeciality Hospital",
+  "estd": 2011,
+  "zone": "South-East Jaipur",
+  "trauma_level": "Level 2 Superspeciality Centre",
+  "overview": "Narayana Multispeciality Hospital Jaipur offers comprehensive care in cardiac sciences, neurosciences, renal sciences, and orthopaedics, serving southern Jaipur and Tonk Road regions.",
+  "contact_details": {
+    "emergency_helpline": "+91-141-7122222",
+    "reception_phone": "+91-141-7122000",
+    "ambulance_direct": "+91-141-7122108",
+    "email": "info.jaipur@narayanahealth.org",
+    "website": "https://www.narayanahealth.org"
+  },
+  "address": {
+    "street": "Sector 28, Kumbha Marg, Pratap Nagar",
+    "locality": "Sanganer",
+    "city": "Jaipur",
+    "state": "Rajasthan",
+    "pin_code": "302033",
+    "landmark": "Near Pratap Nagar Housing Board"
+  },
+  "coordinates": {
+    "latitude": 26.8042,
+    "longitude": 75.8219
+  },
+  "facilities": {
+    "emergency_24x7": true,
+    "total_beds": 330,
+    "icu_beds_count": 68,
+    "blood_bank": true,
+    "organ_transplant_unit": true,
+    "cardiac_catheterization_lab": true,
+    "green_corridor_certified": true
+  },
+  "cars_endpoint": "/hospitals/narayana_hospital/cars"
+}

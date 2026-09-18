@@ -1,0 +1,37 @@
+{
+  "key": "sms_hospital",
+  "name": "Sawai Man Singh (SMS) Hospital",
+  "estd": 1947,
+  "zone": "Central Jaipur",
+  "trauma_level": "Level 1 Apex Trauma Centre",
+  "overview": "Sawai Man Singh Hospital is the largest premier government hospital and medical college in Rajasthan, with over 3,200 beds, multi-organ transplant capabilities, and the premier state trauma centre.",
+  "contact_details": {
+    "emergency_helpline": "+91-141-2560291",
+    "reception_phone": "+91-141-2518224",
+    "ambulance_direct": "108",
+    "email": "ms.smsh.jaipur@rajasthan.gov.in",
+    "website": "https://medicaleducation.rajasthan.gov.in/smsmedicalcollege"
+  },
+  "address": {
+    "street": "Jawahar Lal Nehru Marg, Ashok Nagar",
+    "locality": "C-Scheme",
+    "city": "Jaipur",
+    "state": "Rajasthan",
+    "pin_code": "302004",
+    "landmark": "Near SMS Medical College & Birla Mandir"
+  },
+  "coordinates": {
+    "latitude": 26.8978,
+    "longitude": 75.8156
+  },
+  "facilities": {
+    "emergency_24x7": true,
+    "total_beds": 3250,
+    "icu_beds_count": 380,
+    "blood_bank": true,
+    "organ_transplant_unit": true,
+    "cardiac_catheterization_lab": true,
+    "green_corridor_certified": true
+  },
+  "cars_endpoint": "/hospitals/sms_hospital/cars"
+}

@@ -1,0 +1,37 @@
+{
+  "key": "ehcc_hospital",
+  "name": "Eternal Hospital (EHCC)",
+  "estd": 2013,
+  "zone": "South Jaipur",
+  "trauma_level": "Level 1 Quaternary Centre",
+  "overview": "Eternal Heart Care Centre and Research Institute is a leading state-of-the-art quaternary care hospital in Jawahar Circle, renowned for heart transplants, complex cardiac interventions, and green corridor protocols.",
+  "contact_details": {
+    "emergency_helpline": "+91-141-5174000",
+    "reception_phone": "+91-141-5174001",
+    "ambulance_direct": "+91-9549158888",
+    "email": "contact@eternalhospital.com",
+    "website": "https://www.eternalhospital.com"
+  },
+  "address": {
+    "street": "3 A, Jagatpura Road, Near Jawahar Circle",
+    "locality": "Chainpura, Malviya Nagar",
+    "city": "Jaipur",
+    "state": "Rajasthan",
+    "pin_code": "302017",
+    "landmark": "Adjacent to Jawahar Circle Garden"
+  },
+  "coordinates": {
+    "latitude": 26.8385,
+    "longitude": 75.8038
+  },
+  "facilities": {
+    "emergency_24x7": true,
+    "total_beds": 250,
+    "icu_beds_count": 72,
+    "blood_bank": true,
+    "organ_transplant_unit": true,
+    "cardiac_catheterization_lab": true,
+    "green_corridor_certified": true
+  },
+  "cars_endpoint": "/hospitals/ehcc_hospital/cars"
+}

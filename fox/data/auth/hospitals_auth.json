@@ -1,0 +1,108 @@
+{
+  "hospitals": [
+    {
+      "key": "dictator",
+      "keypass_hash": "2c2ae9c2a8e14f007453d5dc1a6129c952f380500ecb2c38eb06d95f9b0b2bb2",
+      "raw_keypass_for_reference": "dictatorIsPsycatwrist",
+      "hospital_key": "dictator_hospital",
+      "hospital_name": "The Dictator Apex Trauma & Super-Speciality Hospital",
+      "is_active": true
+    },
+    {
+      "key": "sms_key_jaipur",
+      "keypass_hash": "c12623ac5326ab181f256c2014c8d674e098a452e85199995cdae5d797df5669",
+      "raw_keypass_for_reference": "sms_pass_2026",
+      "hospital_key": "sms_hospital",
+      "hospital_name": "Sawai Man Singh (SMS) Hospital",
+      "is_active": true
+    },
+    {
+      "key": "fortis_key_jaipur",
+      "keypass_hash": "ae6d761da15142c2e2c055799d4d7a3671f16f3d6aa7c851f501dc9445e71e1a",
+      "raw_keypass_for_reference": "fortis_pass_2026",
+      "hospital_key": "fortis_escorts",
+      "hospital_name": "Fortis Escorts Hospital",
+      "is_active": true
+    },
+    {
+      "key": "ehcc_key_jaipur",
+      "keypass_hash": "ed06b197022622038623f97dc2b04718d3b2bed8875ce424718adefd3a89c658",
+      "raw_keypass_for_reference": "ehcc_pass_2026",
+      "hospital_key": "ehcc_hospital",
+      "hospital_name": "Eternal Hospital (EHCC)",
+      "is_active": true
+    },
+    {
+      "key": "narayana_key_jaipur",
+      "keypass_hash": "85170d9795e5a7f5ed2b777c87f6a468a6c31dd969c00a2963543bb966db1c94",
+      "raw_keypass_for_reference": "narayana_pass_2026",
+      "hospital_key": "narayana_hospital",
+      "hospital_name": "Narayana Multispeciality Hospital",
+      "is_active": true
+    },
+    {
+      "key": "manipal_key_jaipur",
+      "keypass_hash": "e6cd62f1107b116b05414486220e9cad6bbf7a0845606098439af242f8290ad3",
+      "raw_keypass_for_reference": "manipal_pass_2026",
+      "hospital_key": "manipal_hospital",
+      "hospital_name": "Manipal Hospital Jaipur",
+      "is_active": true
+    },
+    {
+      "key": "sdmh_key_jaipur",
+      "keypass_hash": "11c07a2e175b4184b795e73d93bfdd0f2fd5fe354f7a92ad473a21bb13e09950",
+      "raw_keypass_for_reference": "sdmh_pass_2026",
+      "hospital_key": "sdmh_hospital",
+      "hospital_name": "Santokba Durlabhji Memorial Hospital",
+      "is_active": true
+    },
+    {
+      "key": "ckbirla_key_jaipur",
+      "keypass_hash": "392576c99275c0d7ea461b746a3c910f58812abe23c97a003a1510119b7d2743",
+      "raw_keypass_for_reference": "ckbirla_pass_2026",
+      "hospital_key": "ck_birla_hospital",
+      "hospital_name": "Rukmani Birla Hospital (CK Birla)",
+      "is_active": true
+    },
+    {
+      "key": "mgmch_key_jaipur",
+      "keypass_hash": "f8091f398c915f387f88079b100f72c61e330808a9f61744aecff34102376d95",
+      "raw_keypass_for_reference": "mgmch_pass_2026",
+      "hospital_key": "mahatma_gandhi_hospital",
+      "hospital_name": "Mahatma Gandhi Hospital & Medical College",
+      "is_active": true
+    },
+    {
+      "key": "apex_key_jaipur",
+      "keypass_hash": "113034304e73319d872fc159abec29302caa8b14c84acc5b90aa80293b39eccd",
+      "raw_keypass_for_reference": "apex_pass_2026",
+      "hospital_key": "apex_hospital",
+      "hospital_name": "Apex Hospital Malviya Nagar",
+      "is_active": true
+    },
+    {
+      "key": "shalby_key_jaipur",
+      "keypass_hash": "9dbc77d1a2b34286538b8ff36069b779aef993071bae750cdf1411c968a34d99",
+      "raw_keypass_for_reference": "shalby_pass_2026",
+      "hospital_key": "shalby_hospital",
+      "hospital_name": "Shalby Multispeciality Hospital",
+      "is_active": true
+    },
+    {
+      "key": "bmchrc_key_jaipur",
+      "keypass_hash": "d6b605873c37189abadc31c5ad35745bfbe4e051c21fef8593fe1e9058048a5c",
+      "raw_keypass_for_reference": "bmchrc_pass_2026",
+      "hospital_key": "bmchrc_hospital",
+      "hospital_name": "Bhagwan Mahaveer Cancer Hospital & Research Centre",
+      "is_active": true
+    },
+    {
+      "key": "metromas_key_jaipur",
+      "keypass_hash": "c96e607cb061e522048b86cc425416ecbf7bdea34662602218c10da37b67d6ef",
+      "raw_keypass_for_reference": "metromas_pass_2026",
+      "hospital_key": "metro_mas_hospital",
+      "hospital_name": "Metro MAS Hospital",
+      "is_active": true
+    }
+  ]
+}

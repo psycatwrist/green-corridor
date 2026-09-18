@@ -1,0 +1,37 @@
+{
+  "key": "manipal_hospital",
+  "name": "Manipal Hospital Jaipur",
+  "estd": 2014,
+  "zone": "North Jaipur",
+  "trauma_level": "Level 1 Superspeciality Centre",
+  "overview": "Manipal Hospital Jaipur is a 225-bed tertiary care healthcare destination in Vidhyadhar Nagar offering comprehensive multispeciality critical and surgical care with NABH accreditation.",
+  "contact_details": {
+    "emergency_helpline": "+91-141-5164000",
+    "reception_phone": "+91-141-5164001",
+    "ambulance_direct": "+91-141-5164108",
+    "email": "info.jaipur@manipalhospitals.com",
+    "website": "https://www.manipalhospitals.com/jaipur/"
+  },
+  "address": {
+    "street": "Sector 5, Main Sikar Road",
+    "locality": "Vidhyadhar Nagar",
+    "city": "Jaipur",
+    "state": "Rajasthan",
+    "pin_code": "302039",
+    "landmark": "Near Alka Cinema, Sikar Road"
+  },
+  "coordinates": {
+    "latitude": 26.9632,
+    "longitude": 75.7725
+  },
+  "facilities": {
+    "emergency_24x7": true,
+    "total_beds": 225,
+    "icu_beds_count": 55,
+    "blood_bank": true,
+    "organ_transplant_unit": true,
+    "cardiac_catheterization_lab": true,
+    "green_corridor_certified": true
+  },
+  "cars_endpoint": "/hospitals/manipal_hospital/cars"
+}

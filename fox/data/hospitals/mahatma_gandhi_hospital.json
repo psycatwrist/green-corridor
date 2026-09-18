@@ -1,0 +1,37 @@
+{
+  "key": "mahatma_gandhi_hospital",
+  "name": "Mahatma Gandhi Hospital & Medical College",
+  "estd": 2000,
+  "zone": "South Jaipur (Sitapura)",
+  "trauma_level": "Level 1 University Hospital",
+  "overview": "Mahatma Gandhi Medical College and Hospital is a major 1,400+ bed academic medical center in the Sitapura Industrial Area, pioneering living donor organ transplants in Rajasthan.",
+  "contact_details": {
+    "emergency_helpline": "+91-141-2771777",
+    "reception_phone": "+91-141-2770677",
+    "ambulance_direct": "+91-141-2771108",
+    "email": "principal.medical@mgmch.org",
+    "website": "https://www.mgmch.org"
+  },
+  "address": {
+    "street": "RIICO Institutional Area, Tonk Road",
+    "locality": "Sitapura",
+    "city": "Jaipur",
+    "state": "Rajasthan",
+    "pin_code": "302022",
+    "landmark": "Near JECC Jaipur Exhibition & Convention Centre"
+  },
+  "coordinates": {
+    "latitude": 26.7728,
+    "longitude": 75.8451
+  },
+  "facilities": {
+    "emergency_24x7": true,
+    "total_beds": 1450,
+    "icu_beds_count": 180,
+    "blood_bank": true,
+    "organ_transplant_unit": true,
+    "cardiac_catheterization_lab": true,
+    "green_corridor_certified": true
+  },
+  "cars_endpoint": "/hospitals/mahatma_gandhi_hospital/cars"
+}

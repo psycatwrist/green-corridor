@@ -1,0 +1,37 @@
+{
+  "key": "fortis_escorts",
+  "name": "Fortis Escorts Hospital",
+  "estd": 2007,
+  "zone": "South Jaipur",
+  "trauma_level": "Level 1 Quaternary Centre",
+  "overview": "Fortis Escorts Hospital Jaipur is a premier 275-bed multi-super-speciality hospital JCI and NABH accredited, known for pioneering complex cardiac surgeries, neuro-trauma, and organ transplants.",
+  "contact_details": {
+    "emergency_helpline": "+91-141-2547000",
+    "reception_phone": "+91-141-4097000",
+    "ambulance_direct": "+91-141-2547108",
+    "email": "contactus.jaipur@fortishealthcare.com",
+    "website": "https://www.fortishealthcare.com/location/fortis-escorts-hospital-jaipur"
+  },
+  "address": {
+    "street": "Jawahar Lal Nehru Marg, Malviya Nagar",
+    "locality": "Malviya Nagar",
+    "city": "Jaipur",
+    "state": "Rajasthan",
+    "pin_code": "302017",
+    "landmark": "Opposite OTS, Near Jawahar Circle"
+  },
+  "coordinates": {
+    "latitude": 26.8524,
+    "longitude": 75.8079
+  },
+  "facilities": {
+    "emergency_24x7": true,
+    "total_beds": 275,
+    "icu_beds_count": 85,
+    "blood_bank": true,
+    "organ_transplant_unit": true,
+    "cardiac_catheterization_lab": true,
+    "green_corridor_certified": true
+  },
+  "cars_endpoint": "/hospitals/fortis_escorts/cars"
+}

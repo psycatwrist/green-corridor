@@ -1,0 +1,106 @@
+{
+  "hospital_key": "sdmh_hospital",
+  "hospital_name": "Santokba Durlabhji Memorial Hospital (SDMH)",
+  "total_cars": 3,
+  "in_service_count": 2,
+  "out_service_count": 1,
+  "in_service": [
+    {
+      "car_id": "AMB-SDMH-01",
+      "carkey": "e989071491b37d5214f876483a6f418050553a6130bf8e4f2e0408c933767685",
+      "status": "in-service",
+      "car_info": {
+        "vehicle_number": "RJ-14-PA-1051",
+        "make_model": "Force Motors Traveller 3350 ALS",
+        "type": "ALS",
+        "equipment": [
+          "Biphasic Defibrillator with pacing",
+          "Transport ICU Ventilator (Hamilton-T1)",
+          "Multi-para Patient Monitor (SpO2, ECG, NIBP, EtCO2)",
+          "Dual Syringe Infusion Pumps",
+          "Medical Vacuum Suction Unit",
+          "Centralized Oxygen with 2 x D-type cylinders",
+          "Advanced Trauma Spine Board & Cervical Collars"
+        ],
+        "fuel_level_percent": 92,
+        "oxygen_tank_level_percent": 95
+      },
+      "driver_info": {
+        "driver_id": "DRV-SDMH-01",
+        "name": "Suresh Gurjar",
+        "phone": "+91-98290-33456",
+        "license_number": "RJ14-2018-001290",
+        "blood_group": "A+",
+        "shift": "Morning (08:00 - 16:00 IST)",
+        "experience_years": 6
+      },
+      "current_location": {
+        "latitude": 26.8954,
+        "longitude": 75.8056,
+        "speed_kmh": 0.0,
+        "last_ping": "2026-09-18T16:55:00+05:30"
+      }
+    },
+    {
+      "car_id": "AMB-SDMH-02",
+      "carkey": "757580c548f36d5171ec7c37c65ecf76015b8213b88cda5a2589130a3542e8de",
+      "status": "in-service",
+      "car_info": {
+        "vehicle_number": "RJ-14-PA-1052",
+        "make_model": "Tata Winger Ambulance BLS",
+        "type": "BLS",
+        "equipment": [
+          "Automated External Defibrillator (AED)",
+          "Portable Suction Apparatus",
+          "Oxygen Delivery System (2 x 10L)",
+          "Foldable Wheelchair & Scoop Stretcher",
+          "First Aid & Splints Kit"
+        ],
+        "fuel_level_percent": 80,
+        "oxygen_tank_level_percent": 88
+      },
+      "driver_info": {
+        "driver_id": "DRV-SDMH-02",
+        "name": "Virendra Singh",
+        "phone": "+91-98290-44567",
+        "license_number": "RJ14-2010-009943",
+        "blood_group": "AB+",
+        "shift": "Rotational Day (08:00 - 20:00 IST)",
+        "experience_years": 14
+      },
+      "current_location": {
+        "latitude": 26.8924,
+        "longitude": 75.803,
+        "speed_kmh": 24.5,
+        "last_ping": "2026-09-18T16:56:12+05:30"
+      }
+    }
+  ],
+  "out_service": [
+    {
+      "car_id": "AMB-SDMH-03",
+      "carkey": "f17aebb638c30e6b314c1e3db66093b759a9c9dfb5ca728c4de12444703d8572",
+      "status": "out-service",
+      "car_info": {
+        "vehicle_number": "RJ-14-PA-1053",
+        "make_model": "Force Motors Traveller 3050 ALS",
+        "type": "ALS",
+        "equipment": [
+          "Defibrillator",
+          "Ventilator (Routine Maintenance)",
+          "Oxygen Cylinder Kit",
+          "Stretcher"
+        ],
+        "fuel_level_percent": 45,
+        "oxygen_tank_level_percent": 30
+      },
+      "driver_info": null,
+      "current_location": {
+        "latitude": 26.8942,
+        "longitude": 75.8041,
+        "speed_kmh": 0.0,
+        "last_ping": "2026-09-18T14:30:00+05:30"
+      }
+    }
+  ]
+}

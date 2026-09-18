@@ -1,0 +1,106 @@
+[
+  {
+    "key": "dictator_hospital",
+    "name": "The Dictator Apex Trauma & Super-Speciality Hospital",
+    "estd": 2020,
+    "zone": "Central Jaipur - Civil Lines",
+    "trauma_level": "Level 1 Super-Quaternary Trauma & Research Centre",
+    "detail_url": "/hospitals/dictator_hospital"
+  },
+  {
+    "key": "sms_hospital",
+    "name": "Sawai Man Singh (SMS) Hospital",
+    "estd": 1947,
+    "zone": "Central Jaipur",
+    "trauma_level": "Level 1 Apex Trauma Centre",
+    "detail_url": "/hospitals/sms_hospital"
+  },
+  {
+    "key": "fortis_escorts",
+    "name": "Fortis Escorts Hospital",
+    "estd": 2007,
+    "zone": "South Jaipur",
+    "trauma_level": "Level 1 Quaternary Centre",
+    "detail_url": "/hospitals/fortis_escorts"
+  },
+  {
+    "key": "ehcc_hospital",
+    "name": "Eternal Hospital (EHCC)",
+    "estd": 2013,
+    "zone": "South Jaipur",
+    "trauma_level": "Level 1 Quaternary Centre",
+    "detail_url": "/hospitals/ehcc_hospital"
+  },
+  {
+    "key": "narayana_hospital",
+    "name": "Narayana Multispeciality Hospital",
+    "estd": 2011,
+    "zone": "South-East Jaipur",
+    "trauma_level": "Level 2 Superspeciality Centre",
+    "detail_url": "/hospitals/narayana_hospital"
+  },
+  {
+    "key": "manipal_hospital",
+    "name": "Manipal Hospital Jaipur",
+    "estd": 2014,
+    "zone": "North Jaipur",
+    "trauma_level": "Level 1 Superspeciality Centre",
+    "detail_url": "/hospitals/manipal_hospital"
+  },
+  {
+    "key": "sdmh_hospital",
+    "name": "Santokba Durlabhji Memorial Hospital (SDMH)",
+    "estd": 1971,
+    "zone": "Central Jaipur",
+    "trauma_level": "Level 1 Multidisciplinary Hospital",
+    "detail_url": "/hospitals/sdmh_hospital"
+  },
+  {
+    "key": "ck_birla_hospital",
+    "name": "Rukmani Birla Hospital (CK Birla)",
+    "estd": 2016,
+    "zone": "South Jaipur",
+    "trauma_level": "Level 2 Tertiary Centre",
+    "detail_url": "/hospitals/ck_birla_hospital"
+  },
+  {
+    "key": "mahatma_gandhi_hospital",
+    "name": "Mahatma Gandhi Hospital & Medical College",
+    "estd": 2000,
+    "zone": "South Jaipur (Sitapura)",
+    "trauma_level": "Level 1 University Hospital",
+    "detail_url": "/hospitals/mahatma_gandhi_hospital"
+  },
+  {
+    "key": "apex_hospital",
+    "name": "Apex Hospital Malviya Nagar",
+    "estd": 1994,
+    "zone": "South Jaipur",
+    "trauma_level": "Level 2 Multispeciality Centre",
+    "detail_url": "/hospitals/apex_hospital"
+  },
+  {
+    "key": "shalby_hospital",
+    "name": "Shalby Multispeciality Hospital",
+    "estd": 2017,
+    "zone": "West Jaipur",
+    "trauma_level": "Level 2 Multispeciality Centre",
+    "detail_url": "/hospitals/shalby_hospital"
+  },
+  {
+    "key": "bmchrc_hospital",
+    "name": "Bhagwan Mahaveer Cancer Hospital & Research Centre",
+    "estd": 1997,
+    "zone": "Central Jaipur",
+    "trauma_level": "Comprehensive Cancer Institute",
+    "detail_url": "/hospitals/bmchrc_hospital"
+  },
+  {
+    "key": "metro_mas_hospital",
+    "name": "Metro MAS Hospital",
+    "estd": 2012,
+    "zone": "South-West Jaipur",
+    "trauma_level": "Level 2 Heart & Multispeciality Centre",
+    "detail_url": "/hospitals/metro_mas_hospital"
+  }
+]

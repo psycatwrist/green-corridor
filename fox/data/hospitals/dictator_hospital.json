@@ -1,0 +1,37 @@
+{
+  "key": "dictator_hospital",
+  "name": "The Dictator Apex Trauma & Super-Speciality Hospital",
+  "estd": 2020,
+  "zone": "Central Jaipur - Civil Lines",
+  "trauma_level": "Level 1 Super-Quaternary Trauma & Research Centre",
+  "overview": "The Dictator Apex Hospital is a cutting-edge 500-bed super-speciality medical and emergency command institute located in Civil Lines, Jaipur. Equipped with state-of-the-art robotic surgery theatres, 120 dedicated ICU beds, an ECMO critical shock unit, rooftop emergency helipad, and an autonomous Green Corridor telemetry dispatch integration.",
+  "contact_details": {
+    "emergency_helpline": "+91-141-9999000",
+    "reception_phone": "+91-141-9999111",
+    "ambulance_direct": "+91-141-9999108",
+    "email": "emergency@dictatorhospital.jpr.in",
+    "website": "https://dictatorhospital.jaipur.gov.in"
+  },
+  "address": {
+    "street": "Jacob Road, Civil Lines",
+    "locality": "Civil Lines",
+    "city": "Jaipur",
+    "state": "Rajasthan",
+    "pin_code": "302006",
+    "landmark": "Opposite Raj Bhavan VIP Enclave"
+  },
+  "coordinates": {
+    "latitude": 26.9075,
+    "longitude": 75.7890
+  },
+  "facilities": {
+    "emergency_24x7": true,
+    "total_beds": 500,
+    "icu_beds_count": 120,
+    "blood_bank": true,
+    "organ_transplant_unit": true,
+    "cardiac_catheterization_lab": true,
+    "green_corridor_certified": true
+  },
+  "cars_endpoint": "/hospitals/dictator_hospital/cars"
+}
