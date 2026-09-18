@@ -1,0 +1,433 @@
+/* ==========================================================================
+   GREEN+ CORRIDOR - Public Landing Page Components
+   File: css/landing.css
+   Contains: Hero section, system visual mockup, metrics, architecture cards, specifications matrix.
+   ========================================================================== */
+
+/* Hero Section */
+.hero-section {
+  padding: 80px 0 60px 0;
+  border-bottom: 1px solid var(--color-gray-200);
+}
+
+.hero-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  max-width: 980px;
+}
+
+.hero-title {
+  font-size: 52px;
+  font-weight: 700;
+  line-height: 1.12;
+  letter-spacing: -0.03em;
+  color: var(--color-black);
+  margin-bottom: 24px;
+}
+
+.hero-description {
+  font-size: 19px;
+  font-weight: 400;
+  color: var(--color-gray-600);
+  line-height: 1.6;
+  max-width: 760px;
+  margin-bottom: 38px;
+}
+
+.hero-cta-group {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.hero-subtext {
+  font-size: 13px;
+  color: var(--color-gray-500);
+  margin-bottom: 48px;
+}
+
+/* System Visual Mockup Frame */
+.hero-mockup-frame {
+  width: 100%;
+  max-width: 900px;
+  border: 1px solid var(--color-gray-300);
+  border-radius: var(--border-radius-lg);
+  box-shadow: var(--shadow-elevated);
+  background-color: var(--color-white);
+  overflow: hidden;
+  text-align: left;
+}
+
+.mockup-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 20px;
+  background-color: var(--color-gray-100);
+  border-bottom: 1px solid var(--color-gray-200);
+}
+
+.mockup-dots {
+  display: flex;
+  gap: 6px;
+}
+
+.mockup-dots span {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background-color: var(--color-gray-400);
+}
+
+.mockup-title {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: #27DDF5;
+}
+
+.mockup-status {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 600;
+  color: #16a34a;
+}
+
+.mockup-body {
+  padding: 24px;
+}
+
+.mockup-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+.mockup-card {
+  padding: 16px;
+  border-radius: var(--border-radius-sm);
+  background-color: var(--color-gray-50);
+  border: 1px solid var(--color-gray-200);
+}
+
+.mockup-card-label {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  color: var(--color-gray-500);
+  margin-bottom: 6px;
+}
+
+.mockup-card-value {
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--color-black);
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+}
+
+.mockup-tag {
+  font-size: 10px;
+  font-weight: 600;
+  padding: 2px 6px;
+  border-radius: var(--border-radius-xs);
+  background-color: var(--color-black);
+  color: var(--color-white);
+}
+
+.mockup-card-sub {
+  font-size: 11px;
+  color: var(--color-gray-500);
+  margin-top: 4px;
+}
+
+.mockup-console {
+  background-color: var(--color-black);
+  color: #e4e4e7;
+  padding: 16px;
+  border-radius: var(--border-radius-sm);
+  font-family: var(--font-mono);
+  font-size: 12px;
+  line-height: 1.6;
+}
+
+.console-line {
+  margin-bottom: 4px;
+}
+
+.console-line:last-child {
+  margin-bottom: 0;
+}
+
+.c-time {
+  color: #71717a;
+  margin-right: 8px;
+}
+
+/* Key Metrics Section */
+.metrics-section {
+  padding: 60px 0;
+  border-bottom: 1px solid var(--color-gray-200);
+  background-color: var(--color-gray-50);
+}
+
+.metrics-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 30px;
+}
+
+.metric-item {
+  border-left: 2px solid var(--color-black);
+  padding-left: 18px;
+}
+
+.metric-number {
+  font-size: 34px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--color-black);
+  margin-bottom: 4px;
+}
+
+.metric-label {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--color-gray-900);
+  margin-bottom: 6px;
+}
+
+.metric-sub {
+  font-size: 12px;
+  color: var(--color-gray-500);
+  line-height: 1.5;
+}
+
+/* Features & Interlinked Architecture */
+.features-section {
+  padding: 90px 0;
+  border-bottom: 1px solid var(--color-gray-200);
+}
+
+.section-header {
+  max-width: 680px;
+  margin-bottom: 60px;
+}
+
+.section-kicker {
+  display: block;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  color: var(--color-gray-500);
+  margin-bottom: 10px;
+}
+
+.section-title {
+  font-size: 36px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+  color: var(--color-black);
+  margin-bottom: 14px;
+}
+
+.section-desc {
+  font-size: 16px;
+  color: var(--color-gray-600);
+  line-height: 1.6;
+}
+
+.cards-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 28px;
+}
+
+.feature-card {
+  padding: 32px;
+  border: 1px solid var(--color-gray-200);
+  border-radius: var(--border-radius-md);
+  transition: all var(--transition-normal);
+  display: flex;
+  flex-direction: column;
+}
+
+.feature-card:hover {
+  border-color: var(--color-black);
+  box-shadow: var(--shadow-elevated);
+  transform: translateY(-2px);
+}
+
+.card-icon-box {
+  width: 44px;
+  height: 44px;
+  border-radius: var(--border-radius-sm);
+  background-color: var(--color-black);
+  color: var(--color-white);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 22px;
+}
+
+.card-icon-box svg {
+  width: 22px;
+  height: 22px;
+}
+
+.card-title {
+  font-size: 19px;
+  font-weight: 600;
+  margin-bottom: 12px;
+  color: var(--color-black);
+}
+
+.card-text {
+  font-size: 14px;
+  color: var(--color-gray-600);
+  line-height: 1.6;
+  margin-bottom: 24px;
+  flex-grow: 1;
+}
+
+.card-action {
+  margin-top: auto;
+}
+
+.card-link {
+  background: none;
+  border: none;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--color-black);
+  cursor: pointer;
+  padding: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  transition: gap var(--transition-fast);
+}
+
+.card-link:hover {
+  gap: 8px;
+}
+
+/* Specifications Matrix */
+.info-section {
+  padding: 90px 0;
+}
+
+.info-split {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 60px;
+  align-items: center;
+}
+
+.info-body {
+  font-size: 15px;
+  color: var(--color-gray-600);
+  line-height: 1.6;
+  margin-bottom: 30px;
+}
+
+.info-checklist {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.check-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+}
+
+.check-icon {
+  width: 20px;
+  height: 20px;
+  color: var(--color-black);
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.check-item strong {
+  display: block;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--color-black);
+  margin-bottom: 2px;
+}
+
+.check-item p {
+  font-size: 13px;
+  color: var(--color-gray-500);
+  line-height: 1.5;
+}
+
+.spec-table-card {
+  border: 1px solid var(--color-gray-300);
+  border-radius: var(--border-radius-md);
+  overflow: hidden;
+  background-color: var(--color-white);
+  box-shadow: var(--shadow-subtle);
+}
+
+.spec-header {
+  padding: 16px 20px;
+  background-color: var(--color-gray-100);
+  border-bottom: 1px solid var(--color-gray-200);
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.spec-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.spec-table th,
+.spec-table td {
+  padding: 14px 20px;
+  text-align: left;
+  border-bottom: 1px solid var(--color-gray-200);
+  font-size: 13px;
+}
+
+.spec-table th {
+  background-color: var(--color-gray-50);
+  font-weight: 600;
+  color: var(--color-gray-600);
+  font-size: 12px;
+  text-transform: uppercase;
+}
+
+.spec-table tr:last-child td {
+  border-bottom: none;
+}
+
+.pill-online {
+  display: inline-block;
+  font-size: 10px;
+  font-weight: 700;
+  padding: 2px 7px;
+  border-radius: var(--border-radius-full);
+  background-color: #dcfce7;
+  color: #166534;
+}
+
+.spec-footer {
+  padding: 12px 20px;
+  background-color: var(--color-gray-50);
+  border-top: 1px solid var(--color-gray-200);
+  color: var(--color-gray-500);
+}

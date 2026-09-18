@@ -1,0 +1,379 @@
+/* ==========================================================================
+   GREEN+ CORRIDOR - Interactive Leaflet Map & Telemetry HUD Styles
+   File: css/map.css
+   Contains: Map container, custom Leaflet marker pins, HUD overlays, legend.
+   ========================================================================== */
+
+/* Map Section (Hospital View) */
+.dashboard-map-section {
+  background-color: var(--color-white);
+  border: 1px solid var(--color-gray-200);
+  border-radius: var(--border-radius-md);
+  box-shadow: var(--shadow-subtle);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  min-height: 720px;
+}
+
+.map-card-header {
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--color-gray-200);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.map-route-controls {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.route-select-btn {
+  font-family: var(--font-sans);
+  font-size: 11px;
+  font-weight: 500;
+  padding: 5px 10px;
+  border-radius: var(--border-radius-full);
+  border: 1px solid var(--color-gray-300);
+  background-color: var(--color-white);
+  color: var(--color-gray-700);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: all var(--transition-fast);
+}
+
+.route-select-btn.active {
+  background-color: var(--color-black);
+  color: var(--color-white);
+  border-color: var(--color-black);
+}
+
+.route-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+}
+
+.dot-optimal { background-color: #000000; }
+.route-select-btn.active .dot-optimal { background-color: #ffffff; }
+.dot-alta { background-color: #71717a; }
+.dot-altb { background-color: #a1a1aa; }
+
+.map-wrapper-box {
+  position: relative;
+  flex-grow: 1;
+  width: 100%;
+  min-height: 520px;
+}
+
+#jaipurMap,
+#adminJaipurMap,
+#adminMap {
+  width: 100%;
+  height: 100%;
+  min-height: 520px;
+  z-index: 10;
+}
+
+.admin-map-card {
+  background-color: var(--color-white);
+  border: 1px solid var(--color-gray-200);
+  border-radius: var(--border-radius-md);
+  box-shadow: var(--shadow-subtle);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  height: 840px;
+}
+
+/* Floating HUD Card (Hospital View) */
+.map-hud-overlay {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  z-index: 500;
+  width: 320px;
+  background-color: rgba(255, 255, 255, 0.96);
+  backdrop-filter: blur(8px);
+  border: 1px solid var(--color-gray-300);
+  border-radius: var(--border-radius-md);
+  box-shadow: var(--shadow-hud);
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.hud-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--color-gray-200);
+  padding-bottom: 8px;
+}
+
+.hud-badge {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--color-black);
+  display: block;
+}
+
+.hud-type {
+  font-size: 11px;
+  color: var(--color-gray-500);
+}
+
+.hud-status-indicator {
+  font-size: 10px;
+  font-weight: 700;
+  color: #dc2626;
+  letter-spacing: 0.04em;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.status-pulse-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background-color: #dc2626;
+  animation: pulse-dot-anim 1s infinite;
+}
+
+.hud-metrics-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+.hud-metric {
+  background-color: var(--color-gray-50);
+  border: 1px solid var(--color-gray-200);
+  border-radius: var(--border-radius-xs);
+  padding: 6px 10px;
+}
+
+.hm-label {
+  display: block;
+  font-size: 9px;
+  font-weight: 700;
+  color: var(--color-gray-500);
+  letter-spacing: 0.05em;
+  margin-bottom: 2px;
+}
+
+.hm-val {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--color-black);
+}
+
+.hm-highlight {
+  color: #16a34a;
+  font-weight: 700;
+}
+
+.hud-signal-info {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 11px;
+  color: var(--color-gray-700);
+  padding: 6px 10px;
+  background-color: var(--color-gray-100);
+  border-radius: var(--border-radius-xs);
+}
+
+.hud-signal-info svg {
+  width: 14px;
+  height: 14px;
+  color: #d97706;
+  flex-shrink: 0;
+}
+
+.hud-actions {
+  margin-top: 2px;
+}
+
+/* Admin Map Floating HUD */
+.admin-map-hud {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  z-index: 500;
+  width: 320px;
+  background-color: rgba(0, 0, 0, 0.9);
+  color: var(--color-white);
+  border: 1px solid var(--color-gray-700);
+  border-radius: var(--border-radius-md);
+  box-shadow: var(--shadow-hud);
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.hud-density-pill {
+  font-size: 10px;
+  font-weight: 700;
+  padding: 2px 6px;
+  border-radius: var(--border-radius-full);
+}
+
+.density-low {
+  background-color: #14532d;
+  color: #86efac;
+}
+
+.hud-actions-split {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6px;
+}
+
+/* Map Legend Overlays */
+.map-legend-overlay {
+  position: absolute;
+  bottom: 16px;
+  left: 16px;
+  z-index: 500;
+  background-color: rgba(255, 255, 255, 0.94);
+  backdrop-filter: blur(8px);
+  border: 1px solid var(--color-gray-300);
+  border-radius: var(--border-radius-sm);
+  padding: 8px 12px;
+  font-size: 11px;
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  box-shadow: var(--shadow-subtle);
+}
+
+.admin-map-legend {
+  position: absolute;
+  bottom: 16px;
+  left: 16px;
+  z-index: 500;
+  background-color: rgba(0, 0, 0, 0.88);
+  color: #e4e4e7;
+  border: 1px solid var(--color-gray-800);
+  border-radius: var(--border-radius-sm);
+  padding: 8px 12px;
+  font-size: 11px;
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.leg-icon {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.leg-sms { background-color: #000000; }
+.leg-amb { background-color: #ef4444; }
+.leg-signal-green { background-color: #22c55e; }
+.leg-police { background-color: #1e3a8a; }
+
+.leg-line {
+  width: 16px;
+  height: 3px;
+  display: inline-block;
+}
+
+.leg-optimal { background-color: #000000; }
+.leg-alt { background-color: #71717a; }
+
+/* Custom Leaflet Map Markers */
+.custom-map-icon {
+  background: none;
+  border: none;
+}
+
+.marker-pin-hospital {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background-color: var(--color-black);
+  color: var(--color-white);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  font-weight: 700;
+  border: 2px solid var(--color-white);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+}
+
+.marker-pin-ambulance {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background-color: #dc2626;
+  color: var(--color-white);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid var(--color-white);
+  box-shadow: 0 4px 12px rgba(220, 38, 38, 0.4);
+}
+
+.pulsing-red {
+  animation: pulse-red-ring 1.5s infinite;
+}
+
+@keyframes pulse-red-ring {
+  0% { box-shadow: 0 0 0 0 rgba(220, 38, 38, 0.6); }
+  70% { box-shadow: 0 0 0 12px rgba(220, 38, 38, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(220, 38, 38, 0); }
+}
+
+.marker-pin-police {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background-color: #1e3a8a;
+  color: var(--color-white);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid var(--color-white);
+  box-shadow: 0 2px 8px rgba(30, 58, 138, 0.4);
+}
+
+.marker-pin-signal {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background-color: var(--color-black);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid var(--color-white);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
+}
+
+.signal-inner-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background-color: #22c55e;
+  box-shadow: 0 0 6px #22c55e;
+}

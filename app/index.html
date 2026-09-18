@@ -1,0 +1,1385 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Green+ Corridor | Emergency Hospital &amp; Municipal Traffic Command Network</title>
+  <!-- Google Fonts: Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <!-- Leaflet Map CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+  <!-- Modular Stylesheets -->
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/header-footer.css">
+  <link rel="stylesheet" href="css/landing.css">
+  <link rel="stylesheet" href="css/hospital.css">
+  <link rel="stylesheet" href="css/admin.css">
+  <link rel="stylesheet" href="css/map.css">
+  <link rel="stylesheet" href="css/modals.css">
+</head>
+<body>
+
+  <!-- Navigation Header -->
+  <header class="site-header" id="siteHeader">
+    <div class="container nav-container">
+      <a href="#" class="brand-logo" id="brandLogoHome" title="Return to Overview / Home">
+        <span class="logo-mark">
+          <i data-lucide="plus"></i>
+        </span>
+        <span class="logo-text">
+          <span class="brand-text-green">Green<span class="brand-plus-sign">+</span></span><span class="brand-text-corridor">Corridor</span>
+        </span>
+      </a>
+
+      <!-- Public Navigation Menu (visible on public landing, aligned to right) -->
+      <nav class="nav-menu" id="navMenu">
+        <a href="#overview" class="nav-link public-nav">Overview</a>
+        <a href="#architecture" class="nav-link public-nav">Network Grid</a>
+        <a href="#specifications" class="nav-link public-nav">Dispatch Protocol</a>
+        <a href="#networkMatrix" class="nav-link public-nav">System Matrix</a>
+        <a href="hospital.html" target="_blank" class="nav-link public-nav" title="Dedicated Hospital CAD Terminal">
+          <i data-lucide="building-2"></i>
+          <span>Hospital Portal</span>
+        </a>
+        <a href="driver.html" target="_blank" class="nav-link public-nav driver-nav-highlight" title="Ambulance Driver In-Cab Mobile Terminal">
+          <i data-lucide="smartphone"></i>
+          <span>Driver Mobile App</span>
+        </a>
+      </nav>
+
+      <!-- Active Session Status Bar (shown when logged in) -->
+      <div class="active-session-pill" id="activeSessionPill" style="display: none;">
+        <span class="session-dot" id="sessionDot"></span>
+        <span id="sessionRoleText">Session: SMS Hospital</span>
+        <button type="button" class="btn-session-exit" id="btnSessionSignOut" title="Sign Out">
+          <i data-lucide="log-out"></i>
+          <span>Sign Out</span>
+        </button>
+      </div>
+
+      <button class="mobile-toggle" id="mobileToggle" aria-label="Toggle Navigation Menu">
+        <i data-lucide="menu"></i>
+      </button>
+    </div>
+  </header>
+
+  <!-- =========================================================================
+       VIEW 1: PUBLIC LANDING PAGE
+       ========================================================================= -->
+  <div id="landingView">
+    <main>
+      <!-- Hero Section -->
+      <section class="hero-section" id="overview">
+        <div class="container hero-container">
+          
+          <h1 class="hero-title"><pre>Emergency Hospital Intake
+  &amp; Traffic Command 
+  Corridors.</pre> 
+          </h1>
+
+
+          <div class="hero-cta-group">
+            <!-- Primary Button: Hospital Login -->
+            <button type="button" class="btn btn-primary btn-large" data-login-target="hospital">
+              <i data-lucide="building-2"></i>
+              <span>Hospital Login</span>
+              <i data-lucide="arrow-right" class="arrow-icon"></i>
+            </button>
+
+            <!-- Secondary Button: Administrative Command -->
+            <button type="button" class="btn btn-outline btn-large" data-login-target="admin">
+              <i data-lucide="shield-check"></i>
+              <span>Administrative Command</span>
+            </button>
+
+            <!-- Mobile App Button: Ambulance Driver In-Cab Terminal -->
+            <a href="driver.html" target="_blank" class="btn btn-emergency-driver btn-large" title="Open In-Cab Ambulance Driver Mobile App">
+              <i data-lucide="smartphone"></i>
+              <span>Ambulance Driver App</span>
+              <span class="btn-live-pulse-badge">LIVE GPS</span>
+            </a>
+
+            <!-- Download APK Button -->
+            <a href="GreenCorridorAmbulance.apk" download="GreenCorridorAmbulance.apk" class="btn btn-outline btn-large" title="Download Installable Android APK for Drivers">
+              <i data-lucide="download"></i>
+              <span>Download Driver APK</span>
+            </a>
+
+            <!-- Download Hospital EXE Button -->
+            <a href="HospitalControlPanel.exe" download="HospitalControlPanel.exe" class="btn btn-outline btn-large" title="Download Windows EXE for Hospital Panel">
+              <i data-lucide="monitor"></i>
+              <span>Download Hospital EXE</span>
+            </a>
+          </div>
+
+          <div class="hero-subtext">
+            <span>Integrated Jaipur Traffic Police (JTP) &bull; Sawai Man Singh Hospital &bull; Apex Hospital &bull; In-Cab 108 Ambulance Telemetry</span>
+          </div>
+
+          <!-- Hero System Visual -->
+          <div class="hero-mockup-frame">
+            <div class="mockup-header">
+              <div class="mockup-dots">
+                <span></span><span></span><span></span>
+              </div>
+              <div class="mockup-title"><strong>jaipur-traffic-relay</strong></div>
+              <div class="mockup-status">GRID STATUS: ARMED &bull; RT-LINK VERIFIED</div>
+            </div>
+
+            <div class="mockup-body">
+              <div class="mockup-grid">
+                <div class="mockup-card">
+                  <div class="mockup-card-label">CLINICAL PARTNERS</div>
+                  <div class="mockup-card-value">2 <span class="mockup-tag">ONLINE</span></div>
+                  <div class="mockup-card-sub">SMS Apex Trauma &bull; Apex Super Speciality</div>
+                </div>
+                <div class="mockup-card">
+                  <div class="mockup-card-label">ACTIVE AMBULANCES</div>
+                  <div class="mockup-card-value">8 <span class="mockup-tag">5 IN SERVICE</span></div>
+                  <div class="mockup-card-sub">2 Emergency Green Corridors &bull; 1 Routine Transit</div>
+                </div>
+                <div class="mockup-card">
+                  <div class="mockup-card-label">POLICE INTERCEPT UNITS</div>
+                  <div class="mockup-card-value">5 <span class="mockup-tag">DEPLOYED</span></div>
+                  <div class="mockup-card-sub">Rambagh, Ambedkar, Tonk Phatak &amp; SMS Gate</div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- Key Metrics Section -->
+      <section class="metrics-section">
+        <div class="container">
+          <div class="metrics-grid">
+            <div class="metric-item">
+              <div class="metric-number">&lt; 90s</div>
+              <div class="metric-label">Signal Hold Alert Window</div>
+              <p class="metric-sub">Automated countdown alerts to clear perpendicular cross-traffic ahead of inbound units.</p>
+            </div>
+            <div class="metric-item">
+              <div class="metric-number">Dual Mode</div>
+              <div class="metric-label">Clearance vs. Routine Routing</div>
+              <p class="metric-sub">Emergency green corridors alert JTP police; routine inter-facility trips navigate locally without cluttering police queues.</p>
+            </div>
+            <div class="metric-item">
+              <div class="metric-number">5 Field Units</div>
+              <div class="metric-label">Local Police Hindrance Coverage</div>
+              <p class="metric-sub">Real-time officer deployment at Ambedkar Circle, Rambagh Circle, and Tonk Phatak.</p>
+            </div>
+            <div class="metric-item">
+              <div class="metric-number">Live Override</div>
+              <div class="metric-label">Dynamic Route Diversion</div>
+              <p class="metric-sub">Admin capability to instantly change ambulance optimal route to bypass sudden roadblocks.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Features Section -->
+      <section class="features-section" id="architecture">
+        <div class="container">
+          <div class="section-header">
+            <span class="section-kicker">INTERLINKED DISPATCH ARCHITECTURE</span>
+            <h2 class="section-title">Coordinating medical urgency and municipal traffic control.</h2>
+            <p class="section-desc">
+              Connects hospital emergency triage directly with Jaipur Traffic Police (JTP) central command. Ambulances receive unobstructed passage while administrators maintain complete situational oversight.
+            </p>
+          </div>
+
+          <div class="cards-grid">
+            <div class="feature-card">
+              <div class="card-icon-box">
+                <i data-lucide="building-2"></i>
+              </div>
+              <h3 class="card-title">Dual Hospital Portals</h3>
+              <p class="card-text">
+                Dedicated dashboards for both SMS Hospital (Apex Trauma Center) and Apex Hospital Malviya Nagar. View active fleet, patient condition severity, and clearance grant status.
+              </p>
+              <div class="card-action">
+                <button class="card-link" data-login-target="hospital">Launch Hospital Intake &rarr;</button>
+              </div>
+            </div>
+
+            <div class="feature-card">
+              <div class="card-icon-box">
+                <i data-lucide="shield-alert"></i>
+              </div>
+              <h3 class="card-title">Administrative Command Core</h3>
+              <p class="card-text">
+                Central oversight portal for Jaipur Traffic Police. Approve green corridors, inspect vehicle density on optimal routes, deploy local police officers, and override routing.
+              </p>
+              <div class="card-action">
+                <button class="card-link" data-login-target="admin">Open Admin Command &rarr;</button>
+              </div>
+            </div>
+
+            <div class="feature-card">
+              <div class="card-icon-box">
+                <i data-lucide="map-pin"></i>
+              </div>
+              <h3 class="card-title">Jaipur City GIS Telemetry</h3>
+              <p class="card-text">
+                Real map of Jaipur city featuring traffic light nodes, live vehicle congestion density, upcoming hindrance markers, and countdown timers to clear intersections.
+              </p>
+              <div class="card-action">
+                <button class="card-link" data-login-target="admin">View Live Telemetry &rarr;</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Specifications Section -->
+      <section class="info-section" id="specifications">
+        <div class="container">
+          <div class="info-split">
+            <div class="info-col">
+              <span class="section-kicker">PROTOCOL SPECIFICATIONS</span>
+              <h2 class="section-title">End-to-end synchronization between hospitals and traffic police.</h2>
+              <p class="info-body">
+                When a hospital submits a green corridor clearance request with patient medical severity, the administrative portal evaluates corridor density, alerts local on-duty police, and authorizes signal overrides.
+              </p>
+              <div class="info-checklist">
+                <div class="check-item">
+                  <i data-lucide="check" class="check-icon"></i>
+                  <div>
+                    <strong>Bidirectional Clearance Lifecycle</strong>
+                    <p>Hospitals instantly see if clearance is Pending, Granted, or Overridden by JTP Central Command.</p>
+                  </div>
+                </div>
+                <div class="check-item">
+                  <i data-lucide="check" class="check-icon"></i>
+                  <div>
+                    <strong>Local Police Personnel Deployment</strong>
+                    <p>Officers mapped near critical bottlenecks with direct frequency and pre-emption authority.</p>
+                  </div>
+                </div>
+                <div class="check-item">
+                  <i data-lucide="check" class="check-icon"></i>
+                  <div>
+                    <strong>Route Override Capabilities</strong>
+                    <p>Instant redirection from JLN Marg to Tonk Road or MI Road when bottlenecks arise.</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="info-col">
+              <div class="spec-table-card" id="networkMatrix">
+                <div class="spec-header">Municipal Emergency Network Matrix</div>
+                <table class="spec-table">
+                  <thead>
+                    <tr>
+                      <th>Node</th>
+                      <th>Account / Authority</th>
+                      <th>Access Level</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>JTP Central Command</td>
+                      <td>admin@jtp-control.gov.in</td>
+                      <td><span class="pill-online">FULL OVERRIDE</span></td>
+                    </tr>
+                    <tr>
+                      <td>SMS Hospital Jaipur</td>
+                      <td>sms@jaipurhealth.gov.in</td>
+                      <td><span class="pill-online">APEX TRAUMA INTAKE</span></td>
+                    </tr>
+                    <tr>
+                      <td>Apex Hospital Malviya Nagar</td>
+                      <td>apex@jaipurhealth.gov.in</td>
+                      <td><span class="pill-online">SECONDARY CLIENT</span></td>
+                    </tr>
+                    <tr>
+                      <td>Jaipur Traffic Police Field</td>
+                      <td>5 Deployed Officers</td>
+                      <td><span class="pill-online">FIELD CLEARANCE</span></td>
+                    </tr>
+                  </tbody>
+                </table>
+                <div class="spec-footer">
+                  <small>* Live evaluation environment with real credential validation.</small>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- Clean Compact Footer -->
+    <footer class="site-footer">
+      <div class="container footer-container">
+        <div class="footer-brand">
+          <a href="#" class="brand-logo" title="Return to Overview / Home">
+            <span class="logo-mark"><i data-lucide="plus"></i></span>
+            <span class="logo-text">
+              <span class="brand-text-green">Green<span class="brand-plus-sign">+</span></span><span class="brand-text-corridor">Corridor</span>
+            </span>
+          </a>
+          <span class="footer-copy">&copy; 2026 Green+ Corridor &bull; Emergency Hospital &amp; Municipal Traffic Command Network. All rights reserved.</span>
+        </div>
+
+        <nav class="footer-nav">
+          <a href="#overview">Overview</a>
+          <a href="#architecture">Network</a>
+          <a href="#specifications">Specifications</a>
+          <a href="#" class="footer-link" data-login-target="hospital">Hospital Login</a>
+          <a href="#" class="footer-link" data-login-target="admin">Administrative Login</a>
+        </nav>
+      </div>
+    </footer>
+  </div>
+
+  <!-- =========================================================================
+       VIEW 2: HOSPITAL DASHBOARD (SMS Hospital / Apex Hospital)
+       ========================================================================= -->
+  <div id="hospitalDashboardView" class="hospital-dashboard-wrapper" style="display: none;">
+    
+    <!-- Top Hospital Overview Banner -->
+    <div class="hospital-top-banner">
+      <div class="container hospital-banner-inner">
+        
+        <div class="hospital-info-col">
+          <div class="hospital-badge-row">
+            <span class="status-pill status-pill-active">
+              <span class="pulse-dot"></span> <span id="hospActiveBadge">LIVE INTAKE CORE</span>
+            </span>
+            <span class="tag-badge" id="hospTierBadge">LEVEL 1 APEX TRAUMA CENTER</span>
+            <span class="tag-badge" id="hospNodeBadge">NODE #04 JAIPUR METRO</span>
+          </div>
+
+          <h1 class="hospital-main-name" id="hospMainName">
+            Sawai Man Singh (SMS) Hospital, Jaipur
+          </h1>
+
+          <p class="hospital-address" id="hospAddressText">
+            <i data-lucide="map-pin"></i> Jawaharlal Nehru Marg, Ashok Nagar, Jaipur, Rajasthan 302004
+          </p>
+        </div>
+
+        <div class="hospital-metrics-row">
+          <div class="h-stat-box">
+            <div class="h-stat-label">ICU Trauma Beds</div>
+            <div class="h-stat-value" id="hospBedsStat">14 <span class="h-stat-sub">/ 18 Free</span></div>
+          </div>
+
+          <div class="h-stat-box">
+            <div class="h-stat-label">Emergency ORs</div>
+            <div class="h-stat-value" id="hospOrStat">4 <span class="h-stat-sub">Ready</span></div>
+          </div>
+
+          <div class="h-stat-box">
+            <div class="h-stat-label">JTP Clearance Status</div>
+            <div class="h-stat-value" id="hospClearanceStat"><span class="status-text-green">ACTIVE</span></div>
+          </div>
+
+          <div class="h-action-col">
+            <button class="btn btn-outline btn-sm" id="btnExitDashboard">
+              <i data-lucide="log-out"></i>
+              <span>Sign Out</span>
+            </button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Active Corridor / Route Override Alert Banner -->
+    <div class="corridor-alert-bar" id="corridorAlertBar">
+      <div class="container corridor-alert-content">
+        <div class="corridor-alert-left">
+          <i data-lucide="siren" class="alert-icon-siren"></i>
+          <div>
+            <strong id="corridorAlertTitle">EMERGENCY CLEARANCE STATUS:</strong>
+            <span id="corridorAlertText">Unit RJ-14-EA-4091 en route. 4 Traffic signals pre-empted on JLN Marg corridor.</span>
+          </div>
+        </div>
+        <button class="btn btn-sm btn-outline" id="btnDismissAlert">Dismiss Banner</button>
+      </div>
+    </div>
+
+    <!-- Dashboard Main Grid -->
+    <div class="container dashboard-grid-container">
+      
+      <!-- Left: Fleet & Driver Management for this Hospital -->
+      <section class="dashboard-fleet-section">
+        <!-- Dual Tabs: Hospital Fleet vs Driver Mobile Terminals -->
+        <div class="hospital-subnav-tabs">
+          <button type="button" class="hosp-nav-tab active" id="hospTabFleet">
+            <i data-lucide="truck"></i>
+            <span>Ambulance Fleet</span>
+          </button>
+          <button type="button" class="hosp-nav-tab" id="hospTabDrivers">
+            <i data-lucide="smartphone"></i>
+            <span>Driver Mobile Terminals (<span id="countHospitalDrivers">4</span>)</span>
+          </button>
+        </div>
+
+        <!-- Panel 1: Ambulance Fleet -->
+        <div id="hospPanelFleet">
+          <div class="section-card-header">
+            <div>
+              <h2 class="card-section-title">Hospital Ambulance Fleet</h2>
+              <p class="card-section-sub" id="fleetSubTitle">Active &amp; reserve units assigned to this facility</p>
+            </div>
+
+            <div class="fleet-filter-tabs">
+              <button class="fleet-tab-btn active" data-filter="all">All (<span id="countAll">8</span>)</button>
+              <button class="fleet-tab-btn" data-filter="in-service">In Service (<span id="countInService">5</span>)</button>
+              <button class="fleet-tab-btn" data-filter="out-of-service">Out of Service (<span id="countOutOfService">3</span>)</button>
+            </div>
+          </div>
+
+          <div class="fleet-list-container" id="fleetListContainer">
+            <!-- Populated dynamically via app.js -->
+          </div>
+        </div>
+
+        <!-- Panel 2: Ambulance Drivers & Mobile Terminal Credentials -->
+        <div id="hospPanelDrivers" style="display: none;">
+          <div class="section-card-header">
+            <div>
+              <h2 class="card-section-title">Ambulance Drivers &amp; Mobile Terminals</h2>
+              <p class="card-section-sub">Manage driver logins, issue passkeys, and track live in-cab GPS links</p>
+            </div>
+
+            <div class="driver-header-actions">
+              <button type="button" class="btn btn-primary btn-sm" id="btnRegisterDriverTrigger">
+                <i data-lucide="user-plus"></i>
+                <span>+ Register Driver</span>
+              </button>
+              <a href="GreenCorridorAmbulance.apk" download="GreenCorridorAmbulance.apk" class="btn btn-outline btn-sm" id="btnDownloadDriverApk" title="Download Android APK Package for Ambulance Drivers">
+                <i data-lucide="download"></i>
+                <span>Driver APK</span>
+              </a>
+              <a href="HospitalControlPanel.exe" download="HospitalControlPanel.exe" class="btn btn-outline btn-sm" id="btnDownloadHospitalExePanel" title="Download Desktop Windows Application for Hospital CAD">
+                <i data-lucide="monitor"></i>
+                <span>Hospital EXE</span>
+              </a>
+              <button type="button" class="btn btn-outline btn-sm" id="btnLaunchMobileAppGeneral" title="Open Driver Mobile App">
+                <i data-lucide="smartphone"></i>
+                <span>Open Mobile App</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Hospital Sync Banner -->
+          <div class="hospital-driver-sync-banner">
+            <i data-lucide="key"></i>
+            <span><strong>Hospital Credential Repository:</strong> Unique IDs &amp; Passkeys created here grant immediate login on the Ambulance Driver Mobile App with live GPS reporting to Traffic Police.</span>
+          </div>
+
+          <div class="hospital-drivers-list" id="hospitalDriversListContainer">
+            <!-- Populated dynamically via GC_HOSPITAL.renderHospitalDriversList() -->
+          </div>
+        </div>
+      </section>
+
+      <!-- Right: Live Map of Jaipur & Dispatch Mode -->
+      <section class="dashboard-map-section">
+        
+        <!-- Navigation Mode Tabs -->
+        <div class="dispatch-mode-bar">
+          <button type="button" class="mode-tab-btn active" id="btnModeEmergency">
+            <i data-lucide="siren"></i>
+            <span class="mode-tab-title">Emergency Green Corridor</span>
+            <span class="mode-pill mode-pill-emergency">JTP Police Priority</span>
+          </button>
+          <button type="button" class="mode-tab-btn" id="btnModeRoutine">
+            <i data-lucide="compass"></i>
+            <span class="mode-tab-title">Routine Transit Route Finder</span>
+            <span class="mode-pill mode-pill-routine">Local &bull; No Police Alert</span>
+          </button>
+        </div>
+
+        <!-- Routine Transit Route Finder Card (Visible when Routine Mode is active) -->
+        <div class="routine-planner-panel" id="routinePlannerPanel" style="display: none;">
+          <div class="planner-header">
+            <div class="planner-title-group">
+              <div class="planner-icon"><i data-lucide="compass"></i></div>
+              <div>
+                <h3 class="planner-title">Optimal Transit Route Planner (Standard Navigation)</h3>
+                <p class="planner-sub">Query optimal routes across Jaipur with live vehicle density &bull; <strong>Does NOT alert JTP Traffic Police Admin</strong></p>
+              </div>
+            </div>
+            <span class="privacy-badge">
+              <i data-lucide="shield-check"></i> Police Queue Bypassed
+            </span>
+          </div>
+
+          <form class="planner-form" id="routineRouteForm">
+            <div class="planner-grid">
+              <div class="planner-col">
+                <label for="routineAmbulanceSelect">Selected Ambulance Unit</label>
+                <select id="routineAmbulanceSelect" class="form-select">
+                  <!-- Populated dynamically based on active hospital -->
+                </select>
+              </div>
+
+              <div class="planner-col">
+                <label for="routineOriginSelect">Origin Point</label>
+                <select id="routineOriginSelect" class="form-select">
+                  <option value="sms">SMS Hospital Emergency Dock (JLN Marg)</option>
+                  <option value="apex">Apex Hospital (Malviya Nagar Sector 9)</option>
+                  <option value="vaishali">Vaishali Nagar (Amrapali Circle)</option>
+                  <option value="mansarovar">Mansarovar (Shipra Path Crossing)</option>
+                  <option value="cscheme">C-Scheme (Statue Circle)</option>
+                </select>
+              </div>
+
+              <div class="planner-col">
+                <label for="routineDestinationSelect">Destination in Jaipur City</label>
+                <select id="routineDestinationSelect" class="form-select">
+                  <option value="mansarovar">Mansarovar (Shipra Path Crossing)</option>
+                  <option value="vaishali">Vaishali Nagar (Amrapali Circle)</option>
+                  <option value="apex">Apex Hospital (Malviya Nagar)</option>
+                  <option value="sms">SMS Hospital Trauma Center (JLN Marg)</option>
+                  <option value="jagatpura">Jagatpura (Mahal Road / RTO)</option>
+                  <option value="cscheme">C-Scheme (Statue Circle)</option>
+                  <option value="tonkphatak">Tonk Phatak Railway Crossing</option>
+                  <option value="rajapark">Raja Park (LBS College Marg)</option>
+                </select>
+              </div>
+
+              <div class="planner-col">
+                <label for="routinePurposeSelect">Transit Mission Type</label>
+                <select id="routinePurposeSelect" class="form-select">
+                  <option value="patient-transfer">Inter-Facility Patient Transfer (Non-Critical)</option>
+                  <option value="discharge">Patient Discharge Return Transit</option>
+                  <option value="blood-bank">Blood Bank / Lab Specimen Retrieval</option>
+                  <option value="maintenance">Sanitization / Maintenance Depot Return</option>
+                  <option value="pickup">Scheduled Clinical Pickup</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="planner-actions">
+              <button type="submit" class="btn btn-primary btn-sm" id="btnCalculateOptimalRoute">
+                <i data-lucide="navigation"></i>
+                <span>Calculate Optimal Route</span>
+              </button>
+              <button type="button" class="btn btn-outline btn-sm" id="btnResetRoutineRoute">
+                <i data-lucide="rotate-ccw"></i>
+                <span>Reset to Emergency View</span>
+              </button>
+            </div>
+          </form>
+
+          <!-- Calculated Route Summary Output -->
+          <div class="planner-result-card" id="routineResultCard" style="display: none;">
+            <div class="pr-header">
+              <div class="pr-route-title">
+                <span class="route-pill-optimal">OPTIMAL TRANSIT PATH</span>
+                <strong id="resRouteName">Via JLN Marg &amp; Tonk Road</strong>
+              </div>
+              <div class="pr-status-badge">
+                <i data-lucide="check-circle"></i> Local Navigation Active
+              </div>
+            </div>
+
+            <div class="pr-stats-grid">
+              <div class="pr-stat">
+                <span class="pr-label">TOTAL DISTANCE</span>
+                <span class="pr-val" id="resDistance">6.4 km</span>
+              </div>
+              <div class="pr-stat">
+                <span class="pr-label">ESTIMATED TRANSIT TIME</span>
+                <span class="pr-val" id="resDuration">14 mins</span>
+              </div>
+              <div class="pr-stat">
+                <span class="pr-label">ROAD VEHICLE DENSITY</span>
+                <span class="pr-val" id="resDensity">Moderate (~32 veh/min)</span>
+              </div>
+              <div class="pr-stat">
+                <span class="pr-label">SIGNALS ON ROUTE</span>
+                <span class="pr-val" id="resSignals">3 Signals (Normal Cycle)</span>
+              </div>
+            </div>
+
+            <div class="pr-advisory">
+              <i data-lucide="info"></i>
+              <span><strong>Standard municipal transit:</strong> Normal road regulations and standard traffic signals apply. Jaipur Traffic Police (JTP) Admin queue has <strong>NOT</strong> been notified.</span>
+            </div>
+
+            <div class="pr-escalate-bar">
+              <span>Patient condition deteriorated during transit?</span>
+              <button type="button" class="btn btn-sm btn-escalate-emergency" id="btnEscalateFromRoutine">
+                <i data-lucide="flame"></i>
+                <span>Escalate to Emergency Green Corridor (Alert JTP)</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div class="map-card-header" id="emergencyMapHeader">
+          <div class="map-title-wrap">
+            <h2 class="card-section-title">Jaipur Route Telemetry &bull; Hospital View</h2>
+            <p class="card-section-sub">Live location, optimal corridor, and traffic light status</p>
+          </div>
+
+          <div class="map-route-controls">
+            <button class="route-select-btn active" data-route="optimal">
+              <span class="route-dot dot-optimal"></span> Optimal: JLN Marg (7m)
+            </button>
+            <button class="route-select-btn" data-route="alt-a">
+              <span class="route-dot dot-alta"></span> Alt: Tonk Rd (13m)
+            </button>
+            <button class="route-select-btn" data-route="alt-b">
+              <span class="route-dot dot-altb"></span> Alt: MI Rd (18m)
+            </button>
+          </div>
+        </div>
+
+        <div class="map-wrapper-box">
+          <div id="jaipurMap"></div>
+
+          <!-- Floating Map HUD -->
+          <div class="map-hud-overlay">
+            <div class="hud-header">
+              <div class="hud-unit-info">
+                <span class="hud-badge" id="hudUnitBadge">RJ-14-EA-4091</span>
+                <span class="hud-type" id="hudUnitType">Advanced Life Support (ALS-01)</span>
+              </div>
+              <div class="hud-status-indicator" id="hudStatusIndicator">
+                <span class="status-pulse-dot"></span> EN ROUTE (CODE RED)
+              </div>
+            </div>
+
+            <div class="hud-metrics-grid">
+              <div class="hud-metric">
+                <span class="hm-label">LIVE ETA</span>
+                <span class="hm-val" id="hudEta">7 min 40 sec</span>
+              </div>
+              <div class="hud-metric">
+                <span class="hm-label">DISTANCE</span>
+                <span class="hm-val" id="hudDistance">3.8 km</span>
+              </div>
+              <div class="hud-metric">
+                <span class="hm-label">SPEED</span>
+                <span class="hm-val" id="hudSpeed">56 km/h</span>
+              </div>
+              <div class="hud-metric">
+                <span class="hm-label">JTP CLEARANCE</span>
+                <span class="hm-val hm-highlight" id="hudClearanceState">GRANTED (GREEN WAVE)</span>
+              </div>
+            </div>
+
+            <div class="hud-signal-info">
+              <i data-lucide="traffic-cone"></i>
+              <span id="hudNextSignal">Next Signal: <strong>Rambagh Circle</strong> (Cleared by JTP Unit 4)</span>
+            </div>
+
+            <div class="hud-actions">
+              <button type="button" class="btn btn-primary btn-sm btn-full" id="hudClearanceBtn">
+                <i data-lucide="shield-alert"></i>
+                <span>Request / Update Route Clearance</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Legend Overlay -->
+          <div class="map-legend-overlay">
+            <div class="legend-item"><span class="leg-icon leg-sms"></span> Hospital Destination</div>
+            <div class="legend-item"><span class="leg-icon leg-amb"></span> Live Ambulance</div>
+            <div class="legend-item"><span class="leg-icon leg-signal-green"></span> Green Corridor Signal</div>
+            <div class="legend-item"><span class="leg-icon leg-police"></span> Police Intercept Unit</div>
+            <div class="legend-item"><span class="leg-line leg-optimal"></span> Optimal Route</div>
+            <div class="legend-item"><span class="leg-line leg-alt"></span> Alternative Route</div>
+          </div>
+        </div>
+      </section>
+
+    </div>
+  </div>
+
+  <!-- =========================================================================
+       VIEW 3: ADMINISTRATIVE COMMAND PORTAL (Jaipur Traffic Police Core)
+       ========================================================================= -->
+  <div id="adminDashboardView" class="admin-dashboard-wrapper" style="display: none;">
+    
+    <!-- Top JTP Command Header -->
+    <div class="admin-top-banner">
+      <div class="container admin-banner-inner">
+        <div class="admin-info-col">
+          <div class="admin-badge-row">
+            <span class="status-pill status-pill-active">
+              <span class="pulse-dot"></span> JTP CENTRAL COMMAND
+            </span>
+            <span class="tag-badge">CENTRAL DISPATCH AUTHORITY</span>
+            <span class="tag-badge">JAIPUR METRO EMERGENCY GRID</span>
+          </div>
+
+          <h1 class="admin-main-name">
+            Jaipur Traffic Police &amp; Health Oversight Command Core
+          </h1>
+
+          <p class="admin-subtext">
+            <i data-lucide="shield-check"></i> Police Headquarters, Lal Kothi, Tonk Road, Jaipur &bull; Direct Traffic Signal Pre-emption
+          </p>
+        </div>
+
+        <div class="admin-metrics-row">
+          <div class="h-stat-box stat-box-alert">
+            <div class="h-stat-label">Clearance Queue</div>
+            <div class="h-stat-value" id="adminPendingCount">1 <span class="h-stat-sub">Action Needed</span></div>
+          </div>
+
+          <div class="h-stat-box">
+            <div class="h-stat-label">Active Corridors</div>
+            <div class="h-stat-value" id="adminActiveCount">1 <span class="h-stat-sub">Green Waves</span></div>
+          </div>
+
+          <div class="h-stat-box">
+            <div class="h-stat-label">Connected Clients</div>
+            <div class="h-stat-value">2 <span class="h-stat-sub">SMS &amp; Apex</span></div>
+          </div>
+
+          <div class="h-stat-box">
+            <div class="h-stat-label">Field Police Units</div>
+            <div class="h-stat-value">5 <span class="h-stat-sub">Deployed</span></div>
+          </div>
+
+          <div class="h-action-col">
+            <button class="btn btn-outline btn-sm" id="btnAdminSignOut">
+              <i data-lucide="log-out"></i>
+              <span>Sign Out</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Admin Content Grid -->
+    <div class="container admin-grid-container">
+      
+      <!-- Left Column: Queue & Countdown Alerts -->
+      <div class="admin-left-col">
+        
+        <!-- 1. Dual Hospital Clearance Request Queue -->
+        <div class="admin-card">
+          <div class="admin-card-header">
+            <div class="ach-title-wrap">
+              <h2 class="card-section-title">
+                <i data-lucide="inbox"></i> Hospital Route Clearance Queue
+              </h2>
+              <p class="card-section-sub">Incoming requests from SMS Hospital and Apex Hospital requiring JTP authorization</p>
+            </div>
+          </div>
+
+          <div class="admin-queue-list" id="adminQueueList">
+            <!-- Populated dynamically via app.js -->
+          </div>
+        </div>
+
+        <!-- 2. Upcoming Traffic Signals Clearance Countdown Alert Hub -->
+        <div class="admin-card">
+          <div class="admin-card-header">
+            <div class="ach-title-wrap">
+              <h2 class="card-section-title">
+                <i data-lucide="timer"></i> Traffic Signal Clearance Countdown &amp; Road Alert
+              </h2>
+              <p class="card-section-sub">Time windows to hold cross-traffic and clear bottleneck intersections</p>
+            </div>
+            <span class="tag-badge badge-active-corridor">ACTIVE CORRIDOR: JLN MARG</span>
+          </div>
+
+          <div class="countdown-timeline" id="countdownTimeline">
+            <!-- Generated via app.js -->
+          </div>
+
+          <div class="admin-hindrance-alert-box">
+            <i data-lucide="alert-circle"></i>
+            <div>
+              <strong>ROADWAY CLEARANCE DIRECTIVE:</strong>
+              <span>Perpendicular traffic at Rambagh Circle must be held within the next <strong>90 seconds</strong> to ensure zero latency for inbound Code Red transport.</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- 3. Fleet Categorization Overview (Self-Sustaining Green Corridors vs Attention Needed) -->
+        <div class="admin-card">
+          <div class="admin-card-header">
+            <div class="ach-title-wrap">
+              <h2 class="card-section-title">
+                <i data-lucide="layers"></i> Fleet Categorization Oversight
+              </h2>
+              <p class="card-section-sub">Differentiating units needing immediate attention from self-sustaining green corridors</p>
+            </div>
+          </div>
+
+          <div class="admin-category-tabs">
+            <button class="admin-cat-btn active" data-cat="all">All Units (8)</button>
+            <button class="admin-cat-btn" data-cat="attention">Needs Attention (1)</button>
+            <button class="admin-cat-btn" data-cat="cleared">Green Corridor (1)</button>
+            <button class="admin-cat-btn" data-cat="routine">Standby/Routine (3)</button>
+            <button class="admin-cat-btn" data-cat="offline">Offline (3)</button>
+          </div>
+
+          <div class="admin-fleet-table-wrap">
+            <table class="admin-fleet-table">
+              <thead>
+                <tr>
+                  <th>Vehicle ID / Type</th>
+                  <th>Hospital Client</th>
+                  <th>Severity</th>
+                  <th>Current State</th>
+                  <th>Route / ETA</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody id="adminFleetTableBody">
+                <!-- Populated via app.js -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Right Column: Interactive Map of Jaipur with Police Deployment & Route Override -->
+      <div class="admin-right-col">
+        
+        <div class="admin-card admin-map-card">
+          <div class="admin-card-header map-header-flex">
+            <div>
+              <h2 class="card-section-title">Jaipur GIS Map &bull; Police Deployment &amp; Density</h2>
+              <p class="card-section-sub">Monitor live vehicles, police hindrances, and override decided optimal route</p>
+            </div>
+
+            <!-- Route Override Actions -->
+            <div class="route-override-actions">
+              <span class="override-label">ROUTE OVERRIDE:</span>
+              <button type="button" class="btn btn-sm btn-outline active-override-btn" id="btnRouteOptimal" data-override-route="optimal">
+                JLN Marg (Optimal)
+              </button>
+              <button type="button" class="btn btn-sm btn-outline" id="btnRouteTonk" data-override-route="alt-a">
+                Divert to Tonk Rd
+              </button>
+              <button type="button" class="btn btn-sm btn-outline" id="btnRouteMI" data-override-route="alt-b">
+                Divert to MI Rd
+              </button>
+            </div>
+          </div>
+
+          <!-- Admin Map Container -->
+          <div class="admin-map-wrapper">
+            <div id="adminJaipurMap"></div>
+
+            <!-- Admin Floating HUD -->
+            <div class="admin-map-hud">
+              <div class="hud-header">
+                <div>
+                  <span class="hud-badge" id="adminHudUnit">RJ-14-EA-4091</span>
+                  <span class="hud-type">En route to SMS Hospital (Code Red)</span>
+                </div>
+                <span class="tag-badge" id="adminHudCorridorState">CORRIDOR GRANTED</span>
+              </div>
+
+              <div class="hud-density-box">
+                <div class="hdb-row">
+                  <span class="hdb-label">Active Route Density:</span>
+                  <strong id="adminRouteDensity">Low (~18 veh/min on JLN Marg)</strong>
+                </div>
+                <div class="hdb-row">
+                  <span class="hdb-label">Upcoming Hindrance Site:</span>
+                  <span>Rambagh Circle (Inspector R. S. Rathore present)</span>
+                </div>
+                <div class="hdb-row">
+                  <span class="hdb-label">Perpendicular Signal:</span>
+                  <strong class="text-green">OVERRIDE ACTIVE (ALL RED TO CROSS TRAFFIC)</strong>
+                </div>
+              </div>
+
+              <div class="hud-actions-split">
+                <button type="button" class="btn btn-sm btn-primary" id="btnForceDivertModal">
+                  <i data-lucide="git-branch"></i>
+                  <span>Change / Override Route</span>
+                </button>
+                <button type="button" class="btn btn-sm btn-outline" id="btnPingPolice">
+                  <i data-lucide="radio"></i>
+                  <span>Broadcast Police Alert</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- Police Deployment Legend -->
+            <div class="admin-map-legend">
+              <div class="aml-title">MAP ENTITIES</div>
+              <div class="aml-item"><span class="aml-icon aml-police"></span> On-Duty Police Personnel (5 Sites)</div>
+              <div class="aml-item"><span class="aml-icon aml-amb-red"></span> Ambulance (Needs Clearance)</div>
+              <div class="aml-item"><span class="aml-icon aml-amb-green"></span> Ambulance (Green Corridor Granted)</div>
+              <div class="aml-item"><span class="aml-icon aml-hosp"></span> Hospital (SMS / Apex)</div>
+              <div class="aml-item"><span class="aml-line aml-opt"></span> Active Selected Route</div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+
+  <!-- =========================================================================
+       MODAL 1: HOSPITAL CLINICAL INTAKE LOGIN MODAL
+       ========================================================================= -->
+  <div class="modal-backdrop" id="hospitalLoginModal" aria-hidden="true">
+    <div class="modal-dialog" role="dialog" aria-modal="true" aria-labelledby="hospModalTitle">
+      <div class="modal-header">
+        <div class="modal-title-group">
+          <div class="modal-icon">
+            <i data-lucide="building-2"></i>
+          </div>
+          <div>
+            <h3 class="modal-title" id="hospModalTitle">Hospital Login</h3>
+          </div>
+        </div>
+        <button class="modal-close" id="hospModalCloseBtn" aria-label="Close modal">
+          <i data-lucide="x"></i>
+        </button>
+      </div>
+
+
+
+      <form class="modal-form" id="hospitalLoginForm">
+        <div class="form-group">
+          <label for="hospInputEmail">Email</label>
+          <input type="text" id="hospInputEmail" class="form-input" value="sms@jaipurhealth.gov.in" required>
+        </div>
+
+        <div class="form-group">
+          <label for="hospInputPassword">Password</label>
+          <input type="password" id="hospInputPassword" class="form-input" value="SMS@Jaipur2026" required>
+        </div>
+
+        <div class="modal-actions">
+          <button type="button" class="btn btn-outline" id="hospModalSignUpBtn">
+            <i data-lucide="user-plus"></i>
+            <span>Sign Up</span>
+          </button>
+          <button type="submit" class="btn btn-primary" id="hospModalSubmitBtn">
+            <span>Sign In</span>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- =========================================================================
+       MODAL 1B: HOSPITAL SIGN UP / NEW FACILITY ONBOARDING MODAL
+       ========================================================================= -->
+  <div class="modal-backdrop" id="hospitalSignUpModal" aria-hidden="true">
+    <div class="modal-dialog" role="dialog" aria-modal="true" aria-labelledby="hospSignUpTitle">
+      <div class="modal-header">
+        <div class="modal-title-group">
+          <div class="modal-icon modal-icon-hospital">
+            <i data-lucide="building-2"></i>
+          </div>
+          <div>
+            <h3 class="modal-title" id="hospSignUpTitle">Register Hospital Facility</h3>
+            <p class="modal-subtitle">Enroll New Medical Facility into Emergency Green Corridor Network</p>
+          </div>
+        </div>
+        <button class="modal-close" id="hospSignUpCloseBtn" aria-label="Close modal">
+          <i data-lucide="x"></i>
+        </button>
+      </div>
+
+      <form class="modal-form" id="hospitalSignUpForm">
+        <div class="form-group">
+          <label for="regWebHospName">Hospital / Medical Center Name *</label>
+          <input type="text" id="regWebHospName" class="form-input" placeholder="e.g. Fortis Escorts Hospital Jaipur" required>
+        </div>
+
+        <div class="form-row" style="display: flex; gap: 12px;">
+          <div class="form-group" style="flex: 1;">
+            <label for="regWebHospLicense">Facility Reg / License ID *</label>
+            <input type="text" id="regWebHospLicense" class="form-input" placeholder="e.g. RJ-HOSP-2026-904" required>
+          </div>
+          <div class="form-group" style="flex: 1;">
+            <label for="regWebHospZone">City Zone / Corridor *</label>
+            <select id="regWebHospZone" class="form-select">
+              <option value="JLN Marg">JLN Marg Corridor</option>
+              <option value="Malviya Nagar">Malviya Nagar Hub</option>
+              <option value="Tonk Road">Tonk Road Arterial</option>
+              <option value="Mansarovar">Mansarovar Zone</option>
+              <option value="C-Scheme">C-Scheme / Central</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-row" style="display: flex; gap: 12px;">
+          <div class="form-group" style="flex: 1;">
+            <label for="regWebHospEmail">Official Dispatch Email *</label>
+            <input type="email" id="regWebHospEmail" class="form-input" placeholder="e.g. dispatch@fortisjaipur.org" required>
+          </div>
+          <div class="form-group" style="flex: 1;">
+            <label for="regWebHospPhone">Emergency Triage Phone *</label>
+            <input type="tel" id="regWebHospPhone" class="form-input" placeholder="+91 141 277 XXXX" value="+91 141 277 8899" required>
+          </div>
+        </div>
+
+        <div class="form-row" style="display: flex; gap: 12px;">
+          <div class="form-group" style="flex: 1;">
+            <label for="regWebHospBays">Trauma Intake Bays *</label>
+            <input type="number" id="regWebHospBays" class="form-input" value="12" min="2" max="60" required>
+          </div>
+          <div class="form-group" style="flex: 1;">
+            <label for="regWebHospPass">Hospital Access Password *</label>
+            <input type="password" id="regWebHospPass" class="form-input" value="Hospital@123" required>
+          </div>
+        </div>
+
+        <div class="modal-actions">
+          <button type="button" class="btn btn-outline" id="hospSignUpBackToLoginBtn">
+            <span>Back to Sign In</span>
+          </button>
+          <button type="submit" class="btn btn-primary" id="hospSignUpSubmitBtn">
+            <i data-lucide="check"></i>
+            <span>Register &amp; Enter CAD</span>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- =========================================================================
+       MODAL 2: JAIPUR TRAFFIC CONTROL POLICE (JTP) COMMAND LOGIN MODAL
+       Dedicated, Restricted Access Layer
+       ========================================================================= -->
+  <div class="modal-backdrop" id="adminLoginModal" aria-hidden="true">
+    <div class="modal-dialog" role="dialog" aria-modal="true" aria-labelledby="adminModalTitle">
+      <div class="modal-header">
+        <div class="modal-title-group">
+          <div class="modal-icon modal-icon-police">
+            <i data-lucide="shield-alert"></i>
+          </div>
+          <div>
+            <h3 class="modal-title" id="adminModalTitle">Jaipur Traffic Control Police</h3>
+          </div>
+        </div>
+        <button class="modal-close" id="adminModalCloseBtn" aria-label="Close modal">
+          <i data-lucide="x"></i>
+        </button>
+      </div>
+
+
+      <form class="modal-form" id="adminLoginForm">
+        <div class="form-group">
+          <label for="adminInputEmail">Police Administrator ID / Email</label>
+          <input type="text" id="adminInputEmail" class="form-input" value="admin@jtp-control.gov.in" required>
+        </div>
+
+        <div class="form-group">
+          <label for="adminInputPassword">Security Passkey</label>
+          <input type="password" id="adminInputPassword" class="form-input" value="JTP@Admin2026" required>
+        </div>
+
+        <div class="credentials-reference-box">
+          <div class="crb-title">Authorized Traffic Control Account:</div>
+          <div class="crb-item"><strong>JTP Central Command:</strong> <code>admin@jtp-control.gov.in</code> &bull; <code>JTP@Admin2026</code></div>
+        </div>
+
+        <div class="modal-actions">
+          <button type="button" class="btn btn-outline" id="adminModalCancelBtn">Cancel</button>
+          <button type="submit" class="btn btn-primary btn-police-auth" id="adminModalSubmitBtn">
+            <i data-lucide="shield-check"></i>
+            <span>Authenticate Police Command</span>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- =========================================================================
+       MODAL 2: ROUTE CLEARANCE REQUEST MODAL (Hospital Staff View)
+       ========================================================================= -->
+  <div class="modal-backdrop" id="clearanceModal" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-wide" role="dialog" aria-modal="true" aria-labelledby="clearanceTitle">
+      <div class="modal-header">
+        <div class="modal-title-group">
+          <div class="modal-icon modal-icon-emergency">
+            <i data-lucide="siren"></i>
+          </div>
+          <div>
+            <h3 class="modal-title" id="clearanceTitle">Request Immediate Route Clearance</h3>
+            <p class="modal-subtitle">Direct Emergency Green Corridor Override &bull; Jaipur Traffic Police (JTP)</p>
+          </div>
+        </div>
+        <button class="modal-close" id="clearanceCloseBtn" aria-label="Close modal">
+          <i data-lucide="x"></i>
+        </button>
+      </div>
+
+      <form class="modal-form" id="routeClearanceForm">
+        <div class="form-row-split">
+          <div class="form-group">
+            <label for="clearanceAmbulanceSelect">Selected Ambulance Unit</label>
+            <select id="clearanceAmbulanceSelect" class="form-select">
+              <!-- Populated dynamically based on active hospital -->
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label>Destination Medical Center</label>
+            <input type="text" id="clearanceDestInput" class="form-input" value="Sawai Man Singh (SMS) Hospital, Jaipur" readonly>
+          </div>
+        </div>
+
+        <!-- Severity Selection -->
+        <div class="form-group">
+          <label class="form-label-bold">Severity of Health Condition <span class="required-star">*</span></label>
+          <div class="severity-options-grid">
+            <label class="severity-card selected" data-severity="code-red">
+              <input type="radio" name="severityLevel" value="code-red" checked>
+              <div class="sev-icon-box sev-red"><i data-lucide="flame"></i></div>
+              <div class="sev-text">
+                <div class="sev-title">Code Red &bull; Critical</div>
+                <div class="sev-desc">Immediate life threat (Cardiac Arrest, Polytrauma, Unconscious). Instant pre-emption on all upcoming traffic lights + police escort.</div>
+              </div>
+            </label>
+
+            <label class="severity-card" data-severity="code-yellow">
+              <input type="radio" name="severityLevel" value="code-yellow">
+              <div class="sev-icon-box sev-yellow"><i data-lucide="alert-triangle"></i></div>
+              <div class="sev-text">
+                <div class="sev-title">Code Yellow &bull; Urgent</div>
+                <div class="sev-desc">Serious condition (Acute Stroke window, Respiratory distress). Dynamic green-wave priority adjustments.</div>
+              </div>
+            </label>
+
+            <label class="severity-card" data-severity="code-green">
+              <input type="radio" name="severityLevel" value="code-green">
+              <div class="sev-icon-box sev-green"><i data-lucide="shield-check"></i></div>
+              <div class="sev-text">
+                <div class="sev-title">Code Green &bull; Stable</div>
+                <div class="sev-desc">Inter-hospital transfer, non-critical stabilized injury. Standard transit with advisory beacon.</div>
+              </div>
+            </label>
+          </div>
+        </div>
+
+        <div class="form-row-split">
+          <div class="form-group">
+            <label for="patientAge">Patient Age &amp; Gender</label>
+            <input type="text" id="patientAge" class="form-input" placeholder="e.g. 54 Yrs, Male" value="54 Yrs, Male">
+          </div>
+          <div class="form-group">
+            <label for="patientVitals">Key Vitals (SpO2 / Pulse / BP)</label>
+            <input type="text" id="patientVitals" class="form-input" placeholder="e.g. SpO2 88%, Pulse 128 bpm, BP 85/50" value="SpO2 86%, Pulse 132 bpm, BP 80/50">
+          </div>
+        </div>
+
+        <div class="modal-demo-hint">
+          <i data-lucide="radio"></i>
+          <span>Request will be transmitted live to Jaipur Traffic Police (JTP) Central Command for authorization and signal hold alerts.</span>
+        </div>
+
+        <div class="modal-actions">
+          <button type="button" class="btn btn-outline" id="clearanceCancelBtn">Cancel</button>
+          <button type="submit" class="btn btn-primary" id="clearanceSubmitBtn">
+            <i data-lucide="zap"></i>
+            <span>Submit Request to JTP Admin</span>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- =========================================================================
+       MODAL 3: ROUTE OVERRIDE MODAL (Admin View)
+       ========================================================================= -->
+  <div class="modal-backdrop" id="overrideModal" aria-hidden="true">
+    <div class="modal-dialog" role="dialog" aria-modal="true" aria-labelledby="overrideTitle">
+      <div class="modal-header">
+        <div class="modal-title-group">
+          <div class="modal-icon modal-icon-emergency">
+            <i data-lucide="git-branch"></i>
+          </div>
+          <div>
+            <h3 class="modal-title" id="overrideTitle">Override Decided Route</h3>
+            <p class="modal-subtitle">Divert inbound ambulance to bypass roadblock or sudden hindrance</p>
+          </div>
+        </div>
+        <button class="modal-close" id="overrideCloseBtn" aria-label="Close modal">
+          <i data-lucide="x"></i>
+        </button>
+      </div>
+
+      <form class="modal-form" id="routeOverrideForm">
+        <div class="form-group">
+          <label for="overrideTargetUnit">Target Ambulance</label>
+          <input type="text" id="overrideTargetUnit" class="form-input" value="RJ-14-EA-4091 (SMS Trauma ALS-01)" readonly>
+        </div>
+
+        <div class="form-group">
+          <label for="overrideReason">Reason for Route Diversion</label>
+          <select id="overrideReason" class="form-select">
+            <option value="bottleneck">Sudden Vehicle Congestion at Rambagh Circle (82 veh/min)</option>
+            <option value="roadblock">Civil Demonstration / Roadblock near Ambedkar Circle</option>
+            <option value="accident">Traffic Accident at Bhawani Singh Marg junction</option>
+            <option value="vip">VIP Movement protocol on JLN Marg main carriageway</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label-bold">Select New Forced Route Corridor</label>
+          <div class="override-route-options">
+            <label class="override-card selected" data-override="alt-a">
+              <input type="radio" name="newRouteKey" value="alt-a" checked>
+              <div>
+                <strong>Alternative Route A: Tonk Road Corridor</strong>
+                <p>ETA: 13 min 15 sec &bull; Moderate Density &bull; Head Constable Dinesh deployed at Tonk Phatak</p>
+              </div>
+            </label>
+
+            <label class="override-card" data-override="alt-b">
+              <input type="radio" name="newRouteKey" value="alt-b">
+              <div>
+                <strong>Alternative Route B: MI Road Corridor</strong>
+                <p>ETA: 18 min 50 sec &bull; Market area corridor &bull; Ajmeri Gate pre-emption</p>
+              </div>
+            </label>
+
+            <label class="override-card" data-override="optimal">
+              <input type="radio" name="newRouteKey" value="optimal">
+              <div>
+                <strong>Reset to Default: JLN Marg Optimal Corridor</strong>
+                <p>ETA: 7 min 40 sec &bull; Direct path via Rambagh Circle</p>
+              </div>
+            </label>
+          </div>
+        </div>
+
+        <div class="modal-demo-hint">
+          <i data-lucide="alert-triangle"></i>
+          <span>Overriding will immediately update the map path, alert the hospital intake dashboard, and notify field officers on police radio.</span>
+        </div>
+
+        <div class="modal-actions">
+          <button type="button" class="btn btn-outline" id="overrideCancelBtn">Cancel</button>
+          <button type="submit" class="btn btn-primary" id="overrideSubmitBtn">
+            <i data-lucide="check"></i>
+            <span>Apply Route Override</span>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- =========================================================================
+       MODAL 4: REGISTER AMBULANCE DRIVER MODAL (Hospital Panel)
+       ========================================================================= -->
+  <div class="modal-backdrop" id="driverRegisterModal" aria-hidden="true">
+    <div class="modal-dialog" role="dialog" aria-modal="true" aria-labelledby="driverRegisterTitle">
+      <div class="modal-header">
+        <div class="modal-title-group">
+          <div class="modal-icon modal-icon-hospital">
+            <i data-lucide="user-plus"></i>
+          </div>
+          <div>
+            <h3 class="modal-title" id="driverRegisterTitle">Register Ambulance Driver</h3>
+            <p class="modal-subtitle">Generate Unique ID &amp; Password for Driver In-Cab Mobile Terminal</p>
+          </div>
+        </div>
+        <button class="modal-close" id="driverRegisterCloseBtn" aria-label="Close modal">
+          <i data-lucide="x"></i>
+        </button>
+      </div>
+
+      <div class="driver-modal-info-note" style="background:#f0fdf4; border:1px solid #bbf7d0; color:#166534; padding:10px 14px; border-radius:6px; font-size:12px; margin-bottom:14px; display:flex; align-items:center; gap:8px;">
+        <i data-lucide="shield-check" style="width:16px; height:16px; flex-shrink:0; color:#16a34a;"></i>
+        <span>Credentials saved here are stored in the Hospital Network and enable instant login on the <strong>Ambulance Driver Mobile App</strong> with real-time GPS tracking.</span>
+      </div>
+
+      <form class="modal-form" id="driverRegisterForm">
+        <input type="hidden" id="regDriverHospital" value="sms">
+
+        <div class="form-row" style="display: flex; gap: 14px;">
+          <div class="form-group" style="flex: 1;">
+            <label for="regDriverId">Unique Driver Login ID *</label>
+            <input type="text" id="regDriverId" class="form-input" placeholder="e.g. driver.anita" required>
+            <span class="form-hint" style="font-size: 11px; color: #71717a;">Unique ID used to log into the mobile app</span>
+          </div>
+
+          <div class="form-group" style="flex: 1;">
+            <label for="regDriverPassword">Set Login Password *</label>
+            <input type="password" id="regDriverPassword" class="form-input" value="Ambulance@123" required>
+            <span class="form-hint" style="font-size: 11px; color: #71717a;">PIN or passkey for in-cab terminal</span>
+          </div>
+        </div>
+
+        <div class="form-row" style="display: flex; gap: 14px;">
+          <div class="form-group" style="flex: 1;">
+            <label for="regDriverName">Driver Full Name *</label>
+            <input type="text" id="regDriverName" class="form-input" placeholder="e.g. Anita Gurjar" required>
+          </div>
+
+          <div class="form-group" style="flex: 1;">
+            <label for="regDriverPhone">Contact Mobile Number *</label>
+            <input type="tel" id="regDriverPhone" class="form-input" placeholder="+91 98290 XXXXX" value="+91 98291 55678" required>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="regDriverAmbulance">Assign Hospital Ambulance Vehicle *</label>
+          <select id="regDriverAmbulance" class="form-select" required>
+            <!-- Populated dynamically based on hospital fleet -->
+          </select>
+        </div>
+
+        <div class="form-row" style="display: flex; gap: 14px;">
+          <div class="form-group" style="flex: 1;">
+            <label for="regDriverStatus">Shift / Availability Status</label>
+            <select id="regDriverStatus" class="form-select">
+              <option value="on-duty" selected>On Duty • Active Emergency</option>
+              <option value="standby">Standby • Terminal Armed</option>
+            </select>
+          </div>
+
+          <div class="form-group" style="flex: 1;">
+            <label for="regDriverLicense">Commercial Driving License (Optional)</label>
+            <input type="text" id="regDriverLicense" class="form-input" placeholder="RJ-14-2023-XXXXX" value="RJ-14-2023-009182">
+          </div>
+        </div>
+
+        <div class="modal-actions">
+          <button type="button" class="btn btn-outline" id="driverRegisterCancelBtn">Cancel</button>
+          <button type="submit" class="btn btn-primary" id="driverRegisterSubmitBtn">
+            <i data-lucide="check"></i>
+            <span>Save &amp; Issue Driver Login</span>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Notification Toast -->
+  <div class="toast-notification" id="toastNotification" style="display: none;">
+    <div class="toast-content">
+      <i data-lucide="check-circle" class="toast-icon"></i>
+      <div id="toastMessage">Action verified successfully.</div>
+    </div>
+  </div>
+
+  <!-- Leaflet Map JS -->
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+  <!-- Application Modular Scripts (Sequential order ensures 100% offline & file:// protocol compatibility) -->
+  <script src="js/api.js"></script>
+  <script src="js/data.js"></script>
+  <script src="js/state.js"></script>
+  <script src="js/maps.js"></script>
+  <script src="js/hospital.js"></script>
+  <script src="js/admin.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
