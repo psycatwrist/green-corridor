@@ -712,7 +712,7 @@ window.GC_DATA = (function() {
     return match || null;
   }
 
-  // --- Persistent Hospital Registration (Sign Up & Management) ---
+  // --- Enrolled Hospital Registry Cache ---
   const REGISTERED_HOSPITALS_KEY = 'gc_registered_hospitals_v1';
 
   function getRegisteredHospitals() {
@@ -751,99 +751,7 @@ window.GC_DATA = (function() {
 
   syncRegisteredHospitals();
 
-  function registerHospital(data) {
-    const cleanEmail = (data.email || '').trim().toLowerCase();
-    const cleanName = (data.name || '').trim();
-    if (!cleanEmail || !cleanName) return null;
 
-    const cleanKey = 'hosp_' + cleanName.toLowerCase().replace(/[^a-z0-9]/g, '_').slice(0, 16);
-
-    const record = {
-      name: cleanName,
-      licenseId: data.licenseId || `HOSP-RAJ-${Math.floor(1000 + Math.random() * 9000)}`,
-      email: cleanEmail,
-      password: data.password || 'Hospital@123',
-      phone: data.phone || '+91 141 200 0000',
-      bays: parseInt(data.bays) || 12,
-      zone: data.zone || 'Jaipur Central',
-      hospitalKey: cleanKey,
-      address: data.address || `${cleanName}, ${data.zone || 'Jaipur'}, Rajasthan`,
-      registeredAt: new Date().toISOString()
-    };
-
-    const current = getRegisteredHospitals();
-    const idx = current.findIndex(h => h.email.toLowerCase() === cleanEmail);
-    if (idx >= 0) {
-      current[idx] = record;
-    } else {
-      current.push(record);
-    }
-
-    try {
-      localStorage.setItem(REGISTERED_HOSPITALS_KEY, JSON.stringify(current));
-    } catch(e) {}
-
-    // Update in-memory collections
-    hospitalAccounts[cleanEmail] = {
-      password: record.password,
-      hospitalKey: record.hospitalKey,
-      displayName: record.name
-    };
-    hospitalProfiles[record.hospitalKey] = {
-      name: record.name,
-      address: record.address,
-      tier: "TERTIARY EMERGENCY TRAUMA CENTER",
-      node: `NODE #${Math.floor(10 + Math.random() * 80)} CAD GRID`,
-      activeBadge: "ENROLLED INTAKE",
-      beds: `${record.bays} / ${record.bays} Ready`,
-      ors: "2 Ready",
-      coords: [26.8850 + (Math.random() - 0.5) * 0.05, 75.8050 + (Math.random() - 0.5) * 0.05]
-    };
-
-    // Seed 2 ambulance units for this hospital if none exist
-    const existingAmbs = ambulances.filter(a => a.hospitalKey === record.hospitalKey);
-    if (existingAmbs.length === 0) {
-      const amb1 = {
-        id: `RJ-14-EA-${Math.floor(1000 + Math.random() * 9000)}`,
-        hospitalKey: record.hospitalKey,
-        type: "Advanced Life Support (ALS-01)",
-        driver: "Assigned On Duty",
-        phone: record.phone,
-        owner: `${record.name} Emergency Fleet`,
-        inService: true,
-        hasGreenCorridor: false,
-        statusLabel: "IN SERVICE • STANDBY",
-        statusClass: "status-in-service",
-        location: `${record.name} Trauma Bay 1`,
-        eta: "0 min",
-        distance: "0 km",
-        speed: "0 km/h",
-        coords: hospitalProfiles[record.hospitalKey].coords,
-        currentRoute: "optimal"
-      };
-      const amb2 = {
-        id: `RJ-14-EA-${Math.floor(1000 + Math.random() * 9000)}`,
-        hospitalKey: record.hospitalKey,
-        type: "Basic Life Support (BLS-02)",
-        driver: "Standby Driver",
-        phone: record.phone,
-        owner: `${record.name} Emergency Fleet`,
-        inService: true,
-        hasGreenCorridor: false,
-        statusLabel: "IN SERVICE • AVAILABLE",
-        statusClass: "status-in-service",
-        location: `${record.name} Dock Bay 2`,
-        eta: "0 min",
-        distance: "0 km",
-        speed: "0 km/h",
-        coords: hospitalProfiles[record.hospitalKey].coords,
-        currentRoute: "optimal"
-      };
-      ambulances.push(amb1, amb2);
-    }
-
-    return record;
-  }
 
   function authenticateHospital(emailOrKey, password) {
     if (!emailOrKey || !password) return null;
@@ -909,10 +817,75 @@ window.GC_DATA = (function() {
                 greenCorridorCertified: detail.facilities.green_corridor_certified
               };
             }
+
+            // Sync ambulance cars for this hospital from Fox backend
+            const fleet = await window.GC_API.getHospitalCars(h.key);
+            if (fleet && (fleet.in_service_cars || fleet.out_service_cars)) {
+              const allCars = [...(fleet.in_service_cars || []), ...(fleet.out_service_cars || [])];
+              allCars.forEach(car => {
+                const ambId = car.car_id || (car.car_info && car.car_info.registration_number);
+                if (!ambId) return;
+                const existingIndex = ambulances.findIndex(a => a.id === ambId);
+                const isInService = car.status === 'in-service';
+                const ambObj = {
+                  id: ambId,
+                  carkey: car.carkey,
+                  hospitalKey: h.key,
+                  type: (car.car_info && car.car_info.type) || "Advanced Life Support",
+                  driver: (car.driver_info && car.driver_info.name) || "On Duty Paramedic",
+                  phone: (car.driver_info && car.driver_info.phone) || "+91-141-2560291",
+                  status: isInService ? "en-route" : "maintenance",
+                  statusLabel: isInService ? "Active • En Route" : "Out of Service",
+                  statusClass: isInService ? "amb-status-enroute" : "amb-status-maintenance",
+                  inService: isInService,
+                  location: (car.current_location && car.current_location.address) || "Jaipur Grid",
+                  coords: car.current_location ? [car.current_location.latitude, car.current_location.longitude] : [26.9045, 75.7590],
+                  eta: "7 mins",
+                  speed: car.current_location ? car.current_location.speed_kmh : 54,
+                  hasGreenCorridor: false
+                };
+                if (existingIndex >= 0) {
+                  ambulances[existingIndex] = { ...ambulances[existingIndex], ...ambObj };
+                } else {
+                  ambulances.push(ambObj);
+                }
+              });
+            }
           } catch(err) {}
         }
       }
-    } catch(e) {}
+
+      // Sync active clearance requests queue from Fox backend
+      const reqs = await window.GC_API.getClearanceRequests();
+      if (Array.isArray(reqs) && reqs.length > 0 && window.GC_STATE) {
+        window.GC_STATE.state.clearanceRequests = reqs.map(r => ({
+          id: r.id,
+          hospitalKey: r.hospital_key,
+          hospitalName: r.hospital_name,
+          ambulanceId: r.ambulance_id,
+          type: r.vehicle_type,
+          driver: r.driver_name,
+          severity: r.severity,
+          severityLabel: r.severity_label,
+          vitals: r.patient_vitals,
+          location: r.location,
+          routeKey: r.route_key,
+          routeName: r.route_name,
+          eta: r.eta,
+          status: r.status,
+          statusLabel: r.status_label,
+          grantedAt: r.granted_at,
+          holdAlertSec: r.hold_alert_sec
+        }));
+      }
+
+      // Redraw hospital markers on active Leaflet maps if ready
+      if (window.GC_MAPS && window.GC_MAPS.drawHospitalMarkers) {
+        window.GC_MAPS.drawHospitalMarkers();
+      }
+    } catch(e) {
+      console.warn("Backend init notice:", e);
+    }
   }
 
   // --- Route Intelligence Graph: Shortest Route & Least Traffic Signals Analysis ---
@@ -1204,7 +1177,6 @@ window.GC_DATA = (function() {
     deleteDriver,
     authenticateDriver,
     getRegisteredHospitals,
-    registerHospital,
     authenticateHospital,
     authenticateAdmin,
     initFromFoxBackend,

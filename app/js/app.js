@@ -13,6 +13,11 @@ document.addEventListener('DOMContentLoaded', () => {
     window.lucide.createIcons();
   }
 
+  // Synchronize dynamic facility and fleet data from Fox backend
+  if (window.GC_DATA && window.GC_DATA.initFromFoxBackend) {
+    window.GC_DATA.initFromFoxBackend().catch(err => console.warn("Fox init note:", err));
+  }
+
   // --- Element Selectors ---
   const hospitalLoginForm = document.getElementById('hospitalLoginForm');
   const adminLoginForm = document.getElementById('adminLoginForm');
@@ -22,7 +27,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const hospModalCloseBtn = document.getElementById('hospModalCloseBtn');
   const hospModalCancelBtn = document.getElementById('hospModalCancelBtn');
-  const hospModalSignUpBtn = document.getElementById('hospModalSignUpBtn');
   const adminModalCloseBtn = document.getElementById('adminModalCloseBtn');
   const adminModalCancelBtn = document.getElementById('adminModalCancelBtn');
   const clearanceCloseBtn = document.getElementById('clearanceCloseBtn');
@@ -87,64 +91,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
   if (hospModalCloseBtn) hospModalCloseBtn.addEventListener('click', () => window.GC_STATE.closeModal(hospitalLoginModal));
   if (hospModalCancelBtn) hospModalCancelBtn.addEventListener('click', () => window.GC_STATE.closeModal(hospitalLoginModal));
-
-  // Hospital Sign Up Modal Selectors
-  const hospitalSignUpModal = document.getElementById('hospitalSignUpModal');
-  const hospSignUpCloseBtn = document.getElementById('hospSignUpCloseBtn');
-  const hospSignUpBackToLoginBtn = document.getElementById('hospSignUpBackToLoginBtn');
-  const hospitalSignUpForm = document.getElementById('hospitalSignUpForm');
-
-  if (hospModalSignUpBtn) {
-    hospModalSignUpBtn.addEventListener('click', () => {
-      window.GC_STATE.closeModal(hospitalLoginModal);
-      if (hospitalSignUpModal) window.GC_STATE.openModal(hospitalSignUpModal);
-    });
-  }
-
-  if (hospSignUpCloseBtn) {
-    hospSignUpCloseBtn.addEventListener('click', () => window.GC_STATE.closeModal(hospitalSignUpModal));
-  }
-
-  if (hospSignUpBackToLoginBtn) {
-    hospSignUpBackToLoginBtn.addEventListener('click', () => {
-      window.GC_STATE.closeModal(hospitalSignUpModal);
-      window.GC_STATE.openModal(hospitalLoginModal);
-    });
-  }
-
-  if (hospitalSignUpForm) {
-    hospitalSignUpForm.addEventListener('submit', (e) => {
-      e.preventDefault();
-      const name = document.getElementById('regWebHospName').value.trim();
-      const licenseId = document.getElementById('regWebHospLicense').value.trim();
-      const zone = document.getElementById('regWebHospZone').value;
-      const email = document.getElementById('regWebHospEmail').value.trim();
-      const phone = document.getElementById('regWebHospPhone').value.trim();
-      const bays = document.getElementById('regWebHospBays').value;
-      const password = document.getElementById('regWebHospPass').value.trim();
-
-      const record = window.GC_DATA.registerHospital({
-        name,
-        licenseId,
-        zone,
-        email,
-        phone,
-        bays,
-        password
-      });
-
-      if (!record) {
-        window.GC_STATE.showToast("Registration failed. Please check form fields.");
-        return;
-      }
-
-      window.GC_STATE.closeModal(hospitalSignUpModal);
-      window.GC_STATE.state.activeRole = 'hospital';
-      window.GC_STATE.state.activeHospitalKey = record.hospitalKey;
-      window.GC_STATE.switchView('hospital');
-      window.GC_STATE.showToast(`Welcome! Registered and authenticated as ${record.name}.`);
-    });
-  }
 
   if (adminModalCloseBtn) adminModalCloseBtn.addEventListener('click', () => window.GC_STATE.closeModal(adminLoginModal));
   if (adminModalCancelBtn) adminModalCancelBtn.addEventListener('click', () => window.GC_STATE.closeModal(adminLoginModal));
@@ -253,18 +199,30 @@ document.addEventListener('DOMContentLoaded', () => {
       if (window.GC_API) {
         try {
           const apiRes = await window.GC_API.login(9, email, pass);
-          if (apiRes && apiRes.code === 100) {
-            authSuccess = true;
-            displayName = apiRes.entity_name || "Hospital Staff";
-            const localAcc = window.GC_DATA.authenticateHospital(email, pass);
-            targetHospKey = localAcc ? localAcc.hospitalKey : (email.includes('apex') ? 'apex_hospital' : 'sms_hospital');
+          if (apiRes) {
+            if (apiRes.code === 100) {
+              authSuccess = true;
+              displayName = apiRes.entity_name || "Hospital Staff";
+              const localAcc = window.GC_DATA.authenticateHospital(email, pass);
+              targetHospKey = apiRes.hospital_key || (localAcc ? localAcc.hospitalKey : (email.includes('apex') ? 'apex_hospital' : 'sms_hospital'));
+            } else if (apiRes.code === 110) {
+              submitBtn.disabled = false;
+              submitBtn.innerHTML = originalHtml;
+              window.GC_STATE.showToast("Fox Backend: Incorrect keypass for hospital key.");
+              return;
+            } else if (apiRes.code === 200) {
+              submitBtn.disabled = false;
+              submitBtn.innerHTML = originalHtml;
+              window.GC_STATE.showToast("Fox Backend: UNAUTH - Hospital authorization key not found.");
+              return;
+            }
           }
         } catch(err) {
           console.warn("Fox API hospital auth error:", err);
         }
       }
 
-      // 2. Fallback to local credential table if API offline
+      // 2. Fallback to local credential table only if API offline/unreachable
       if (!authSuccess) {
         const localAuth = window.GC_DATA.authenticateHospital(email, pass);
         if (localAuth) {
@@ -278,7 +236,7 @@ document.addEventListener('DOMContentLoaded', () => {
       submitBtn.innerHTML = originalHtml;
 
       if (!authSuccess) {
-        window.GC_STATE.showToast("Invalid credentials! Check your key/password or use 'Sign Up' to register your hospital.");
+        window.GC_STATE.showToast("Invalid credentials! Please check hospital key and keypass.");
         return;
       }
 
@@ -319,16 +277,28 @@ document.addEventListener('DOMContentLoaded', () => {
       if (window.GC_API) {
         try {
           const apiRes = await window.GC_API.login(8, email, pass);
-          if (apiRes && apiRes.code === 100) {
-            authSuccess = true;
-            displayName = apiRes.entity_name || displayName;
+          if (apiRes) {
+            if (apiRes.code === 100) {
+              authSuccess = true;
+              displayName = apiRes.entity_name || displayName;
+            } else if (apiRes.code === 110) {
+              submitBtn.disabled = false;
+              submitBtn.innerHTML = originalHtml;
+              window.GC_STATE.showToast("Fox Backend: Incorrect security keypass for JTP Command.");
+              return;
+            } else if (apiRes.code === 200) {
+              submitBtn.disabled = false;
+              submitBtn.innerHTML = originalHtml;
+              window.GC_STATE.showToast("Fox Backend: UNAUTH - Police Command authorization key not found.");
+              return;
+            }
           }
         } catch(err) {
           console.warn("Fox API police admin auth error:", err);
         }
       }
 
-      // 2. Fallback to local credential table if API offline
+      // 2. Fallback to local credential table only if API offline/unreachable
       if (!authSuccess) {
         if ((email === window.GC_DATA.policeAdminAccount.email.toLowerCase() && pass === window.GC_DATA.policeAdminAccount.password) ||
             (window.GC_DATA.adminAccounts && window.GC_DATA.adminAccounts[email] && window.GC_DATA.adminAccounts[email].password === pass)) {

@@ -1429,15 +1429,8 @@ document.addEventListener('DOMContentLoaded', () => {
   // Modal Close Buttons
   const hospModalCloseBtn = document.getElementById('hospModalCloseBtn');
   const hospModalCancelBtn = document.getElementById('hospModalCancelBtn');
-  const hospModalSignUpBtn = document.getElementById('hospModalSignUpBtn');
   if (hospModalCloseBtn) hospModalCloseBtn.addEventListener('click', () => closeModal(hospitalLoginModal));
   if (hospModalCancelBtn) hospModalCancelBtn.addEventListener('click', () => closeModal(hospitalLoginModal));
-  if (hospModalSignUpBtn) {
-    hospModalSignUpBtn.addEventListener('click', () => {
-      closeModal(hospitalLoginModal);
-      showToast("Hospital registration: Contact Jaipur Municipal Command to enroll a new hospital facility.");
-    });
-  }
 
   const adminModalCloseBtn = document.getElementById('adminModalCloseBtn');
   const adminModalCancelBtn = document.getElementById('adminModalCancelBtn');

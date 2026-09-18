@@ -120,6 +120,9 @@ window.GC_API = (function() {
       }
       return data;
     } catch (err) {
+      if (isBackendReachable) {
+        return { code: 401, error: err.message || "Invalid Driver ID or Password." };
+      }
       console.warn("Driver login API unreachable", err);
       return null;
     }

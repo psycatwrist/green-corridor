@@ -2842,7 +2842,7 @@ int main() {
     printf("  [URL]    %s\n", app_url);
     printf("  [PORT]   %d\n", current_port);
     printf("---------------------------------------------------------------------\n");
-    printf("  * Hospital Sign In & Facility Sign Up System Active\n");
+    printf("  * Hospital CAD Sign In & Fox Backend Authentication Active\n");
     printf("  * Ambulance Driver In-Cab Setup (Unique ID & Passwords) Active\n");
     printf("  * Live AIS-140 GPS Telemetry Link Synchronized\n");
     printf("---------------------------------------------------------------------\n");

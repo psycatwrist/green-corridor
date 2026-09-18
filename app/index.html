@@ -962,90 +962,12 @@
         </div>
 
         <div class="modal-actions">
-          <button type="button" class="btn btn-outline" id="hospModalSignUpBtn">
-            <i data-lucide="user-plus"></i>
-            <span>Sign Up</span>
+          <button type="button" class="btn btn-outline" id="hospModalCancelBtn">
+            <span>Cancel</span>
           </button>
           <button type="submit" class="btn btn-primary" id="hospModalSubmitBtn">
+            <i data-lucide="log-in"></i>
             <span>Sign In</span>
-          </button>
-        </div>
-      </form>
-    </div>
-  </div>
-
-  <!-- =========================================================================
-       MODAL 1B: HOSPITAL SIGN UP / NEW FACILITY ONBOARDING MODAL
-       ========================================================================= -->
-  <div class="modal-backdrop" id="hospitalSignUpModal" aria-hidden="true">
-    <div class="modal-dialog" role="dialog" aria-modal="true" aria-labelledby="hospSignUpTitle">
-      <div class="modal-header">
-        <div class="modal-title-group">
-          <div class="modal-icon modal-icon-hospital">
-            <i data-lucide="building-2"></i>
-          </div>
-          <div>
-            <h3 class="modal-title" id="hospSignUpTitle">Register Hospital Facility</h3>
-            <p class="modal-subtitle">Enroll New Medical Facility into Emergency Green Corridor Network</p>
-          </div>
-        </div>
-        <button class="modal-close" id="hospSignUpCloseBtn" aria-label="Close modal">
-          <i data-lucide="x"></i>
-        </button>
-      </div>
-
-      <form class="modal-form" id="hospitalSignUpForm">
-        <div class="form-group">
-          <label for="regWebHospName">Hospital / Medical Center Name *</label>
-          <input type="text" id="regWebHospName" class="form-input" placeholder="e.g. Fortis Escorts Hospital Jaipur" required>
-        </div>
-
-        <div class="form-row" style="display: flex; gap: 12px;">
-          <div class="form-group" style="flex: 1;">
-            <label for="regWebHospLicense">Facility Reg / License ID *</label>
-            <input type="text" id="regWebHospLicense" class="form-input" placeholder="e.g. RJ-HOSP-2026-904" required>
-          </div>
-          <div class="form-group" style="flex: 1;">
-            <label for="regWebHospZone">City Zone / Corridor *</label>
-            <select id="regWebHospZone" class="form-select">
-              <option value="JLN Marg">JLN Marg Corridor</option>
-              <option value="Malviya Nagar">Malviya Nagar Hub</option>
-              <option value="Tonk Road">Tonk Road Arterial</option>
-              <option value="Mansarovar">Mansarovar Zone</option>
-              <option value="C-Scheme">C-Scheme / Central</option>
-            </select>
-          </div>
-        </div>
-
-        <div class="form-row" style="display: flex; gap: 12px;">
-          <div class="form-group" style="flex: 1;">
-            <label for="regWebHospEmail">Official Dispatch Email *</label>
-            <input type="email" id="regWebHospEmail" class="form-input" placeholder="e.g. dispatch@fortisjaipur.org" required>
-          </div>
-          <div class="form-group" style="flex: 1;">
-            <label for="regWebHospPhone">Emergency Triage Phone *</label>
-            <input type="tel" id="regWebHospPhone" class="form-input" placeholder="+91 141 277 XXXX" value="+91 141 277 8899" required>
-          </div>
-        </div>
-
-        <div class="form-row" style="display: flex; gap: 12px;">
-          <div class="form-group" style="flex: 1;">
-            <label for="regWebHospBays">Trauma Intake Bays *</label>
-            <input type="number" id="regWebHospBays" class="form-input" value="12" min="2" max="60" required>
-          </div>
-          <div class="form-group" style="flex: 1;">
-            <label for="regWebHospPass">Hospital Access Password *</label>
-            <input type="password" id="regWebHospPass" class="form-input" value="Hospital@123" required>
-          </div>
-        </div>
-
-        <div class="modal-actions">
-          <button type="button" class="btn btn-outline" id="hospSignUpBackToLoginBtn">
-            <span>Back to Sign In</span>
-          </button>
-          <button type="submit" class="btn btn-primary" id="hospSignUpSubmitBtn">
-            <i data-lucide="check"></i>
-            <span>Register &amp; Enter CAD</span>
           </button>
         </div>
       </form>

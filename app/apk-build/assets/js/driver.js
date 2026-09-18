@@ -79,9 +79,34 @@ document.addEventListener('DOMContentLoaded', () => {
   // ==========================================================================
   // 1. Lifecycle & Initialization
   // ==========================================================================
+  function populateHospitalDestinations() {
+    if (!locToSelect) return;
+    const profiles = window.GC_DATA && window.GC_DATA.hospitalProfiles ? window.GC_DATA.hospitalProfiles : {};
+    const keys = Object.keys(profiles);
+    if (keys.length > 0) {
+      const currentVal = locToSelect.value;
+      locToSelect.innerHTML = '';
+      keys.forEach(k => {
+        const p = profiles[k];
+        const opt = document.createElement('option');
+        opt.value = k;
+        opt.textContent = p.name || k;
+        if (k === 'sms_hospital' || k === 'sms' || k === currentVal) {
+          opt.selected = true;
+        }
+        locToSelect.appendChild(opt);
+      });
+    }
+  }
+
   function init() {
     startClock();
     startSignalCountdownClock();
+    populateHospitalDestinations();
+
+    if (window.GC_DATA && window.GC_DATA.initFromFoxBackend) {
+      window.GC_DATA.initFromFoxBackend().then(populateHospitalDestinations).catch(() => {});
+    }
 
     // Check existing session in sessionStorage
     try {
@@ -111,8 +136,16 @@ document.addEventListener('DOMContentLoaded', () => {
         if (window.GC_API && window.GC_API.driverLogin) {
           try {
             const apiResp = await window.GC_API.driverLogin(id, pass);
-            if (apiResp && apiResp.profile) {
-              authenticated = apiResp.profile;
+            if (apiResp) {
+              if (apiResp.code === 100 && apiResp.profile) {
+                authenticated = apiResp.profile;
+              } else if (apiResp.code === 401 || apiResp.error) {
+                btnLogin.disabled = false;
+                btnLogin.innerHTML = '<span>Login</span>';
+                vibrate([50, 50, 50]);
+                showToast("Fox Backend: Invalid Driver ID or Password.");
+                return;
+              }
             }
           } catch(err) {}
         }

@@ -139,7 +139,7 @@
     }
 
     /* =========================================================================
-       VIEW 1: HOSPITAL AUTHENTICATION PORTAL (Sign In & Sign Up)
+       VIEW 1: HOSPITAL AUTHENTICATION PORTAL (Sign In)
        ========================================================================= */
     .auth-viewport {
       flex: 1;
@@ -669,94 +669,43 @@
   </header>
 
   <!-- =========================================================================
-       VIEW 1: HOSPITAL AUTHENTICATION VIEW (Sign In & Sign Up)
+       VIEW 1: HOSPITAL AUTHENTICATION VIEW (Sign In)
        ========================================================================= -->
   <div class="auth-viewport" id="authViewport">
     <div class="auth-card">
       
-      <!-- Dual Auth Navigation Tabs -->
-      <div class="auth-tabs">
-        <button type="button" class="auth-tab-btn active" id="tabSignIn">Sign In</button>
-        <button type="button" class="auth-tab-btn" id="tabSignUp">Sign Up Hospital</button>
+      <div style="text-align: center; margin-bottom: 24px;">
+        <div style="width: 48px; height: 48px; border-radius: 12px; background: #059669; color: #ffffff; display: inline-flex; align-items: center; justify-content: center; font-size: 24px; font-weight: 900; margin-bottom: 12px; box-shadow: 0 4px 14px rgba(5, 150, 105, 0.4);">+</div>
+        <h2 style="font-size: 20px; font-weight: 800; color: var(--text-white); margin-bottom: 4px;">Hospital CAD Terminal</h2>
+        <p style="font-size: 12px; color: var(--text-muted);">Emergency Trauma Intake • Fox Backend Authenticated</p>
       </div>
 
-      <!-- Form 1: Hospital Sign In -->
+      <!-- Hospital Sign In Form -->
       <form id="formSignIn">
         <div class="form-group">
-          <label class="form-label" for="inputSignEmail">Hospital Dispatch Email</label>
-          <input type="email" id="inputSignEmail" class="form-input" placeholder="e.g. sms@jaipurhealth.gov.in" value="sms@jaipurhealth.gov.in" required>
+          <label class="form-label" for="inputSignEmail">Hospital Key / Dispatch Email</label>
+          <input type="text" id="inputSignEmail" class="form-input" placeholder="e.g. sms_key_jaipur or sms@jaipurhealth.gov.in" value="sms@jaipurhealth.gov.in" required>
         </div>
 
         <div class="form-group">
           <label class="form-label" for="inputSignPassword">Hospital Access Password</label>
-          <input type="password" id="inputSignPassword" class="form-input" placeholder="Password" value="SMS@Jaipur2026" required>
+          <input type="password" id="inputSignPassword" class="form-input" placeholder="Keypass" value="SMS@Jaipur2026" required>
         </div>
 
         <button type="submit" class="btn-submit" id="btnSignInSubmit">
           <i data-lucide="log-in"></i>
-          <span>Sign In to Hospital Portal</span>
+          <span>Sign In to Hospital CAD</span>
         </button>
 
-        <!-- Quick Demo Accounts -->
+        <!-- Quick Demo Accounts Reference -->
         <div class="quick-creds-box">
           <div class="quick-creds-title">Enrolled Hospital Access Reference:</div>
           <div class="quick-creds-list">
             <span>• SMS Hospital: <strong>sms@jaipurhealth.gov.in</strong> / <strong>SMS@Jaipur2026</strong></span>
             <span>• Apex Hospital: <strong>apex@jaipurhealth.gov.in</strong> / <strong>Apex@Jaipur2026</strong></span>
+            <span>• Direct Key: <strong>sms_key_jaipur</strong> / <strong>sms_pass_2026</strong></span>
           </div>
         </div>
-      </form>
-
-      <!-- Form 2: Hospital Sign Up (New Facility Registration) -->
-      <form id="formSignUp" style="display: none;">
-        <div class="form-group">
-          <label class="form-label" for="regHospName">Hospital / Medical Center Name *</label>
-          <input type="text" id="regHospName" class="form-input" placeholder="e.g. Fortis Escorts Hospital Jaipur" required>
-        </div>
-
-        <div class="form-row">
-          <div class="form-group" style="flex: 1;">
-            <label class="form-label" for="regHospLicense">Facility Reg / License ID *</label>
-            <input type="text" id="regHospLicense" class="form-input" placeholder="e.g. RJ-HOSP-2026-904" required>
-          </div>
-          <div class="form-group" style="flex: 1;">
-            <label class="form-label" for="regHospZone">City Zone / Corridor *</label>
-            <select id="regHospZone" class="form-select">
-              <option value="JLN Marg">JLN Marg Corridor</option>
-              <option value="Malviya Nagar">Malviya Nagar Hub</option>
-              <option value="Tonk Road">Tonk Road Arterial</option>
-              <option value="Mansarovar">Mansarovar Zone</option>
-              <option value="C-Scheme">C-Scheme / Central</option>
-            </select>
-          </div>
-        </div>
-
-        <div class="form-row">
-          <div class="form-group" style="flex: 1;">
-            <label class="form-label" for="regHospEmail">Official Dispatch Email *</label>
-            <input type="email" id="regHospEmail" class="form-input" placeholder="e.g. dispatch@fortisjaipur.org" required>
-          </div>
-          <div class="form-group" style="flex: 1;">
-            <label class="form-label" for="regHospPhone">Emergency Triage Phone *</label>
-            <input type="tel" id="regHospPhone" class="form-input" placeholder="+91 141 277 XXXX" value="+91 141 277 8899" required>
-          </div>
-        </div>
-
-        <div class="form-row">
-          <div class="form-group" style="flex: 1;">
-            <label class="form-label" for="regHospBays">Trauma Intake Bays *</label>
-            <input type="number" id="regHospBays" class="form-input" value="12" min="2" max="60" required>
-          </div>
-          <div class="form-group" style="flex: 1;">
-            <label class="form-label" for="regHospPass">Hospital Access Password *</label>
-            <input type="password" id="regHospPass" class="form-input" value="Hospital@123" required>
-          </div>
-        </div>
-
-        <button type="submit" class="btn-submit" id="btnSignUpSubmit">
-          <i data-lucide="building-2"></i>
-          <span>Register Hospital &amp; Enter CAD</span>
-        </button>
       </form>
 
     </div>
@@ -978,10 +927,7 @@
       // Element References
       const authViewport = document.getElementById('authViewport');
       const dashboardViewport = document.getElementById('dashboardViewport');
-      const tabSignIn = document.getElementById('tabSignIn');
-      const tabSignUp = document.getElementById('tabSignUp');
       const formSignIn = document.getElementById('formSignIn');
-      const formSignUp = document.getElementById('formSignUp');
       const btnSignOutTop = document.getElementById('btnSignOutTop');
 
       // Dashboard Header
@@ -1007,57 +953,93 @@
       const formDriverSetup = document.getElementById('formDriverSetup');
       const setupDriverAmbulance = document.getElementById('setupDriverAmbulance');
 
-      // 1. Auth Tabs Switcher
-      tabSignIn.addEventListener('click', () => {
-        tabSignIn.classList.add('active');
-        tabSignUp.classList.remove('active');
-        formSignIn.style.display = 'block';
-        formSignUp.style.display = 'none';
-      });
-
-      tabSignUp.addEventListener('click', () => {
-        tabSignUp.classList.add('active');
-        tabSignIn.classList.remove('active');
-        formSignUp.style.display = 'block';
-        formSignIn.style.display = 'none';
-      });
-
-      // 2. Sign In Submission (Connected to Fox Backend Role 9 Auth)
+      // Sign In Submission (Connected to Fox Backend Role 9 Auth)
       formSignIn.addEventListener('submit', async (e) => {
         e.preventDefault();
         const inputVal = document.getElementById('inputSignEmail').value.trim();
         const password = document.getElementById('inputSignPassword').value.trim();
 
-        // 1. Try Fox Backend API authentication
-        if (window.GC_API && window.GC_API.login) {
-          const apiResp = await window.GC_API.login(9, inputVal, password);
-          if (apiResp && apiResp.code === 100) {
-            const hKey = apiResp.hospital_key || (apiResp.sub ? apiResp.sub.replace('_key_jaipur', '_hospital') : 'sms_hospital');
-            let profile = window.GC_DATA.hospitalProfiles[hKey] || window.GC_DATA.hospitalProfiles.sms;
-            try {
-              const apiDetail = await window.GC_API.getHospitalDetail(hKey);
-              if (apiDetail && apiDetail.coordinates) {
-                profile = {
-                  ...profile,
-                  name: apiDetail.name,
-                  tier: apiDetail.trauma_level || profile.tier,
-                  coords: [apiDetail.coordinates.latitude, apiDetail.coordinates.longitude],
-                  beds: `${apiDetail.facilities.icu_beds_count} ICU / ${apiDetail.facilities.total_beds} Total`
-                };
-              }
-            } catch(e) {}
+        const submitBtn = document.getElementById('btnSignInSubmit');
+        const origText = submitBtn.innerHTML;
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = '<span>Verifying with Fox Backend...</span>';
 
-            launchHospitalSession({
-              email: inputVal,
-              hospitalKey: hKey,
-              displayName: apiResp.entity_name || profile.name,
-              profile: profile
-            });
-            return;
+        // 1. Authenticate with Fox Backend API
+        if (window.GC_API && window.GC_API.login) {
+          try {
+            const apiResp = await window.GC_API.login(9, inputVal, password);
+            if (apiResp) {
+              if (apiResp.code === 100) {
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = origText;
+
+                const hKey = apiResp.hospital_key || (apiResp.sub ? apiResp.sub.replace('_key_jaipur', '_hospital') : 'sms_hospital');
+                let profile = window.GC_DATA.hospitalProfiles[hKey] || window.GC_DATA.hospitalProfiles.sms;
+                try {
+                  const apiDetail = await window.GC_API.getHospitalDetail(hKey);
+                  if (apiDetail && apiDetail.coordinates) {
+                    profile = {
+                      ...profile,
+                      name: apiDetail.name,
+                      tier: apiDetail.trauma_level || profile.tier,
+                      coords: [apiDetail.coordinates.latitude, apiDetail.coordinates.longitude],
+                      beds: `${apiDetail.facilities.icu_beds_count} ICU / ${apiDetail.facilities.total_beds} Total`
+                    };
+                  }
+                  // Sync cars from Fox backend
+                  const fleet = await window.GC_API.getHospitalCars(hKey);
+                  if (fleet && fleet.in_service_cars) {
+                    fleet.in_service_cars.forEach(c => {
+                      const cid = c.car_id || (c.car_info && c.car_info.registration_number);
+                      if (!cid) return;
+                      const exIdx = window.GC_DATA.ambulances.findIndex(a => a.id === cid);
+                      const aObj = {
+                        id: cid,
+                        hospitalKey: hKey,
+                        type: (c.car_info && c.car_info.type) || "Advanced Life Support",
+                        driver: (c.driver_info && c.driver_info.name) || "On Duty Paramedic",
+                        phone: (c.driver_info && c.driver_info.phone) || "+91-141-2560291",
+                        inService: true,
+                        statusLabel: "IN SERVICE • ACTIVE",
+                        statusClass: "status-in-service",
+                        location: (c.current_location && c.current_location.address) || "Jaipur Grid",
+                        coords: c.current_location ? [c.current_location.latitude, c.current_location.longitude] : [26.9045, 75.7590],
+                        speed: c.current_location ? `${c.current_location.speed_kmh} km/h` : "55 km/h"
+                      };
+                      if (exIdx >= 0) window.GC_DATA.ambulances[exIdx] = { ...window.GC_DATA.ambulances[exIdx], ...aObj };
+                      else window.GC_DATA.ambulances.push(aObj);
+                    });
+                  }
+                } catch(e) {}
+
+                launchHospitalSession({
+                  email: inputVal,
+                  hospitalKey: hKey,
+                  displayName: apiResp.entity_name || profile.name,
+                  profile: profile
+                });
+                return;
+              } else if (apiResp.code === 110) {
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = origText;
+                showToast("Fox Backend: Incorrect keypass for hospital facility.");
+                return;
+              } else if (apiResp.code === 200) {
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = origText;
+                showToast("Fox Backend: UNAUTH - Hospital authorization key not found.");
+                return;
+              }
+            }
+          } catch(err) {
+            console.warn("Fox API auth exception:", err);
           }
         }
 
-        // 2. Resilient local credential fallback
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = origText;
+
+        // 2. Resilient local credential fallback only if API offline
         const auth = window.GC_DATA.authenticateHospital(inputVal, password);
         if (!auth) {
           showToast("Invalid Credentials. Please check hospital key/email and password.");
@@ -1065,36 +1047,6 @@
         }
 
         launchHospitalSession(auth);
-      });
-
-      // 3. Sign Up Submission (New Hospital Facility Registration)
-      formSignUp.addEventListener('submit', (e) => {
-        e.preventDefault();
-        const name = document.getElementById('regHospName').value.trim();
-        const licenseId = document.getElementById('regHospLicense').value.trim();
-        const zone = document.getElementById('regHospZone').value;
-        const email = document.getElementById('regHospEmail').value.trim();
-        const phone = document.getElementById('regHospPhone').value.trim();
-        const bays = document.getElementById('regHospBays').value;
-        const password = document.getElementById('regHospPass').value.trim();
-
-        const record = window.GC_DATA.registerHospital({
-          name,
-          licenseId,
-          zone,
-          email,
-          phone,
-          bays,
-          password
-        });
-
-        showToast(`Hospital Registered! Welcome, ${record.name}`);
-        launchHospitalSession({
-          email: record.email,
-          hospitalKey: record.hospitalKey,
-          displayName: record.name,
-          profile: window.GC_DATA.hospitalProfiles[record.hospitalKey]
-        });
       });
 
       // 4. Launch Hospital Session
