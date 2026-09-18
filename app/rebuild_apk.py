@@ -77,6 +77,17 @@ def rebuild():
             if not item.filename.startswith('assets/') and not item.filename.startswith('META-INF/'):
                 apk_files[item.filename] = orig.read(item.filename)
 
+    # Ensure cleartext HTTP traffic is permitted for local IP connections (http://10.x.x.x, http://192.168.x.x)
+    # Patch targetSdkVersion to 27 so Android OS network security policy permits cleartext HTTP by default
+    if 'AndroidManifest.xml' in apk_files:
+        manifest_bytes = bytearray(apk_files['AndroidManifest.xml'])
+        pattern = struct.pack('<IIIIi', 23, 7, 0xFFFFFFFF, 0x10000008, 34)
+        p_idx = manifest_bytes.find(pattern)
+        if p_idx != -1:
+            manifest_bytes[p_idx+16:p_idx+20] = struct.pack('<i', 27)
+            apk_files['AndroidManifest.xml'] = bytes(manifest_bytes)
+            print("      [+] Patched AndroidManifest.xml targetSdkVersion=27 for cleartext HTTP support.")
+
     for root, dirs, files in os.walk(assets_dir):
         for f in sorted(files):
             abs_path = os.path.join(root, f)
