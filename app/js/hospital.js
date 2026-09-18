@@ -373,14 +373,14 @@ window.GC_HOSPITAL = (function() {
       }
 
       elements.routineRouteLine = L.polyline(points, {
-        color: '#1e293b',
+        color: '#27272a',
         weight: 6,
         opacity: 0.95
       }).addTo(hospitalMap);
 
       const destIcon = L.divIcon({
         className: 'custom-map-icon',
-        html: `<div class="marker-pin-hospital" style="background:#0f172a; border-color:#64748b;" title="${dest.name}"><span>⚑</span></div>`,
+        html: `<div class="marker-pin-hospital" style="background:#141416; border-color:#71717a;" title="${dest.name}"><span>⚑</span></div>`,
         iconSize: [30, 30],
         iconAnchor: [15, 15]
       });

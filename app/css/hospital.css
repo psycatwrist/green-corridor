@@ -912,21 +912,22 @@
 
 /* Nav & Hero Driver App Highlights */
 .driver-nav-highlight {
-  background-color: #0f172a;
-  color: #38bdf8 !important;
+  background-color: #141416;
+  color: #10b981 !important;
   font-weight: 600;
   border-radius: var(--border-radius-full);
   padding: 6px 14px !important;
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  border: 1px solid #1e293b;
+  border: 1px solid rgba(16, 185, 129, 0.3);
   transition: all var(--transition-fast);
 }
 
 .driver-nav-highlight:hover {
-  background-color: #1e293b;
-  color: #7dd3fc !important;
+  background-color: #1e1e22;
+  color: #34d399 !important;
+  border-color: #10b981;
   transform: translateY(-1px);
 }
 

@@ -611,7 +611,7 @@ document.addEventListener('DOMContentLoaded', () => {
       html: `
         <div style="position:relative; width:34px; height:34px; display:flex; align-items:center; justify-content:center;">
           <div style="position:absolute; width:34px; height:34px; border-radius:50%; background:rgba(16,185,129,0.3); animation:pulseDot 1.5s infinite;"></div>
-          <div style="width:26px; height:26px; border-radius:50%; background:#10b981; border:2.5px solid #090d16; box-shadow:0 0 14px rgba(16,185,129,0.8); display:flex; align-items:center; justify-content:center; color:#042f2e; font-size:14px; font-weight:900;">+</div>
+          <div style="width:26px; height:26px; border-radius:50%; background:#10b981; border:2.5px solid #09090b; box-shadow:0 0 14px rgba(16,185,129,0.8); display:flex; align-items:center; justify-content:center; color:#042f2e; font-size:14px; font-weight:900;">+</div>
         </div>
       `,
       iconSize: [34, 34],
@@ -659,7 +659,7 @@ document.addEventListener('DOMContentLoaded', () => {
       route.trafficSignals.forEach((sig, idx) => {
         const icon = L.divIcon({
           className: 'custom-sig-marker',
-          html: `<div style="width:22px; height:22px; border-radius:50%; background:#0f172a; border:2px solid #10b981; box-shadow:0 0 8px rgba(16,185,129,0.5); color:#10b981; font-size:10px; font-weight:900; display:flex; align-items:center; justify-content:center;">${idx + 1}</div>`,
+          html: `<div style="width:22px; height:22px; border-radius:50%; background:#141416; border:2px solid #10b981; box-shadow:0 0 8px rgba(16,185,129,0.5); color:#10b981; font-size:10px; font-weight:900; display:flex; align-items:center; justify-content:center;">${idx + 1}</div>`,
           iconSize: [22, 22],
           iconAnchor: [11, 11]
         });
