@@ -103,6 +103,30 @@
       "hospital_key": "metro_mas_hospital",
       "hospital_name": "Metro MAS Hospital",
       "is_active": true
+    },
+    {
+      "key": "jaipur_city_heart_in_hospital_key",
+      "keypass_hash": "e8736f7fc17d4bd23ed2295c6909f1b60f33b8a155a028f8553662850ffff88b",
+      "raw_keypass_for_reference": "Heart@Jaipur2026",
+      "hospital_key": "jaipur_city_heart_in_hospital",
+      "hospital_name": "Jaipur City Heart Institute",
+      "is_active": true
+    },
+    {
+      "key": "sms@jaipurhealth.gov.in",
+      "keypass_hash": "96643af1609c6aa5938c20715a339218fb2cf1e269d54defcbfef58ab741bbe6",
+      "raw_keypass_for_reference": "SMS@Jaipur2026",
+      "hospital_key": "sms_hospital",
+      "hospital_name": "Sawai Man Singh (SMS) Hospital",
+      "is_active": true
+    },
+    {
+      "key": "apex@jaipurhealth.gov.in",
+      "keypass_hash": "cdc712f8fab1e63ba271d7c4fad7517e872dc4c0c5834db9deb163eb76b17054",
+      "raw_keypass_for_reference": "Apex@Jaipur2026",
+      "hospital_key": "apex_hospital",
+      "hospital_name": "Apex Hospital Malviya Nagar",
+      "is_active": true
     }
   ]
 }

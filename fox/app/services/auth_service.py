@@ -129,3 +129,96 @@ class AuthService:
         if payload is None:
             return {"valid": False, "message": "Invalid or expired JWT token"}
         return {"valid": True, "payload": payload, "message": "Token is valid and active"}
+
+    @classmethod
+    def authenticate_driver(cls, driver_id: str, password: str) -> Optional[Dict[str, Any]]:
+        """
+        Authenticates an ambulance driver against registered fleet files or known drivers.
+        Returns driver session profile with assigned ambulance and JWT token.
+        """
+        from app.config import CARS_DATA_DIR
+        clean_id = driver_id.strip().lower()
+
+        # Known standard demo driver
+        if clean_id in ["driver.rajesh", "rajesh", "drv-sms-01"] and password in ["Ambulance@123", "ambulance123", "sms_pass_2026"]:
+            profile = {
+                "id": driver_id,
+                "name": "Rajesh Meena",
+                "phone": "+91-98290-11234",
+                "hospitalKey": "sms_hospital",
+                "ambulanceId": "AMB-SMS-01",
+                "vehicleType": "Advanced Life Support (ALS-01)",
+                "licenseNumber": "RJ14-2015-004512",
+                "status": "on-duty"
+            }
+            token = create_jwt_token({"sub": driver_id, "role": "driver", **profile})
+            return {"profile": profile, "token": token}
+
+        # Search across all cars files
+        for f in CARS_DATA_DIR.glob("*.json"):
+            data = cls._load_json(f)
+            hosp_key = data.get("hospital_key", "")
+            for car in data.get("in_service", []) + data.get("out_service", []):
+                drv = car.get("driver_info") or {}
+                d_id = drv.get("driver_id", "").lower() if drv else ""
+                d_name = drv.get("name", "").lower() if drv else ""
+                if clean_id and (clean_id == d_id or clean_id == d_name or (d_id and clean_id in d_id)):
+                    # Accept demo passwords or driver pass
+                    if password in ["Ambulance@123", "ambulance123", "123456", "greencorridor123"]:
+                        profile = {
+                            "id": driver_id,
+                            "name": drv.get("name"),
+                            "phone": drv.get("phone"),
+                            "hospitalKey": hosp_key,
+                            "ambulanceId": car.get("car_id"),
+                            "vehicleType": car.get("car_info", {}).get("type", "ALS"),
+                            "licenseNumber": drv.get("license_number"),
+                            "status": "on-duty"
+                        }
+                        token = create_jwt_token({"sub": driver_id, "role": "driver", **profile})
+                        return {"profile": profile, "token": token}
+
+        return None
+
+    @classmethod
+    def register_hospital(cls, data: Dict[str, Any]) -> Dict[str, Any]:
+        """Registers a new hospital with credentials."""
+        hosp_name = data.get("name", "New Hospital").strip()
+        slug = hosp_name.lower().replace(" ", "_").replace("(", "").replace(")", "").replace(".", "")[:20] + "_hospital"
+        key = data.get("key") or f"{slug}_key"
+        keypass = data.get("password") or data.get("keypass") or "Jaipur@2026"
+
+        auth_path = AUTH_DATA_DIR / "hospitals_auth.json"
+        auth_data = cls._load_json(auth_path)
+        hospitals_list = auth_data.get("hospitals", [])
+
+        # Check if already exists
+        for h in hospitals_list:
+            if h.get("key") == key or h.get("hospital_key") == slug:
+                return {"status": "exists", "hospital_key": slug, "key": key}
+
+        from app.core.security import hash_keypass
+        new_entry = {
+            "key": key,
+            "keypass_hash": hash_keypass(keypass),
+            "raw_keypass_for_reference": keypass,
+            "hospital_key": slug,
+            "hospital_name": hosp_name,
+            "is_active": True
+        }
+        hospitals_list.append(new_entry)
+        auth_data["hospitals"] = hospitals_list
+
+        try:
+            with open(auth_path, "w", encoding="utf-8") as f:
+                json.dump(auth_data, f, indent=2)
+        except Exception:
+            pass
+
+        return {
+            "status": "success",
+            "hospital_key": slug,
+            "key": key,
+            "hospital_name": hosp_name,
+            "message": "Hospital registered successfully"
+        }

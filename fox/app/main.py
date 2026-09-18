@@ -13,7 +13,13 @@ if str(ROOT_DIR) not in sys.path:
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from app.routers import auth_router, hospitals_router
+from app.routers import (
+    auth_router,
+    hospitals_router,
+    clearance_router,
+    telemetry_router,
+    routing_router
+)
 
 # Initialize the FastAPI application
 app = FastAPI(
@@ -26,19 +32,23 @@ app = FastAPI(
     1. **Dual-Role Authentication**:
        - Role `9`: Hospital credentials verification
        - Role `8`: Traffic Admin credentials verification
-       - Custom Response Status Codes:
-         - `100`: Authenticated (returns JWT Bearer token)
-         - `110`: Incorrect keypass but true key
-         - `200`: UNAUTH
+       - Driver In-Cab Authentication (`/auth/driver/login`)
     2. **Open Hospital Registry**:
        - Fast lightweight directory (`/hospitals`)
        - Detailed nested profiles with GPS coordinates & trauma facilities (`/hospitals/{key}`)
     3. **Ambulance Fleet Management**:
        - In-service (`/hospitals/{key}/cars/in-service`) and Out-service (`/hospitals/{key}/cars/out-service`)
-       - Direct nested access (`/hospitals/{key}/cars/{car_id}`)
        - Secret unique vehicle `carkey` security & live telemetry update via POST
+    4. **Emergency Clearance Network (Page-to-Backend-to-Page)**:
+       - Hospital corridor request (`POST /clearance/request`)
+       - Police command approval & override (`POST /clearance/{id}/grant`)
+       - Live queue sync across all devices (`GET /clearance/requests`)
+    5. **Live Fleet GPS Telemetry**:
+       - Vehicle GPS streaming & broadcast (`GET /telemetry/live`)
+    6. **OSRM Real Street Driving & Green Wave ETA**:
+       - Turn-by-turn routing with OpenStreetMap road geometry (`GET /routing/route`)
     """,
-    version="1.0.0",
+    version="2.0.0",
     docs_url="/docs",
     redoc_url="/redoc"
 )
@@ -55,6 +65,9 @@ app.add_middleware(
 # Register routers
 app.include_router(auth_router)
 app.include_router(hospitals_router)
+app.include_router(clearance_router)
+app.include_router(telemetry_router)
+app.include_router(routing_router)
 
 
 @app.get("/", tags=["Root"])
@@ -68,10 +81,11 @@ def root_index():
         "city": "Jaipur, Rajasthan",
         "purpose": "Open Hospital & Green Corridor Ambulance API",
         "status": "online",
-        "version": "1.0.0",
+        "version": "2.0.0",
         "documentation": "/docs",
         "endpoints": {
             "auth_login": "POST /auth/login (code 9 for hospital, code 8 for admin)",
+            "auth_driver_login": "POST /auth/driver/login",
             "auth_verify": "POST /auth/verify",
             "hospitals_list": "GET /hospitals",
             "hospital_detail": "GET /hospitals/{key}",
@@ -79,7 +93,13 @@ def root_index():
             "cars_in_service": "GET /hospitals/{key}/cars/in-service",
             "cars_out_service": "GET /hospitals/{key}/cars/out-service",
             "car_drilldown": "GET /hospitals/{key}/cars/{car_id}",
-            "car_telemetry_post": "POST /hospitals/{key}/cars/{car_id}/telemetry"
+            "car_telemetry_post": "POST /hospitals/{key}/cars/{car_id}/telemetry",
+            "telemetry_live": "GET /telemetry/live",
+            "clearance_requests": "GET /clearance/requests",
+            "clearance_request_post": "POST /clearance/request",
+            "clearance_grant": "POST /clearance/{id}/grant",
+            "clearance_override": "POST /clearance/{id}/override",
+            "routing_osrm": "GET /routing/route"
         }
     }
 

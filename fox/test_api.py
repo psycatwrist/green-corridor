@@ -233,6 +233,110 @@ def run_tests():
     assert_test(resp_bad.status_code == 401, "POST telemetry with invalid carkey rejected (401)")
 
     # ---------------------------------------------------------
+    # TEST 13: Emergency Clearance Lifecycle (Page-to-Backend-to-Page)
+    # ---------------------------------------------------------
+    print("\n--- Testing Emergency Clearance Lifecycle ---")
+    clearance_payload = {
+        "hospital_key": "sms_hospital",
+        "hospital_name": "Sawai Man Singh (SMS) Hospital",
+        "ambulance_id": "AMB-SMS-01",
+        "vehicle_type": "ALS",
+        "driver_name": "Rajesh Meena",
+        "severity": "code-red",
+        "patient_vitals": "SpO2 85%, Pulse 130 bpm",
+        "location": "Vaishali Nagar Amrapali Circle",
+        "destination_hospital_key": "sms_hospital",
+        "route_key": "optimal",
+        "route_name": "JLN Marg Corridor",
+        "eta": "7 min"
+    }
+    resp = client.post("/clearance/request", json=clearance_payload)
+    assert_test(resp.status_code == 201, "POST /clearance/request returns 201 Created")
+    created_req = resp.json()
+    new_req_id = created_req["id"]
+    assert_test(created_req["status"] == "pending", "Initial clearance status is pending")
+
+    # List clearance requests
+    resp_list = client.get("/clearance/requests")
+    assert_test(resp_list.status_code == 200, "GET /clearance/requests returns 200")
+    all_reqs = resp_list.json()
+    assert_test(any(r["id"] == new_req_id for r in all_reqs), "Created clearance request exists in queue")
+
+    # Grant clearance (Admin Command)
+    resp_grant = client.post(f"/clearance/{new_req_id}/grant", json={"notes": "Traffic police clear all 4 intersections"})
+    assert_test(resp_grant.status_code == 200, "POST /clearance/{id}/grant returns 200")
+    granted_data = resp_grant.json()
+    assert_test(granted_data["status"] == "granted", "Clearance status updated to granted")
+
+    # Override route (Admin Command)
+    resp_override = client.post(f"/clearance/{new_req_id}/override", json={
+        "new_route_key": "alt-b",
+        "new_route_name": "B2 Bypass Emergency Green Wave",
+        "reason": "Avoid construction on Tonk Road"
+    })
+    assert_test(resp_override.status_code == 200, "POST /clearance/{id}/override returns 200")
+    override_data = resp_override.json()
+    assert_test(override_data["route_key"] == "alt-b", "Route key successfully updated to alt-b")
+
+    # Single clearance status lookup
+    resp_status = client.get(f"/clearance/{new_req_id}/status")
+    assert_test(resp_status.status_code == 200, "GET /clearance/{id}/status returns 200")
+
+    # ---------------------------------------------------------
+    # TEST 14: Live Fleet Telemetry Stream
+    # ---------------------------------------------------------
+    print("\n--- Testing Live Telemetry Stream ---")
+    resp_tel = client.get("/telemetry/live")
+    assert_test(resp_tel.status_code == 200, "GET /telemetry/live returns 200")
+    live_fleet = resp_tel.json()
+    assert_test(len(live_fleet) >= 1, "Live fleet contains telemetry reporting ambulances")
+
+    # ---------------------------------------------------------
+    # TEST 15: Ambulance Driver Authentication
+    # ---------------------------------------------------------
+    print("\n--- Testing Driver Authentication ---")
+    driver_login_payload = {
+        "id": "driver.rajesh",
+        "password": "Ambulance@123"
+    }
+    resp_drv = client.post("/auth/driver/login", json=driver_login_payload)
+    assert_test(resp_drv.status_code == 200, "POST /auth/driver/login returns 200")
+    drv_data = resp_drv.json()
+    assert_test(drv_data.get("token") is not None, "Driver receives JWT session token")
+    assert_test(drv_data.get("profile", {}).get("ambulanceId") == "AMB-SMS-01", "Driver assigned to SMS Ambulance")
+
+    # Test bad driver password
+    bad_drv = client.post("/auth/driver/login", json={"id": "driver.rajesh", "password": "wrong"})
+    assert_test(bad_drv.status_code == 401, "Bad driver password rejected with 401")
+
+    # ---------------------------------------------------------
+    # TEST 16: OSRM Routing Engine & Jaipur Grid Fallback
+    # ---------------------------------------------------------
+    print("\n--- Testing Routing & ETA Calculation ---")
+    resp_route = client.get("/routing/route?start_lat=26.9045&start_lon=75.7590&dest_lat=26.8978&dest_lon=75.8156&mode=emergency")
+    assert_test(resp_route.status_code == 200, "GET /routing/route returns 200")
+    route_data = resp_route.json()
+    assert_test(len(route_data.get("coordinates", [])) > 2, "Route returns polyline coordinates array")
+    assert_test(route_data.get("distance_km", 0) > 0, "Route calculates positive distance in km")
+    assert_test("eta" in route_data, "Route calculates ETA string")
+    assert_test(route_data.get("green_wave_active") is True, "Emergency mode activates green wave preemption")
+
+    # ---------------------------------------------------------
+    # TEST 17: Dynamic Hospital Registration
+    # ---------------------------------------------------------
+    print("\n--- Testing Hospital Facility Registration ---")
+    reg_payload = {
+        "name": "Jaipur City Heart Institute",
+        "license_id": "RAJ-HOSP-2026-9912",
+        "zone": "Central Jaipur",
+        "password": "Heart@Jaipur2026"
+    }
+    resp_reg = client.post("/auth/register-hospital", json=reg_payload)
+    assert_test(resp_reg.status_code == 200, "POST /auth/register-hospital returns 200")
+    reg_data = resp_reg.json()
+    assert_test("hospital_key" in reg_data, "Registration returns hospital key slug")
+
+    # ---------------------------------------------------------
     # FINAL RESULTS SUMMARY
     # ---------------------------------------------------------
     print("\n" + "=" * 60)

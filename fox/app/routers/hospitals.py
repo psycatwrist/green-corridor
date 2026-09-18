@@ -149,6 +149,10 @@ class TelemetryUpdateRequest(BaseModel):
     longitude: float
     speed_kmh: Optional[float] = 0.0
     status: Optional[str] = "in-service"
+    heading: Optional[float] = 0.0
+    eta: Optional[str] = None
+    distance_remaining: Optional[str] = None
+    driver_name: Optional[str] = None
 
 
 @router.post(
@@ -166,6 +170,8 @@ def update_car_telemetry(
     Validates carkey and acknowledges telemetry update.
     Ensures secure communication between ambulances and the backend.
     """
+    from app.services.telemetry_service import TelemetryService
+
     car = HospitalService.get_car_by_id(key, car_id)
     if not car:
         raise HTTPException(
@@ -180,6 +186,21 @@ def update_car_telemetry(
             detail="Invalid carkey: Unauthorized ambulance telemetry transmission."
         )
 
+    # Record in live TelemetryService
+    telemetry_data = {
+        "latitude": payload.latitude,
+        "longitude": payload.longitude,
+        "speed_kmh": payload.speed_kmh,
+        "status": payload.status,
+        "heading": payload.heading,
+        "eta": payload.eta,
+        "distance_remaining": payload.distance_remaining,
+        "driver_name": payload.driver_name or (car.get("driver_info", {}).get("name") if car.get("driver_info") else "Driver"),
+        "vehicle_number": car.get("car_info", {}).get("vehicle_number", car_id),
+        "vehicle_type": car.get("car_info", {}).get("type", "ALS")
+    }
+    cached = TelemetryService.update_telemetry(key, car_id, telemetry_data)
+
     # Acknowledge receipt of telemetry
     return {
         "status": "success",
@@ -191,5 +212,6 @@ def update_car_telemetry(
             "longitude": payload.longitude,
             "speed_kmh": payload.speed_kmh,
             "status": payload.status
-        }
+        },
+        "telemetry": cached
     }

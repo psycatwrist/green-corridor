@@ -35,6 +35,15 @@
       "name": "South Zone Traffic Command (Malviya Nagar & Sanganer)",
       "jurisdiction": "South Jaipur & Airport Corridor",
       "is_active": true
+    },
+    {
+      "key": "admin@jtp-control.gov.in",
+      "keypass_hash": "03d87e82d922fab7625f000979ece3ca68f0590930cc8f78062e436c863425e7",
+      "raw_keypass_for_reference": "JTP@Admin2026",
+      "admin_id": "ADM-JPR-WEB-04",
+      "name": "Jaipur Traffic Control Police Command",
+      "jurisdiction": "Jaipur Urban Emergency Grid",
+      "is_active": true
     }
   ]
 }
